@@ -116,9 +116,13 @@
     <Compile Include="Controls\DataGridView\DataGridViewImageButtonCell.vb" />
     <Compile Include="Controls\DataGridView\DataGridViewImageButtonColumn.vb" />
     <Compile Include="Controls\DataGridView\ImageIndexEditor.vb" />
-    <Compile Include="Controls\DateRangePicker\DateRangePicker.vb">
-      <SubType>Component</SubType>
+    <Compile Include="Controls\DateRangePicker\DateRangePicker.Designer.vb">
+      <DependentUpon>DateRangePicker.vb</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DateRangePicker\DateRangePicker.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\DateRangePicker\DateRangePickerCheckBoxVisibilityState.vb" />
     <Compile Include="Controls\DateRangePicker\DateRangePickerDesigner.vb" />
     <Compile Include="Controls\Highlighter\HighlightableColor.vb" />
     <Compile Include="Controls\Highlighter\Highlighter.ColorPainter.vb">

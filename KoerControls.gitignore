@@ -2,8 +2,10 @@
 .vs/
 
 # Build output
-[Bb]in/
-[Oo]bj/
+bin/
+obj/
+**/bin/
+**/obj/
 
 # User-specific files
 *.user

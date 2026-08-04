@@ -11,7 +11,6 @@ Imports System.Reflection
 '''<para/>When finished, rebuild your project and the new control will be available to drop into any Form.</remarks>
 <Designer(GetType(StaticColumnsDataGridViewDesigner))>
 <ToolboxItem(False)>
-<TypeDescriptionProvider(GetType(StaticColumnsDataGridViewTypeDescriptorProvider))>
 Public Class StaticColumnsDataGridView
     Inherits DataGridView
 
@@ -22,20 +21,16 @@ Public Class StaticColumnsDataGridView
     Private _contextMenuStripInitialized As Boolean = False
     Private Shared ReadOnly _preDefinedContextMenuStrips As New Dictionary(Of Type, ContextMenuStrip)
     Private ReadOnly _contextMenuStripItems As New StaticColumnsDataGridViewToolStripItemCollection(Me)
-    Private Shared _typeDescriptorProvidersAdded As New HashSet(Of Type)
 
     Private Sub EnsureColumns()
         If _columnsInitialized Then Return
         _columnsInitialized = True
-        Try
-            For Each fiField As FieldInfo In [GetType].GetFields(BindingFlags.Instance Or BindingFlags.Public Or BindingFlags.NonPublic Or BindingFlags.DeclaredOnly)
-                If GetType(DataGridViewColumn).IsAssignableFrom(fiField.FieldType) Then
-                    Dim dgvcColumn As DataGridViewColumn = fiField.GetValue(Me)
-                    If dgvcColumn IsNot Nothing AndAlso dgvcColumn.DataGridView Is Nothing Then MyBase.Columns.Add(dgvcColumn)
-                End If
-            Next
-        Catch
-        End Try
+        For Each fiField As FieldInfo In [GetType].GetFields(BindingFlags.Instance Or BindingFlags.Public Or BindingFlags.NonPublic Or BindingFlags.DeclaredOnly)
+            If GetType(DataGridViewColumn).IsAssignableFrom(fiField.FieldType) Then
+                Dim dgvcColumn As DataGridViewColumn = fiField.GetValue(Me)
+                If dgvcColumn IsNot Nothing AndAlso dgvcColumn.DataGridView Is Nothing Then MyBase.Columns.Add(dgvcColumn)
+            End If
+        Next
     End Sub
     Private Sub EnsureContextMenuStrip()
         If _contextMenuStripInitialized Then Return
@@ -57,17 +52,6 @@ Public Class StaticColumnsDataGridView
         Dim dhHost As IDesignerHost = TryCast(Site.GetService(GetType(IDesignerHost)), IDesignerHost)
         Return dhHost IsNot Nothing AndAlso ReferenceEquals(dhHost.RootComponent, Me)
     End Function
-
-#End Region
-
-#Region "Initializers"
-
-    Public Sub New()
-        MyBase.New
-
-        Dim tType As Type = GetDesignerType()
-        If _typeDescriptorProvidersAdded.Add(tType) Then TypeDescriptor.AddProvider(New StaticColumnsDataGridViewTypeDescriptorProvider, tType)
-    End Sub
 
 #End Region
 
@@ -126,6 +110,7 @@ Public Class StaticColumnsDataGridView
     End Function
     Protected Overrides Sub InitLayout()
         MyBase.InitLayout()
+        If DesignMode Then Return
         EnsureColumns()
         EnsureContextMenuStrip()
     End Sub
@@ -150,9 +135,11 @@ Public Class StaticColumnsDataGridView
         MyBase.OnContextMenuStripChanged(e)
     End Sub
     Protected Overrides Sub OnCreateControl()
+        If Not DesignMode Then
+            EnsureColumns()
+            EnsureContextMenuStrip()
+        End If
         MyBase.OnCreateControl()
-        EnsureColumns()
-        EnsureContextMenuStrip()
     End Sub
 
 #End Region

@@ -97,19 +97,20 @@ Public Class StaticColumnsDataGridViewCodeDomSerializer
 
     'Serializes all properties To display In the Properties window When editing a StaticColumnsDataGridView In a Form. Removes all properties that can edit the number Of columns.
     Public Overrides Function Serialize(manager As IDesignerSerializationManager, value As Object) As Object
-        If manager Is Nothing OrElse value Is Nothing Then Return Nothing
-        If Not GetType(StaticColumnsDataGridView).IsAssignableFrom(value.GetType()) Then
-            'MessageBox.Show("LincolnControls reference has separated into two instance. Please clear out the bin/Debug and obj/Debug folders of your project and rebuild.")
+        Try
+            If manager Is Nothing OrElse value Is Nothing OrElse Not GetType(StaticColumnsDataGridView).IsAssignableFrom(value.GetType()) Then Return Nothing
+            Dim baseSerializer As CodeDomSerializer = TryCast(manager.GetSerializer(GetType(DataGridView), GetType(CodeDomSerializer)), CodeDomSerializer)
+            Dim oSerializedValue = baseSerializer.Serialize(manager, value)
+            Dim cscStetments = TryCast(oSerializedValue, CodeStatementCollection)
+            If cscStetments IsNot Nothing Then
+                RemoveColumnStatements(cscStetments)
+                RewriteReferences(value, cscStetments)
+            End If
+            Return oSerializedValue
+        Catch ex As Exception
+            MessageBox.Show(ex.Message & vbNewLine & ex.StackTrace)
             Return Nothing
-        End If
-        Dim baseSerializer As CodeDomSerializer = TryCast(manager.GetSerializer(GetType(DataGridView), GetType(CodeDomSerializer)), CodeDomSerializer)
-        Dim oSerializedValue = baseSerializer.Serialize(manager, value)
-        Dim cscStetments = TryCast(oSerializedValue, CodeStatementCollection)
-        If cscStetments IsNot Nothing Then
-            RemoveColumnStatements(cscStetments)
-            RewriteReferences(value, cscStetments)
-        End If
-        Return oSerializedValue
+        End Try
     End Function
 
 End Class

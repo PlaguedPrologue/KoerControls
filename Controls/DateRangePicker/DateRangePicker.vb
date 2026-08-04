@@ -10,8 +10,6 @@ Public Class DateRangePicker
 
 #Region "Private Items"
 
-    Private WithEvents MyEndDatePicker As New DateTimePicker With {.Dock = DockStyle.Right}
-    Private WithEvents MyStartDatePicker As New DateTimePicker With {.Dock = DockStyle.Left}
     Private WithEvents MyValue As DateRange = DateRange.Empty
 
     Private _busyChangingValue As Boolean = False
@@ -28,40 +26,47 @@ Public Class DateRangePicker
     Private _maxDate As Date = DateTimePicker.MaximumDateTime
     Private _minDate As Date = DateTimePicker.MinimumDateTime
     Private _rightToLeftLayout As Boolean = False
+    Private _showTextBox As DateRangePickerCheckBoxVisibilityState = DateRangePickerCheckBoxVisibilityState.None
     Private _showUpDown As Boolean = False
 
-    Private Sub MyEndDatePicker_SizeChanged(sender As Object, e As EventArgs) Handles MyEndDatePicker.SizeChanged
-        If IsHandleCreated Then Height = Math.Max(MyEndDatePicker.Size.Height, MyStartDatePicker.Size.Height)
+    Private Sub DelimiterText_TextChanged(sender As Object, e As EventArgs) Handles DelimiterText.TextChanged
+        MyBase.Text = DelimiterText.Text
+        EndDatePicker.Width = Math.Floor((Width - DelimiterText.Width) / 2)
+        StartDatePicker.Width = Math.Ceiling((Width - DelimiterText.Width) / 2)
     End Sub
-    Private Sub MyEndDatePicker_ValueChanged(sender As Object, e As EventArgs) Handles MyEndDatePicker.ValueChanged
+    Private Sub EndDatePicker_SizeChanged(sender As Object, e As EventArgs) Handles EndDatePicker.SizeChanged
+        If IsHandleCreated Then Height = Math.Max(EndDatePicker.Size.Height, StartDatePicker.Size.Height)
+    End Sub
+    Private Sub EndDatePicker_ValueChanged(sender As Object, e As EventArgs) Handles EndDatePicker.ValueChanged
         If _busyChangingValue Then Return
         _busyChangingValue = True
-        Dim dValue1 As Date = MyStartDatePicker.Value
-        Dim dValue2 As Date = MyEndDatePicker.Value
+        Dim dValue1 As Date = StartDatePicker.Value
+        Dim dValue2 As Date = EndDatePicker.Value
         If dValue1 > dValue2 Then
-            MyValue.EndDate = dValue2
-            MyStartDatePicker.Value = dValue2
-            MyEndDatePicker.Value = dValue1
-            If MyEndDatePicker.Focused Then MyStartDatePicker.Focus()
+            Value.EndDate = dValue2
+            StartDatePicker.Value = dValue2
+            EndDatePicker.Value = dValue1
+            If EndDatePicker.Focused Then StartDatePicker.Focus()
         Else
             MyValue.EndDate = dValue2
         End If
         OnValueChanged(EventArgs.Empty)
         _busyChangingValue = False
     End Sub
-    Private Sub MyStartDatePicker_SizeChanged(sender As Object, e As EventArgs) Handles MyStartDatePicker.SizeChanged
-        If IsHandleCreated Then Height = Math.Max(MyEndDatePicker.Size.Height, MyStartDatePicker.Size.Height)
+
+    Private Sub StartDatePicker_SizeChanged(sender As Object, e As EventArgs) Handles StartDatePicker.SizeChanged
+        If IsHandleCreated Then Height = Math.Max(EndDatePicker.Size.Height, StartDatePicker.Size.Height)
     End Sub
-    Private Sub MyStartDatePicker_ValueChanged(sender As Object, e As EventArgs) Handles MyStartDatePicker.ValueChanged
+    Private Sub StartDatePicker_ValueChanged(sender As Object, e As EventArgs) Handles StartDatePicker.ValueChanged
         If _busyChangingValue Then Return
         _busyChangingValue = True
-        Dim dValue1 As Date = MyStartDatePicker.Value
-        Dim dValue2 As Date = MyEndDatePicker.Value
+        Dim dValue1 As Date = StartDatePicker.Value
+        Dim dValue2 As Date = EndDatePicker.Value
         If dValue1 > dValue2 Then
             MyValue.StartDate = dValue2
-            MyStartDatePicker.Value = dValue2
-            MyEndDatePicker.Value = dValue1
-            If MyStartDatePicker.Focused Then MyEndDatePicker.Focus()
+            StartDatePicker.Value = dValue2
+            EndDatePicker.Value = dValue1
+            If StartDatePicker.Focused Then EndDatePicker.Focus()
         Else
             MyValue.StartDate = dValue1
         End If
@@ -71,14 +76,14 @@ Public Class DateRangePicker
     Private Sub MyValue_EndDateChanged(sender As Object, e As EventArgs) Handles MyValue.EndDateChanged
         If _busyChangingValue Then Return
         _busyChangingValue = True
-        MyEndDatePicker.Value = MyValue.EndDate
+        EndDatePicker.Value = MyValue.EndDate
         OnValueChanged(EventArgs.Empty)
         _busyChangingValue = False
     End Sub
     Private Sub MyValue_StartDateChanged(sender As Object, e As EventArgs) Handles MyValue.StartDateChanged
         If _busyChangingValue Then Return
         _busyChangingValue = True
-        MyStartDatePicker.Value = MyValue.StartDate
+        StartDatePicker.Value = MyValue.StartDate
         OnValueChanged(EventArgs.Empty)
         _busyChangingValue = False
     End Sub
@@ -89,6 +94,14 @@ Public Class DateRangePicker
 
     ''' <summary>Occurs when the value has changed.</summary>
     Public Event ValueChanged As EventHandler
+
+#End Region
+
+#Region "Initializers"
+
+    Public Sub New()
+        InitializeComponent()
+    End Sub
 
 #End Region
 
@@ -103,8 +116,8 @@ Public Class DateRangePicker
         Set(value As Color)
             If value = MyBase.BackColor Then Return
             MyBase.BackColor = value
-            MyEndDatePicker.BackColor = value
-            MyStartDatePicker.CalendarMonthBackground = value
+            EndDatePicker.BackColor = value
+            StartDatePicker.CalendarMonthBackground = value
         End Set
     End Property
     <Browsable(False)>
@@ -116,8 +129,8 @@ Public Class DateRangePicker
         Set(value As Image)
             If ReferenceEquals(value, MyBase.BackgroundImage) Then Return
             MyBase.BackgroundImage = value
-            MyEndDatePicker.BackgroundImage = value
-            MyStartDatePicker.BackgroundImage = value
+            EndDatePicker.BackgroundImage = value
+            StartDatePicker.BackgroundImage = value
         End Set
     End Property
     <Browsable(False)>
@@ -129,8 +142,8 @@ Public Class DateRangePicker
         Set(value As ImageLayout)
             If value = MyBase.BackgroundImageLayout Then Return
             MyBase.BackgroundImageLayout = value
-            MyEndDatePicker.BackgroundImageLayout = value
-            MyStartDatePicker.BackgroundImageLayout = value
+            EndDatePicker.BackgroundImageLayout = value
+            StartDatePicker.BackgroundImageLayout = value
         End Set
     End Property
     '''<summary>Gets or sets the font style applied to each calendar.</summary>
@@ -144,8 +157,8 @@ Public Class DateRangePicker
         Set(value As Font)
             If value.Equals(_calendarFont) Then Return
             _calendarFont = value
-            MyEndDatePicker.CalendarFont = value
-            MyStartDatePicker.CalendarFont = value
+            EndDatePicker.CalendarFont = value
+            StartDatePicker.CalendarFont = value
         End Set
     End Property
     Private Sub ResetCalendarFont()
@@ -175,8 +188,8 @@ Public Class DateRangePicker
         Set(value As Color)
             If value = _calendarForeColor Then Return
             _calendarForeColor = value
-            MyEndDatePicker.CalendarForeColor = value
-            MyStartDatePicker.CalendarForeColor = value
+            EndDatePicker.CalendarForeColor = value
+            StartDatePicker.CalendarForeColor = value
         End Set
     End Property
     '''<summary>Gets or sets the background color of the calendar month.</summary>
@@ -192,8 +205,8 @@ Public Class DateRangePicker
         Set(value As Color)
             If value = _calendarMonthBackground Then Return
             _calendarMonthBackground = value
-            MyEndDatePicker.CalendarMonthBackground = value
-            MyStartDatePicker.CalendarMonthBackground = value
+            EndDatePicker.CalendarMonthBackground = value
+            StartDatePicker.CalendarMonthBackground = value
         End Set
     End Property
     '''<summary>Gets or sets the background color of each calendar title.</summary>
@@ -209,8 +222,8 @@ Public Class DateRangePicker
         Set(value As Color)
             If value = _calendarTitleBackColor Then Return
             _calendarTitleBackColor = value
-            MyEndDatePicker.CalendarTitleBackColor = value
-            MyStartDatePicker.CalendarTitleBackColor = value
+            EndDatePicker.CalendarTitleBackColor = value
+            StartDatePicker.CalendarTitleBackColor = value
         End Set
     End Property
     '''<summary>Gets or sets the foreground color of each calendar title.</summary>
@@ -226,8 +239,8 @@ Public Class DateRangePicker
         Set(value As Color)
             If value = _calendarTitleForeColor Then Return
             _calendarTitleForeColor = value
-            MyEndDatePicker.CalendarTitleForeColor = value
-            MyStartDatePicker.CalendarTitleForeColor = value
+            EndDatePicker.CalendarTitleForeColor = value
+            StartDatePicker.CalendarTitleForeColor = value
         End Set
     End Property
     '''<summary>Gets or sets the foreground color of each calendar trailing dates.</summary>
@@ -243,8 +256,8 @@ Public Class DateRangePicker
         Set(value As Color)
             If value = _calendarTrailingForeColor Then Return
             _calendarTrailingForeColor = value
-            MyEndDatePicker.CalendarTrailingForeColor = value
-            MyStartDatePicker.CalendarTrailingForeColor = value
+            EndDatePicker.CalendarTrailingForeColor = value
+            StartDatePicker.CalendarTrailingForeColor = value
         End Set
     End Property
     '''<summary>Gets or sets the custom date/time format string.</summary>
@@ -259,8 +272,8 @@ Public Class DateRangePicker
         Set(value As String)
             If value = _customFormat Then Return
             _customFormat = value
-            MyEndDatePicker.CustomFormat = value
-            MyStartDatePicker.CustomFormat = value
+            EndDatePicker.CustomFormat = value
+            StartDatePicker.CustomFormat = value
         End Set
     End Property
     '''<summary>Gets or sets the alignment of the drop-down calendar on each <see cref="DateTimePicker"/> control.</summary>
@@ -278,18 +291,31 @@ Public Class DateRangePicker
             _dropDownAlign = value
             Select Case value
                 Case LeftRightRelativeAlignment.Left
-                    MyEndDatePicker.DropDownAlign = LeftRightAlignment.Left
-                    MyStartDatePicker.DropDownAlign = LeftRightAlignment.Left
+                    EndDatePicker.DropDownAlign = LeftRightAlignment.Left
+                    StartDatePicker.DropDownAlign = LeftRightAlignment.Left
                 Case LeftRightRelativeAlignment.Right
-                    MyEndDatePicker.DropDownAlign = LeftRightAlignment.Right
-                    MyStartDatePicker.DropDownAlign = LeftRightAlignment.Right
+                    EndDatePicker.DropDownAlign = LeftRightAlignment.Right
+                    StartDatePicker.DropDownAlign = LeftRightAlignment.Right
                 Case LeftRightRelativeAlignment.Outer
-                    MyEndDatePicker.DropDownAlign = LeftRightAlignment.Right
-                    MyStartDatePicker.DropDownAlign = LeftRightAlignment.Left
+                    EndDatePicker.DropDownAlign = LeftRightAlignment.Right
+                    StartDatePicker.DropDownAlign = LeftRightAlignment.Left
                 Case LeftRightRelativeAlignment.Inner
-                    MyEndDatePicker.DropDownAlign = LeftRightAlignment.Left
-                    MyStartDatePicker.DropDownAlign = LeftRightAlignment.Right
+                    EndDatePicker.DropDownAlign = LeftRightAlignment.Left
+                    StartDatePicker.DropDownAlign = LeftRightAlignment.Right
             End Select
+        End Set
+    End Property
+    '''<summary>Indicates whether the end date has been set.</summary>
+    '''<returns><see langword="True"/> if the end date has been set; otherwise, <see langword="False"/>.</returns>
+    <Category("Behavior")>
+    <DefaultValue(True)>
+    <Description("When ShowChekcBox includes the EndDate, determines if the check box for the end date is checked, indicating that the user has selected a value.")>
+    Public Property EndDateChecked As Boolean
+        Get
+            Return EndDatePicker.Checked
+        End Get
+        Set(value As Boolean)
+            EndDatePicker.Checked = value
         End Set
     End Property
     '''<summary>Gets or sets the foreground color of each <see cref="DateTimePicker"/> control.</summary>
@@ -303,8 +329,8 @@ Public Class DateRangePicker
         Set(value As Color)
             If value = _foreColor Then Return
             _foreColor = value
-            MyEndDatePicker.ForeColor = value
-            MyStartDatePicker.ForeColor = value
+            EndDatePicker.ForeColor = value
+            StartDatePicker.ForeColor = value
         End Set
     End Property
     '''<summary>Gets or sets the format of the date and time displayed in the control.</summary>
@@ -320,8 +346,8 @@ Public Class DateRangePicker
         Set(value As DateTimePickerFormat)
             If value = _format Then Return
             _format = value
-            MyEndDatePicker.Format = value
-            MyStartDatePicker.Format = value
+            EndDatePicker.Format = value
+            StartDatePicker.Format = value
         End Set
     End Property
     '''<summary>Gets or sets the maximum date and time that can be selected in the control.</summary>
@@ -337,8 +363,8 @@ Public Class DateRangePicker
         Set(value As Date)
             If value = _maxDate Then Return
             _maxDate = value
-            MyEndDatePicker.MaxDate = value
-            MyStartDatePicker.MaxDate = value
+            EndDatePicker.MaxDate = value
+            StartDatePicker.MaxDate = value
         End Set
     End Property
     Private Sub ResetMaxDate()
@@ -360,8 +386,8 @@ Public Class DateRangePicker
         Set(value As Date)
             If value = _minDate Then Return
             _minDate = value
-            MyEndDatePicker.MinDate = value
-            MyStartDatePicker.MinDate = value
+            EndDatePicker.MinDate = value
+            StartDatePicker.MinDate = value
         End Set
     End Property
     Private Sub ResetMinDate()
@@ -376,8 +402,8 @@ Public Class DateRangePicker
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
     Public ReadOnly Property PreferredHeight As Integer
         Get
-            If MyEndDatePicker Is Nothing Then Return 0
-            Return MyEndDatePicker.PreferredHeight
+            If EndDatePicker Is Nothing Then Return 0
+            Return EndDatePicker.PreferredHeight
         End Get
     End Property
     '''<summary>Gets or sets whether the contents of each <see cref="DateTimePicker"/> are laid out from right to left.</summary>
@@ -392,8 +418,24 @@ Public Class DateRangePicker
         Set(value As Boolean)
             If value = _rightToLeftLayout Then Return
             _rightToLeftLayout = value
-            MyEndDatePicker.RightToLeftLayout = value
-            MyStartDatePicker.RightToLeftLayout = value
+            EndDatePicker.RightToLeftLayout = value
+            StartDatePicker.RightToLeftLayout = value
+        End Set
+    End Property
+    '''<summary>Determines the checkboxes visible in the <see cref="DateRangePicker"/>.</summary>
+    '''<returns>The checkboxes visible in the <see cref="DateRangePicker"/>.</returns>
+    <Category("Appearance")>
+    <DefaultValue(DateRangePickerCheckBoxVisibilityState.None)>
+    <Description("Determines whether a check box is displayed in the control. When the box is unchecked, no value is selected.")>
+    Public Property ShowCheckBox As DateRangePickerCheckBoxVisibilityState
+        Get
+            Return _showTextBox
+        End Get
+        Set(value As DateRangePickerCheckBoxVisibilityState)
+            If value = _showTextBox Then Return
+            _showTextBox = value
+            EndDatePicker.ShowCheckBox = value = DateRangePickerCheckBoxVisibilityState.EndDate OrElse value = DateRangePickerCheckBoxVisibilityState.DateRange
+            StartDatePicker.ShowCheckBox = value = DateRangePickerCheckBoxVisibilityState.StartDate OrElse value = DateRangePickerCheckBoxVisibilityState.DateRange
         End Set
     End Property
     '''<summary>Gets or sets a value indicating whether a spin button control (also known as an up-down control) is used to adjust the date/time value.</summary>
@@ -408,22 +450,34 @@ Public Class DateRangePicker
         Set(value As Boolean)
             If value = _showUpDown Then Return
             _showUpDown = value
-            MyEndDatePicker.ShowUpDown = value
-            MyStartDatePicker.ShowUpDown = value
+            EndDatePicker.ShowUpDown = value
+            StartDatePicker.ShowUpDown = value
         End Set
     End Property
-    <Browsable(False)>
-    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
-    <EditorBrowsable(EditorBrowsableState.Advanced)>
+    '''<summary>Indicates whether the start date has been set.</summary>
+    '''<returns><see langword="True"/> if the start date has been set; otherwise, <see langword="False"/>.</returns>
+    <Category("Behavior")>
+    <DefaultValue(True)>
+    <Description("When ShowChekcBox includes the StartDate, determines if the check box for the start date is checked, indicating that the user has selected a value.")>
+    Public Property StartDateChecked As Boolean
+        Get
+            Return StartDatePicker.Checked
+        End Get
+        Set(value As Boolean)
+            StartDatePicker.Checked = value
+        End Set
+    End Property
+    <DefaultValue("To")>
     Public Overrides Property Text As String
         Get
-            Return Value.ToShortDateFormat
+            Return DelimiterText.Text
         End Get
         Set(value As String)
-            Dim drValue As DateRange = DateRange.Parse(value)
-            MyValue = drValue
-            MyEndDatePicker.Value = drValue.EndDate
-            MyStartDatePicker.Value = drValue.StartDate
+            If value = Name OrElse value = DelimiterText.Text Then Return
+            DelimiterText.Text = value
+            DelimiterText.Visible = Not String.IsNullOrEmpty(DelimiterText.Text)
+            EndDatePicker.Width = Math.Floor((Width - DelimiterText.Width) / 2)
+            StartDatePicker.Width = Math.Ceiling((Width - DelimiterText.Width) / 2)
         End Set
     End Property
     '''<summary>Gets or sets the date/time values assigned to the control.</summary>
@@ -441,8 +495,8 @@ Public Class DateRangePicker
             MyValue = value
             If Not _busyChangingValue Then
                 _busyChangingValue = True
-                MyEndDatePicker.Value = value.EndDate
-                MyStartDatePicker.Value = value.StartDate
+                EndDatePicker.Value = value.EndDate
+                StartDatePicker.Value = value.StartDate
                 _busyChangingValue = False
             End If
             OnValueChanged(EventArgs.Empty)
@@ -459,15 +513,10 @@ Public Class DateRangePicker
 
 #Region "Functions"
 
-    Protected Overrides Sub CreateHandle()
-        MyBase.CreateHandle()
-        Controls.Add(MyEndDatePicker)
-        Controls.Add(MyStartDatePicker)
-    End Sub
     Protected Overrides Sub OnSizeChanged(e As EventArgs)
         MyBase.OnSizeChanged(e)
-        MyEndDatePicker.Width = Math.Floor(Width / 2)
-        MyStartDatePicker.Width = Math.Ceiling(Width / 2)
+        EndDatePicker.Width = Math.Floor((Width - DelimiterText.Width) / 2)
+        StartDatePicker.Width = Math.Ceiling((Width - DelimiterText.Width) / 2)
     End Sub
     '''<summary>Raises the <see cref="ValueChanged"/> event.</summary>
     '''<param name="e">The <see cref="EventArgs"/> containing the event data.</param>

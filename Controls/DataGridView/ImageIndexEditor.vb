@@ -12,7 +12,7 @@ Public Class ImageIndexEditor
 
 #End Region
 
-#Region "Protected Items"
+#Region "Functions"
 
     '''<summary>Gets the <see cref="Image"/> from the specified index in the specified context.</summary>
     '''<returns>The <see cref="Image"/> from the specified index in the specified context..</returns>
