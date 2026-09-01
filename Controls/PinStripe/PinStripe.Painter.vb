@@ -134,15 +134,15 @@ Partial Public Class PinStripe
                 Return _borderStyle
             End Get
         End Property
-        '''<summary>Gets the <see cref="LincolnControls.PinStripe"/> the <see cref="Painter"/> will paint.</summary>
-        '''<returns>The <see cref="LincolnControls.PinStripe"/> the <see cref="Painter"/> will paint.</returns>
+        '''<summary>Gets the <see cref="KoerControls.PinStripe"/> the <see cref="Painter"/> will paint.</summary>
+        '''<returns>The <see cref="KoerControls.PinStripe"/> the <see cref="Painter"/> will paint.</returns>
         Public ReadOnly Property PinStripe As PinStripe
             Get
                 Return MyPinStripe
             End Get
         End Property
-        '''<summary>Represents the thickness of the <see cref="Control"/> according to the direction of the <see cref="LincolnControls.PinStripe"/>.</summary>
-        '''<returns>The thickness of the <see cref="Control"/> according to the direction of the <see cref="LincolnControls.PinStripe"/>.</returns>
+        '''<summary>Represents the thickness of the <see cref="Control"/> according to the direction of the <see cref="KoerControls.PinStripe"/>.</summary>
+        '''<returns>The thickness of the <see cref="Control"/> according to the direction of the <see cref="KoerControls.PinStripe"/>.</returns>
         Public Property Thickness As Integer
             Get
                 Return _thickness
@@ -153,11 +153,11 @@ Partial Public Class PinStripe
                 RefreshValues()
             End Set
         End Property
-        '''<summary>Represents one of the x-values in the <see cref="LincolnControls.PinStripe"/>.</summary>
-        '''<remarks>When Type = Chevron Horizontal : The x-value of the back of the trail of the <see cref="LincolnControls.PinStripe"/>.
-        '''<para/>When Type = Chevron Vertical : The x-value of the left of the <see cref="LincolnControls.PinStripe"/>.
-        '''<para/>When Type = Diagonal : The x-value of the top-left of the <see cref="LincolnControls.PinStripe"/>.</remarks>
-        '''<returns>One of the x-values in the <see cref="LincolnControls.PinStripe"/>.</returns>
+        '''<summary>Represents one of the x-values in the <see cref="KoerControls.PinStripe"/>.</summary>
+        '''<remarks>When Type = Chevron Horizontal : The x-value of the back of the trail of the <see cref="KoerControls.PinStripe"/>.
+        '''<para/>When Type = Chevron Vertical : The x-value of the left of the <see cref="KoerControls.PinStripe"/>.
+        '''<para/>When Type = Diagonal : The x-value of the top-left of the <see cref="KoerControls.PinStripe"/>.</remarks>
+        '''<returns>One of the x-values in the <see cref="KoerControls.PinStripe"/>.</returns>
         Public Overridable Property X1 As Integer
             Get
                 Return _x1
@@ -166,11 +166,11 @@ Partial Public Class PinStripe
                 _x1 = value
             End Set
         End Property
-        '''<summary>Represents one of the x-values in the <see cref="LincolnControls.PinStripe"/>.</summary>
-        '''<remarks>When Type = Chevron Horizontal : The x-value of the lead of the trail of the <see cref="LincolnControls.PinStripe"/>.
-        '''<para/>When Type = Chevorn Vertical : The x-value of the lead of trail for the left line of the <see cref="LincolnControls.PinStripe"/>.
-        '''<para/>When Type = Diagonal : The x-value of the bottom-right of the <see cref="LincolnControls.PinStripe"/>.</remarks>
-        '''<returns>One of the x-values in the <see cref="LincolnControls.PinStripe"/>.</returns>
+        '''<summary>Represents one of the x-values in the <see cref="KoerControls.PinStripe"/>.</summary>
+        '''<remarks>When Type = Chevron Horizontal : The x-value of the lead of the trail of the <see cref="KoerControls.PinStripe"/>.
+        '''<para/>When Type = Chevorn Vertical : The x-value of the lead of trail for the left line of the <see cref="KoerControls.PinStripe"/>.
+        '''<para/>When Type = Diagonal : The x-value of the bottom-right of the <see cref="KoerControls.PinStripe"/>.</remarks>
+        '''<returns>One of the x-values in the <see cref="KoerControls.PinStripe"/>.</returns>
         Public Overridable Property X2 As Integer
             Get
                 Return _x2
@@ -179,11 +179,11 @@ Partial Public Class PinStripe
                 _x2 = value
             End Set
         End Property
-        '''<summary>Represents one of the x-values in the <see cref="LincolnControls.PinStripe"/>.</summary>.
+        '''<summary>Represents one of the x-values in the <see cref="KoerControls.PinStripe"/>.</summary>.
         '''<remarks>When Type = Chevron Horizontal : Not used.
-        '''<para/>When Type = Chevron Vertical : The x-vale of the lead of the trail for the right line of the <see cref="LincolnControls.PinStripe"/>.
+        '''<para/>When Type = Chevron Vertical : The x-vale of the lead of the trail for the right line of the <see cref="KoerControls.PinStripe"/>.
         '''<para/>When Type = Diagonal : Not used.</remarks>
-        '''<returns>One of the x-values in the <see cref="LincolnControls.PinStripe"/>.</returns>
+        '''<returns>One of the x-values in the <see cref="KoerControls.PinStripe"/>.</returns>
         Public Overridable Property X3 As Integer
             Get
                 Return _x3
@@ -192,11 +192,11 @@ Partial Public Class PinStripe
                 _x3 = value
             End Set
         End Property
-        '''<summary>Represents one of the x-values in the <see cref="LincolnControls.PinStripe"/>.</summary>
+        '''<summary>Represents one of the x-values in the <see cref="KoerControls.PinStripe"/>.</summary>
         '''<remarks>When Type = Chevron Horizontal : Not used.
-        '''<para/>When Type = Chevron Vertical : The x-vale of the right side of the <see cref="LincolnControls.PinStripe"/>.
+        '''<para/>When Type = Chevron Vertical : The x-vale of the right side of the <see cref="KoerControls.PinStripe"/>.
         '''<para/>When Type = Diagonal : Not used.</remarks>
-        '''<returns>One of the x-values in the <see cref="LincolnControls.PinStripe"/>.</returns>
+        '''<returns>One of the x-values in the <see cref="KoerControls.PinStripe"/>.</returns>
         Public Overridable Property X4 As Integer
             Get
                 Return _x4
@@ -205,11 +205,11 @@ Partial Public Class PinStripe
                 _x4 = value
             End Set
         End Property
-        '''<summary>Represents one of the y-values in the <see cref="LincolnControls.PinStripe"/>.</summary>
-        '''<remarks>When Type = Chevron Horizontal : The y-value of the top of the <see cref="LincolnControls.PinStripe"/>.
-        '''<para/>When Type = Chevron Vertical : The y-value of the back of the trail of the <see cref="LincolnControls.PinStripe"/>.
-        '''<para/>When Type = Diagonal : The x-value of the top-left of the <see cref="LincolnControls.PinStripe"/>.</remarks>
-        '''<returns>One of the x-values in the <see cref="LincolnControls.PinStripe"/>.</returns>
+        '''<summary>Represents one of the y-values in the <see cref="KoerControls.PinStripe"/>.</summary>
+        '''<remarks>When Type = Chevron Horizontal : The y-value of the top of the <see cref="KoerControls.PinStripe"/>.
+        '''<para/>When Type = Chevron Vertical : The y-value of the back of the trail of the <see cref="KoerControls.PinStripe"/>.
+        '''<para/>When Type = Diagonal : The x-value of the top-left of the <see cref="KoerControls.PinStripe"/>.</remarks>
+        '''<returns>One of the x-values in the <see cref="KoerControls.PinStripe"/>.</returns>
         Public Overridable Property Y1 As Integer
             Get
                 Return _y1
@@ -218,11 +218,11 @@ Partial Public Class PinStripe
                 _y1 = value
             End Set
         End Property
-        '''<summary>Represents one of the x-values in the <see cref="LincolnControls.PinStripe"/>.</summary>
-        '''<remarks>When Type = Chevron Horizontal : The y-value of the lead of trail for the top line of the <see cref="LincolnControls.PinStripe"/>.
-        '''<para/>When Type = Chevorn Vertical : The y-value of the lead of the trail of the <see cref="LincolnControls.PinStripe"/>.
-        '''<para/>When Type = Diagonal : The y-value of the bottom-right of the <see cref="LincolnControls.PinStripe"/>.</remarks>
-        '''<returns>One of the x-values in the <see cref="LincolnControls.PinStripe"/>.</returns>
+        '''<summary>Represents one of the x-values in the <see cref="KoerControls.PinStripe"/>.</summary>
+        '''<remarks>When Type = Chevron Horizontal : The y-value of the lead of trail for the top line of the <see cref="KoerControls.PinStripe"/>.
+        '''<para/>When Type = Chevorn Vertical : The y-value of the lead of the trail of the <see cref="KoerControls.PinStripe"/>.
+        '''<para/>When Type = Diagonal : The y-value of the bottom-right of the <see cref="KoerControls.PinStripe"/>.</remarks>
+        '''<returns>One of the x-values in the <see cref="KoerControls.PinStripe"/>.</returns>
         Public Overridable Property Y2 As Integer
             Get
                 Return _y2
@@ -231,11 +231,11 @@ Partial Public Class PinStripe
                 _y2 = value
             End Set
         End Property
-        '''<summary>Represents one of the x-values in the <see cref="LincolnControls.PinStripe"/>.</summary>
-        '''<remarks>When Type = Chevron Horizontal : The y-vale of the lead of the trail for the bottom line of the <see cref="LincolnControls.PinStripe"/>.
+        '''<summary>Represents one of the x-values in the <see cref="KoerControls.PinStripe"/>.</summary>
+        '''<remarks>When Type = Chevron Horizontal : The y-vale of the lead of the trail for the bottom line of the <see cref="KoerControls.PinStripe"/>.
         '''<para/>When Type = Chevron Vertical : Not used.
         '''<para/>When Type = Diagonal : Not used.</remarks>
-        '''<returns>One of the x-values in the <see cref="LincolnControls.PinStripe"/>.</returns>
+        '''<returns>One of the x-values in the <see cref="KoerControls.PinStripe"/>.</returns>
         Public Overridable Property Y3 As Integer
             Get
                 Return _y3
@@ -244,11 +244,11 @@ Partial Public Class PinStripe
                 _y3 = value
             End Set
         End Property
-        '''<summary>Represents one of the x-values in the <see cref="LincolnControls.PinStripe"/>.</summary>
-        '''<remarks>When Type = Chevron Horizontal :  The y-vale of the bottom side of the <see cref="LincolnControls.PinStripe"/>.
+        '''<summary>Represents one of the x-values in the <see cref="KoerControls.PinStripe"/>.</summary>
+        '''<remarks>When Type = Chevron Horizontal :  The y-vale of the bottom side of the <see cref="KoerControls.PinStripe"/>.
         '''<para/>When Type = Chevron Vertical : Not used.
         '''<para/>When Type = Diagonal : Not used.</remarks>
-        '''<returns>One of the x-values in the <see cref="LincolnControls.PinStripe"/>.</returns>
+        '''<returns>One of the x-values in the <see cref="KoerControls.PinStripe"/>.</returns>
         Public Overridable Property Y4 As Integer
             Get
                 Return _y4

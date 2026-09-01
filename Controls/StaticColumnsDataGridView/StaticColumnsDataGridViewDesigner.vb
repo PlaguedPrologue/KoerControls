@@ -1,4 +1,5 @@
-﻿Imports System.ComponentModel.Design
+﻿Imports System.ComponentModel
+Imports System.ComponentModel.Design
 Imports System.ComponentModel.Design.Serialization
 Imports System.Windows.Forms.Design
 
@@ -15,10 +16,18 @@ Public Class StaticColumnsDataGridViewDesigner
     'Removes the 'Columns' property from any StaticColumnsDataGridView being dropped into a form. Removes 'ContextMenuStrip' property from any StaticColumnsDataGridView with a predefined context menu strip
     Protected Overrides Sub PreFilterProperties(properties As IDictionary)
         MyBase.PreFilterProperties(properties)
-        If TypeOf Component Is StaticColumnsDataGridView Then
-            Dim dhHost As IDesignerHost = CType(GetService(GetType(IDesignerHost)), IDesignerHost)
-            If dhHost IsNot Nothing AndAlso Not ReferenceEquals(dhHost.RootComponent, Component) Then properties.Remove(NameOf(DataGridView.Columns))
-            If DirectCast(Component, StaticColumnsDataGridView).PreDefinedCotextMenuStrip IsNot Nothing Then properties.Remove(NameOf(Windows.Forms.Control.ContextMenuStrip))
+        If TypeOf Component IsNot StaticColumnsDataGridView Then Return 'Exit if component is not a StaticColumnsDataGridView
+        Dim dhHost As IDesignerHost = CType(GetService(GetType(IDesignerHost)), IDesignerHost) 'Get designer displaying properties
+        If dhHost Is Nothing Then Return 'Exit if host does not exist
+
+        If ReferenceEquals(dhHost.RootComponent, Component) Then 'Deal with properties of a StaticColumnsDataGridView inheriting designer
+            properties.Remove(NameOf(DataGridView.ContextMenuStrip)) 'Remove 'ContextMenuStrip' property
+
+        Else 'Deal with properties of StaticColumnsDataGridView inheriting controls inside another designer
+            properties.Remove(NameOf(DataGridView.Columns)) 'Remove 'Columns' property
+            properties.Remove(NameOf(StaticColumnsDataGridView.DefaultContextMenuStrip)) 'Remove 'DefaultContextMenuStrip' property
+            Dim pdContextmenuStrip As PropertyDescriptor = TryCast(properties(NameOf(Windows.Forms.Control.ContextMenuStrip)), PropertyDescriptor)
+            If pdContextmenuStrip IsNot Nothing Then properties(NameOf(Windows.Forms.Control.ContextMenuStrip)) = New StaticColumnsDataGridViewContextMenuStripPropertyDescriptor(pdContextmenuStrip)
         End If
     End Sub
 

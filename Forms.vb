@@ -1,9 +1,9 @@
-﻿Imports System.ComponentModel
-Imports System.Reflection
+﻿Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
+Imports System.Windows.Forms.Control
 
-Module Forms
+Public Module Forms
 
 #Region "Imports"
 
@@ -46,38 +46,6 @@ Module Forms
 
         Return True
     End Function
-    '''<summary>Flattens the entire control heirarchy that is contained inside the specified control.</summary>
-    '''<returns>The entire control heirarchy that is contained inside the specified control.</returns>
-    '''<param name="control">The control on which to flatten its control heirarchy.</param>
-    <Extension>
-    Public Iterator Function GetAllControls(control As Control) As IEnumerable(Of Control)
-        For Each cControl As Control In control.Controls
-            For Each cChild As Control In cControl.GetAllControls
-                Yield cChild
-            Next
-            Yield cControl
-        Next
-    End Function
-    '''<summary>Flattens the entire control heirarchy of the specified type that is contained inside the specified control.</summary>
-    '''<returns>The entire control heirarchy of the specified type that is contained inside the specified control.</returns>
-    '''<typeparam name="T">The type of control to search for.</typeparam>
-    '''<param name="control">The control on which to flatten its control heirarchy.</param>
-    '''<param name="stopIterationAtTop"><see langword="True"/> if stopping search down a path at the first control of type <typeparamref name="T"/>; otherwise <see langword="False"/> if getting every child of type <typeparamref name="T"/>.</param>
-    <Extension>
-    Public Iterator Function GetAllControls(Of T)(control As Control, Optional stopIterationAtTop As Boolean = False) As IEnumerable(Of T)
-        For Each cControl As Control In control.Controls
-            Dim bIsOfTypeT As Boolean = TypeOf cControl Is T
-            If Not bIsOfTypeT OrElse Not stopIterationAtTop Then
-                For Each cChild As T In cControl.GetAllControls(Of T)(stopIterationAtTop)
-                    Yield cChild
-                Next
-            End If
-            If bIsOfTypeT Then
-                Yield CObj(cControl)
-                If stopIterationAtTop Then Return
-            End If
-        Next
-    End Function
     '''<summary>Gets the displayed background color of the <see cref="Control"/> based on the transparency of itself, as well as all of its parent controls.</summary>
     '''<returns>The displayed background color of the <see cref="Control"/> based on the transparency of itself, as well as all of its parent controls
     '''<para/>Returns <see cref="Color.Transparent"/> if the <see cref="Control"/> is null or no parent control has been found, or if all of its own color as well as its parent colors are transparent..</returns>
@@ -112,7 +80,7 @@ Module Forms
     '''<typeparam name="T">The type of the control to search for.</typeparam>
     '''<param name="this">The control to find its parent controls from.</param>
     <Extension>
-    Public Function GetNearetParent(Of T)(this As Control) As T
+    Public Function GetNearestParent(Of T)(this As Control) As T
         Dim cParent As Control = this.Parent
         While cParent IsNot Nothing
             If TypeOf cParent Is T Then
@@ -120,13 +88,6 @@ Module Forms
             End If
         End While
         Return Nothing
-    End Function
-    '''<summary>Gets the Z-index of a control.</summary>
-    '''<returns>The Z-index of a control.</returns>
-    '''<param name="control">The control for which the Z-index will be changed.</param>
-    <Extension>
-    Public Function GetZIndex(control As Control) As Integer
-        Return If(control?.Parent?.Controls.IndexOf(control), 0)
     End Function
     '''<summary>Determines if a <see cref="IDisposable"/> object has been disposed.</summary>
     '''<returns><see langword="True"/> if the object is disposed; otherwise, <see langword="False"/>.</returns>
@@ -160,12 +121,140 @@ Module Forms
             Return True
         End If
     End Function
-    '''<summary>Sets the Z-index of a control.</summary>
-    '''<param name="control">The control for which the Z-index will be changed.</param>
-    '''<param name="ZIndex">The new Z-index of the control.</param>
+
+#End Region
+
+#Region "ControlCollection"
+
+    '''<summary>Flattens the entire control heirarchy that is contained inside the specified control collection.</summary>
+    '''<returns>The entire control heirarchy that is contained inside the specified control collection.</returns>
+    '''<param name="controlCollection">The collection on which to flatten its control heirarchy.</param>
+    '''<param name="filter">An optional filter to apply to the control collection. Leave as <see langword="Nothing"/> to apply no filter,</param>
+    '''<param name="stopAtTop">Stop iterating through a tree of controls if the filter fails, and continue onto the next tree.</param>
+    '''<exception cref="NullReferenceException"><paramref name="controlCollection"/> is null.</exception>
     <Extension>
-    Public Sub SetZIndex(control As Control, ZIndex As Integer)
-        control.Parent.Controls.SetChildIndex(control, ZIndex)
+    Public Iterator Function GetAll(controlCollection As ControlCollection, Optional filter As Func(Of Control, Boolean) = Nothing, Optional stopAtTop As Boolean = True) As IEnumerable(Of Control)
+        If controlCollection Is Nothing Then Throw New NullReferenceException("Collection cannot be null.")
+
+        If filter Is Nothing Then
+            For Each cControl As Control In controlCollection
+                For Each cChild As Control In cControl.Controls.GetAll
+                    Yield cChild
+                Next
+                Yield cControl
+            Next
+
+        Else
+            For Each cControl As Control In controlCollection
+                Dim bFilterPassed As Boolean = filter.Invoke(cControl)
+                If bFilterPassed OrElse Not stopAtTop Then
+                    For Each cChild As Control In cControl.Controls.GetAll(filter, stopAtTop)
+                        Yield cChild
+                    Next
+                End If
+                If bFilterPassed Then Yield cControl
+            Next
+        End If
+    End Function
+    '''<summary>Flattens the entire control heirarchy of the specified type that is contained inside the specified control collection.</summary>
+    '''<returns>The entire control heirarchy of the specified type that is contained inside the specified control collection.</returns>
+    '''<typeparam name="T">The type of control to search for.</typeparam>
+    '''<param name="controlCollection">The collection on which to flatten its control heirarchy.</param>
+    '''<param name="stopIterationAtTop"><see langword="True"/> if stopping search down a path at the first control of type <typeparamref name="T"/>; otherwise <see langword="False"/> if getting every child of type <typeparamref name="T"/>.</param>
+    '''<exception cref="NullReferenceException"><paramref name="controlCollection"/> is null</exception>
+    <Extension>
+    Public Iterator Function GetAll(Of T)(controlCollection As ControlCollection, Optional stopIterationAtTop As Boolean = False) As IEnumerable(Of T)
+        If controlCollection Is Nothing Then Throw New NullReferenceException("Collection cannot be null")
+
+        For Each cControl As Control In controlCollection
+            Dim bIsOfTypeT As Boolean = TypeOf cControl Is T
+            If Not bIsOfTypeT OrElse Not stopIterationAtTop Then
+                For Each tChild As T In cControl.Controls.GetAll(Of T)(stopIterationAtTop)
+                    Yield tChild
+                Next
+            End If
+
+            If bIsOfTypeT Then
+                Yield CObj(cControl)
+                If stopIterationAtTop Then Return
+            End If
+        Next
+    End Function
+    '''<summary>Gets the z-index of the control in the control collection.</summary>
+    '''<returns>The z-index of the control in the control collection.</returns>
+    '''<param name="controlCollection">The <see cref="ControlCollection"/> to find the control in.</param>
+    '''<param name="control">The <see cref="Control"/> to find the z-index of.</param>
+    '''<exception cref="InvalidOperationException">Owner of the ControlCollection does not match the Parent of the Control.</exception>
+    '''<exception cref="NullReferenceException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
+    <Extension>
+    Public Function GetIndex(controlCollection As ControlCollection, control As Control) As Integer
+        If controlCollection Is Nothing Then Throw New ArgumentNullException(NameOf(controlCollection))
+        If control Is Nothing Then Throw New ArgumentNullException(NameOf(control))
+        Dim cOwner As Control = controlCollection.Owner
+        If Not ReferenceEquals(cOwner, control.Parent) Then Throw New InvalidOperationException("Owner of the ControlCollection is not the current Parent of the Control.")
+
+        If control.Dock = DockStyle.Bottom OrElse control.Dock = DockStyle.Right Then
+            Return controlCollection.IndexOf(control)
+        Else
+            Return controlCollection.Count - controlCollection.IndexOf(control) - 1
+        End If
+    End Function
+    '''<summary>Inserts the control at the specified z-index of the control collection.</summary>
+    '''<param name="controlCollection">The <see cref="ControlCollection"/> to insert the control into.</param>
+    '''<param name="control">The <see cref="Control"/> is insert into the <see cref="ControlCollection"/>.</param>
+    '''<param name="index">The z-index in which to insert the <see cref="Control"/>.</param>
+    '''<exception cref="NullReferenceException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
+    <Extension>
+    Public Sub Insert(controlCollection As ControlCollection, control As Control, index As Integer)
+        If controlCollection Is Nothing Then Throw New ArgumentNullException(NameOf(controlCollection))
+        If control Is Nothing Then Throw New ArgumentNullException(NameOf(control))
+        If index < 0 Then
+            index = 0
+        ElseIf index > controlCollection.Count Then
+            index = controlCollection.Count
+        End If
+
+        Dim cOwner As Control = controlCollection.Owner
+        cOwner.SuspendLayout()
+        Try
+            If Not ReferenceEquals(cOwner, control.Parent) Then controlCollection.Add(control)
+            If control.Dock = DockStyle.Bottom OrElse control.Dock = DockStyle.Right Then
+                controlCollection.SetChildIndex(control, index)
+            Else
+                controlCollection.SetChildIndex(control, controlCollection.Count - index - 1)
+            End If
+        Catch
+            Throw
+        Finally
+            cOwner.ResumeLayout()
+        End Try
+    End Sub
+    '''<summary>Sets z-index of the control in the control collection.</summary>
+    '''<param name="controlCollection">The <see cref="ControlCollection"/> to reorder.</param>
+    '''<param name="control">The <see cref="Control"/> is set the z-index of in the <see cref="ControlCollection"/>.</param>
+    '''<param name="index">The new z-index of which to set the <see cref="Control"/>.</param>
+    '''<exception cref="InvalidOperationException">Owner of the ControlCollection does not match the Parent of the Control.</exception>
+    '''<exception cref="NullReferenceException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
+    <Extension>
+    Public Sub SetIndex(controlCollection As ControlCollection, control As Control, index As Integer)
+        If controlCollection Is Nothing Then Throw New ArgumentNullException(NameOf(controlCollection))
+        If control Is Nothing Then Throw New ArgumentNullException(NameOf(control))
+        Dim cOwner As Control = controlCollection.Owner
+        If Not ReferenceEquals(cOwner, control.Parent) Then Throw New InvalidOperationException("Owner of the ControlCollection is not the current Parent of the Control.")
+
+        control.SuspendLayout()
+        Try
+            If control.Dock = DockStyle.Bottom OrElse control.Dock = DockStyle.Right Then
+                controlCollection.SetChildIndex(control, index)
+            Else
+                controlCollection.SetChildIndex(control, controlCollection.Count - index - 1)
+            End If
+            control.ResumeLayout()
+        Catch
+            Throw
+        Finally
+            control.ResumeLayout()
+        End Try
     End Sub
 
 #End Region

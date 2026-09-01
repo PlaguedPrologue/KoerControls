@@ -66,7 +66,7 @@ Public Class WeakCollection(Of T As {Class, IDisposable})
         End Get
     End Property
     Public ReadOnly Property IsReadOnly As Boolean = False Implements ICollection(Of T).IsReadOnly
-    '''<summary>Gets a <see cref="IEnumerable"/> wrapper around the <see cref="WeakCollection"/>.</summary>
+    '''<summary>Iterates through a <see cref="IEnumerable"/> wrapper around the <see cref="WeakCollection"/>.</summary>
     '''<returns>A <see cref="IEnumerable"/> wapper around the <see cref="WeakCollection"/>.</returns>
     Public ReadOnly Iterator Property Items As IEnumerable(Of T)
         Get
@@ -149,7 +149,7 @@ Public Class WeakCollection(Of T As {Class, IDisposable})
         Next
         Return False
     End Function
-    '''<summary>Gets each <typeparamref name="T"/> that fulfills the provided <see cref="Func(Of T, TResult)"/>.</summary>
+    '''<summary>Iterates through each <typeparamref name="T"/> that fulfills the provided <see cref="Func(Of T, TResult)"/>.</summary>
     '''<returns>Each <typeparamref name="T"/> that fulfills the provided <see cref="Func(Of T, TResult)"/> if it exists; otherwise, <see langword="Nothing"/></returns>
     '''<param name="predicate">A function to test each element for a condition.</param>
     Public Iterator Function Where(predicate As Func(Of T, Boolean)) As IEnumerable(Of T)

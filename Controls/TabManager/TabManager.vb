@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.ComponentModel.Design
 Imports System.Drawing.Design
 
 '''<summary>A component that can allow TabPages to be reoredred, detached from a TabControl, and attached to another TabControl with the same within the same specified TabGroup.</summary>
@@ -31,6 +32,14 @@ Public Class TabManager
     Private Function CanExtend(extendee As Object) As Boolean Implements IExtenderProvider.CanExtend
         Return TypeOf extendee Is TabControl
     End Function
+    Private Sub NotifyPropertyChanged(control As Control, propertyName As String, oldValue As Object, newValue As Object)
+        Dim ccsChangeService As IComponentChangeService = TryCast(GetService(GetType(IComponentChangeService)), IComponentChangeService)
+        If ccsChangeService Is Nothing Then Return
+        Dim pdDescriptor As PropertyDescriptor = TypeDescriptor.GetProperties(control)(propertyName)
+        If pdDescriptor Is Nothing Then Return
+        ccsChangeService.OnComponentChanged(control, pdDescriptor, oldValue, newValue)
+        TypeDescriptor.Refresh(control)
+    End Sub
     Private Sub RemoveHandlers(tabControl As TabControl)
         RemoveHandler tabControl.ControlAdded, AddressOf TabControl_ControlAdded
         RemoveHandler tabControl.MouseDown, AddressOf TabControl_MouseDown
@@ -125,10 +134,13 @@ Public Class TabManager
         Else
             _tabControlsAllowedReordering.Remove(tabControl)
 
-            'If TabControl is not able to reorder, they cannot have a TabGroup assigned  
-            _tabControlTabGroup.Remove(tabControl)
-            _tabGroupManagedTabControls.Remove(tabControl)
-            RemoveHandlers(tabControl)
+            Dim tgTabGroup As TabGroup = Nothing
+            If _tabControlTabGroup.TryGetValue(tabControl, tgTabGroup) Then 'Control that has 'AllowReordering = False' requires it to have 'TabGroup = (none)'
+                _tabControlTabGroup.Remove(tabControl)
+                _tabGroupManagedTabControls.Remove(tabControl)
+                RemoveHandlers(tabControl)
+                NotifyPropertyChanged(tabControl, "TabGroup", tgTabGroup, Nothing)
+            End If
         End If
     End Sub
     '''<summary>Gets the name of the component.</summary>
@@ -158,6 +170,18 @@ Public Class TabManager
         _tabControlTabGroup.TryGetValue(tabControl, tgTabGroup)
         Return tgTabGroup
     End Function
+    '''<summary>Gets the tab group assigned to a tab page.</summary>
+    '''<returns>The tab group assigned to the <see cref="TabPage"/>.</returns>
+    '''<param name="tabPage">The <see cref="TabPage"/> to get the tab group from.</param>
+    <Category("Behavior")>
+    <Description("The TabGroupCollection assigned to the TabControl for rearranging tabs while the program is running. Setting a TabGroup allows each TabPage to be detached from the TabControl.")>
+    Public Function GetTabGroup(tabPage As TabPage) As TabGroup
+        Dim tcTabControl As TabControl = GetOriginalTabControl(tabPage)
+        If tcTabControl Is Nothing Then Return Nothing
+        Dim tgTabGroup As TabGroup = Nothing
+        _tabControlTabGroup.TryGetValue(tcTabControl, tgTabGroup)
+        Return tgTabGroup
+    End Function
     '''<summary>Assigns the specified TabGroup to the specified <see cref="TabControl"/>.</summary>
     '''<param name="tabControl">The <see cref="TabControl"/> to set the TabGroup of.</param>
     '''<param name="value">The TabGroup to assign to the specified <see cref="TabControl"/>.</param>
@@ -184,12 +208,14 @@ Public Class TabManager
             End If
 
         Else 'Adding LinkingGroup
-            If Not _tabControlsAllowedReordering.Contains(tabControl) Then
-                _tabControlsAllowedReordering.Add(tabControl) 'TabControls with a TabGroup assigned must be allowed to reorder
-                AddHandlers(tabControl) 'Add Control handlers if TabControl
-            End If
             _tabControlTabGroup.Add(tabControl, value) 'Add new Control/TabGroup pair to tracked TabGroups
             _tabGroupManagedTabControls.Add(tabControl) 'Force TabControl to allow reordering TabPages
+
+            If Not _tabControlsAllowedReordering.Contains(tabControl) Then 'Control that has 'TabGroup <> (none)' requires it to have 'AllowReordering = True'
+                _tabControlsAllowedReordering.Add(tabControl) 'TabControls with a TabGroup assigned must be allowed to reorder
+                AddHandlers(tabControl) 'Add Control handlers if TabControl
+                NotifyPropertyChanged(tabControl, "AllowReordering", False, True)
+            End If
         End If
     End Sub
     Friend Sub ResetTabGroup(tabControl As TabControl)
@@ -199,18 +225,6 @@ Public Class TabManager
     End Sub
     Friend Function ShouldSerializeTabGroup(tabControl As TabControl) As Boolean
         Return _tabGroupManagedTabControls.Contains(tabControl)
-    End Function
-    '''<summary>Gets the tab group assigned to a tab page.</summary>
-    '''<returns>The tab group assigned to the <see cref="TabPage"/>.</returns>
-    '''<param name="tabPage">The <see cref="TabPage"/> to get the tab group from.</param>
-    <Category("Behavior")>
-    <Description("The TabGroupCollection assigned to the TabControl for rearranging tabs while the program is running. Setting a TabGroup allows each TabPage to be detached from the TabControl.")>
-    Public Function GetTabGroup(tabPage As TabPage) As TabGroup
-        Dim tcTabControl As TabControl = GetOriginalTabControl(tabPage)
-        If tcTabControl Is Nothing Then Return Nothing
-        Dim tgTabGroup As TabGroup = Nothing
-        _tabControlTabGroup.TryGetValue(tcTabControl, tgTabGroup)
-        Return tgTabGroup
     End Function
     '''<summary>Gets or sets each <see cref="TabGroup"/> assigned to the <see cref="TabManager"/></summary>
     '''<returns>Each <see cref="TabGroup"/> assigned to the <see cref="TabManager"/>.</returns>

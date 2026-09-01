@@ -56,12 +56,12 @@ Friend Class StaticColumnsDataGridViewTypeDescriptor
     Public Overrides Function GetProperties(attributes() As Attribute) As PropertyDescriptorCollection
         If _owner Is Nothing Then Return MyBase.GetProperties(attributes)
         Dim pdProperties As List(Of PropertyDescriptor) = MyBase.GetProperties(attributes).Cast(Of PropertyDescriptor).ToList
-        If IsRootComponent() Then pdProperties.RemoveAll(Function(pd) pd.Name = NameOf(StaticColumnsDataGridView.ColumnList) OrElse pd.Name = NameOf(StaticColumnsDataGridView.ContextMenuStripItems))
+        If IsRootComponent() Then pdProperties.RemoveAll(Function(pd) pd.Name = NameOf(StaticColumnsDataGridView.ColumnList) OrElse pd.Name = NameOf(StaticColumnsDataGridView.DefaultContextMenuStripItems))
         For Each fiField As FieldInfo In GetColumnFields()
             pdProperties.Add(New StaticDataGridViewColumnSerializationDescriptor(fiField, _owner))
         Next
         For Each fiField As FieldInfo In GetToolStripItemFields()
-            pdProperties.Add(New StaticColumnsDataGridViewToolStripItemSerializationDescriptor(fiField, _owner))
+            pdProperties.Add(New StaticColumnsDataGridViewDefaultContextMenuStripItemSerializationDescriptor(fiField, _owner))
         Next
         Return New PropertyDescriptorCollection(pdProperties.ToArray)
     End Function

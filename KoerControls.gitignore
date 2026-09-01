@@ -10,3 +10,6 @@ obj/
 # User-specific files
 *.user
 *.suo
+
+# Personal files
+MYTASKS.txt

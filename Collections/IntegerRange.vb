@@ -257,7 +257,7 @@ Public Class IntegerRange
         If _endValue > other._endValue Then Return New IntegerRange(_startValue, other._endValue)
         Return New IntegerRange(_startValue, _endValue)
     End Function
-    '''<summary>Merges each overlapping <see cref="IntegerRange"/>, returning the each joined <see cref="IntegerRange"/>, sorted from least to greatest.</summary>
+    '''<summary>Merges each overlapping <see cref="IntegerRange"/>, iterating through the each joined <see cref="IntegerRange"/>, sorted from least to greatest.</summary>
     '''<returns>Each joined <see cref="IntegerRange"/>, sorted from least to greatest.</returns>
     Public Shared Iterator Function Join(ranges() As IntegerRange) As IEnumerable(Of IntegerRange)
         Dim irBuildingRange As IntegerRange = Nothing
@@ -277,7 +277,7 @@ Public Class IntegerRange
             Yield irBuildingRange
         End If
     End Function
-    '''<summary>Merges each overlapping <see cref="IntegerRange"/>, returning the each joined <see cref="IntegerRange"/>, sorted from least to greatest.</summary>
+    '''<summary>Merges each overlapping <see cref="IntegerRange"/>, iterating through the each joined <see cref="IntegerRange"/>, sorted from least to greatest.</summary>
     '''<returns>Each joined <see cref="IntegerRange"/>, sorted from least to greatest.</returns>
     Public Shared Iterator Function Join(ranges As IntegerRangeCollection) As IEnumerable(Of IntegerRange)
         Dim irBuildingRange As IntegerRange = Nothing

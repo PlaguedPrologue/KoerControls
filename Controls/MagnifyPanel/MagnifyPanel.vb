@@ -137,7 +137,7 @@ Public Class MagnifyPanel
 
                     'Create drawable border around child controls
                     Dim ctrlChildren As List(Of Control) = Controls.Cast(Of Control)().ToList
-                    For Each ctrlChild As Control In ctrlChildren.OrderBy(Function(ctrl) -ctrl.GetZIndex)
+                    For Each ctrlChild As Control In ctrlChildren.OrderBy(Function(ctrl) -ctrl.Parent?.Controls.IndexOf(ctrl))
                         If ctrlChild.Visible AndAlso ctrlChild.Width > 0 Then
                             If TypeOf ctrlChild Is Panel Then
                                 DirectCast(ctrlChild, Panel).DrawToBitmap(bmpControl, ctrlChild.Bounds)

@@ -47,7 +47,8 @@ Public Class WeakKeyDictionary(Of TKey As {Class, IDisposable}, TValue)
 #Region "Operators"
 
     Public Function Contains(item As KeyValuePair(Of TKey, TValue)) As Boolean Implements ICollection(Of KeyValuePair(Of TKey, TValue)).Contains
-        If item.Key Is Nothing OrElse item.Value Is Nothing Then Throw New ArgumentNullException("key and value cannot be null.")
+        If item.Key Is Nothing Then Throw New ArgumentNullException(NameOf(item.Key))
+        If item.Value Is Nothing Then Throw New ArgumentNullException(NameOf(item.Value))
         For Each kvpItem As KeyValuePair(Of WeakReference(Of TKey), TValue) In _instances 'Go through each instance
             Dim tKey As TKey = Nothing
             If kvpItem.Key.TryGetTarget(tKey) AndAlso tKey IsNot Nothing AndAlso Not tKey.IsDisposed Then 'Determine if key is valid
@@ -63,7 +64,7 @@ Public Class WeakKeyDictionary(Of TKey As {Class, IDisposable}, TValue)
         Return False
     End Function
     Public Function ContainsKey(key As TKey) As Boolean Implements IDictionary(Of TKey, TValue).ContainsKey
-        If key Is Nothing Then Throw New ArgumentNullException("key cannot be null.")
+        If key Is Nothing Then Throw New ArgumentNullException(NameOf(key))
         For Each kvpItem As KeyValuePair(Of WeakReference(Of TKey), TValue) In _instances 'Go through each instance
             Dim tKey As TKey = Nothing
             If kvpItem.Key.TryGetTarget(tKey) AndAlso tKey IsNot Nothing AndAlso Not tKey.IsDisposed Then 'Determine if key is valid
@@ -117,7 +118,7 @@ Public Class WeakKeyDictionary(Of TKey As {Class, IDisposable}, TValue)
     Public ReadOnly Property IsReadOnly As Boolean = False Implements ICollection(Of KeyValuePair(Of TKey, TValue)).IsReadOnly
     Default Public Property Item(key As TKey) As TValue Implements IDictionary(Of TKey, TValue).Item
         Get
-            If key Is Nothing Then Throw New ArgumentNullException("key cannot be null.")
+            If key Is Nothing Then Throw New ArgumentNullException(NameOf(key))
             For Each kvpItem As KeyValuePair(Of WeakReference(Of TKey), TValue) In _instances 'Go through each instance
                 Dim tKey As TKey = Nothing
                 If kvpItem.Key.TryGetTarget(tKey) AndAlso tKey IsNot Nothing AndAlso Not tKey.IsDisposed Then 'Determine if key is valid
@@ -133,7 +134,8 @@ Public Class WeakKeyDictionary(Of TKey As {Class, IDisposable}, TValue)
             Return Nothing
         End Get
         Set(value As TValue)
-            If key Is Nothing OrElse value Is Nothing Then Throw New ArgumentNullException("key and value cannot be null.")
+            If key Is Nothing Then Throw New ArgumentNullException(NameOf(key))
+            If value Is Nothing Then Throw New ArgumentNullException(NameOf(value))
             For Each kvpItem As KeyValuePair(Of WeakReference(Of TKey), TValue) In _instances 'Go through each item
                 Dim tKey As TKey = Nothing
                 If kvpItem.Key.TryGetTarget(tKey) AndAlso tKey IsNot Nothing AndAlso Not tKey.IsDisposed Then 'Determine if key is valid
@@ -180,11 +182,13 @@ Public Class WeakKeyDictionary(Of TKey As {Class, IDisposable}, TValue)
 #Region "Functions"
 
     Public Sub Add(item As KeyValuePair(Of TKey, TValue)) Implements ICollection(Of KeyValuePair(Of TKey, TValue)).Add
-        If item.Key Is Nothing OrElse item.Value Is Nothing Then Throw New ArgumentNullException("key and value cannot be null.")
+        If item.Key Is Nothing Then Throw New ArgumentNullException(NameOf(item.Key))
+        If item.Value Is Nothing Then Throw New ArgumentNullException(NameOf(item.Value))
         _instances.TryAdd(New WeakReference(Of TKey)(item.Key), item.Value)
     End Sub
     Public Sub Add(key As TKey, value As TValue) Implements IDictionary(Of TKey, TValue).Add
-        If key Is Nothing OrElse value Is Nothing Then Throw New ArgumentNullException("key and value cannot be null.")
+        If key Is Nothing Then Throw New ArgumentNullException(NameOf(key))
+        If value Is Nothing Then Throw New ArgumentNullException(NameOf(value))
         _instances.TryAdd(New WeakReference(Of TKey)(key), value)
     End Sub
     Public Sub Clear() Implements ICollection(Of KeyValuePair(Of TKey, TValue)).Clear
@@ -229,7 +233,7 @@ Public Class WeakKeyDictionary(Of TKey As {Class, IDisposable}, TValue)
         Return False 'Key not found, so value not found
     End Function
     Public Function Remove(key As TKey) As Boolean Implements IDictionary(Of TKey, TValue).Remove
-        If key Is Nothing Then Throw New ArgumentNullException("key cannot be null.")
+        If key Is Nothing Then Throw New ArgumentNullException(NameOf(key))
         For Each kvpItem As KeyValuePair(Of WeakReference(Of TKey), TValue) In _instances 'Go through each instance
             Dim tKey As TKey = Nothing
             If kvpItem.Key.TryGetTarget(tKey) AndAlso tKey IsNot Nothing AndAlso Not tKey.IsDisposed Then 'Determine if key is valid
@@ -244,7 +248,7 @@ Public Class WeakKeyDictionary(Of TKey As {Class, IDisposable}, TValue)
         Return False 'Key not found, so value not found
     End Function
     Public Function TryGetValue(key As TKey, ByRef value As TValue) As Boolean Implements IDictionary(Of TKey, TValue).TryGetValue
-        If key Is Nothing Then Throw New ArgumentNullException("key cannot be null.")
+        If key Is Nothing Then Throw New ArgumentNullException(NameOf(key))
         For Each kvpItem As KeyValuePair(Of WeakReference(Of TKey), TValue) In _instances 'Go through each instance
             Dim tKey As TKey = Nothing
             If kvpItem.Key.TryGetTarget(tKey) AndAlso tKey IsNot Nothing AndAlso Not tKey.IsDisposed Then 'Determine if key is valid

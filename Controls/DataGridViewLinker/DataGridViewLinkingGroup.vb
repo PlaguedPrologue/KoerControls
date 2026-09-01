@@ -1,78 +1,81 @@
 ﻿Imports System.ComponentModel
 
 '''<summary>Represents a group that links DataGridViews together.</summary>
-<DesignTimeVisible(False)>
-<ToolboxItem(False)>
 Public Class DataGridViewLinkingGroup
+    Inherits NamedComponent
     Implements IComponent, IDisposable
 
 #Region "Private Items"
 
-    Private _name As String
+    Friend _dataGridViewLinker As DataGridViewLinker
 
 #End Region
 
 #Region "Initializers"
 
-    '''<summary>Creates an empty instance of the <see cref="DataGridViewLinkingGroup"/> class.</summary>
+    '''<summary>Create a new empty instance of the <see cref="DataGridViewLinkingGroup"/> clas.</summary>
     Public Sub New()
+        MyBase.New
     End Sub
     '''<summary>Creates a new instance of the <see cref="DataGridViewLinkingGroup"/> class.</summary>
     '''<param name="value">The name value of the <see cref="DataGridViewLinkingGroup"/>.</param>
     Public Sub New(value As String)
-        Me.Value = value
+        MyBase.New(value)
     End Sub
     '''<summary>Creates a new instance of the <see cref="DataGridViewLinkingGroup"/> class.</summary>
     '''<param name="value">The name value of the <see cref="DataGridViewLinkingGroup"/>.</param>
     '''<param name="container">The owning <see cref="IContainer"/> of the <see cref="DataGridViewLinkingGroup"/>.</param>
     Public Sub New(value As String, container As IContainer)
-        container?.Add(Me)
-        Me.Value = value
+        MyBase.New(value, container)
     End Sub
-
-#End Region
-
-#Region "Events"
-
-    Public Event Disposed As EventHandler Implements IComponent.Disposed
 
 #End Region
 
 #Region "Properties"
 
-    '''<summary>Gets or sets the name of the control in its site.</summary>
-    '''<returns>The name of the control in its site.</returns>
-    Public Property Name As String
+    '''<summary>Gets or sets the currently active cell.</summary>
+    '''<returns>The <see cref="DataGridViewCell"/> that represents the current cell, or null if there is no current cell. The default is the first cell in the first column or null if there are no cells in the control.</returns>
+    '''<exception cref="InvalidOperationException">The value of this property cannot be set because changes to the current cell cannot be committed or canceled.-or-The specified cell when setting this property is in a hidden row or column. Re-entrant calling is only allowed when the <see cref="DataGridView"/> is bound to a <see cref="DataGridView.DataSource"/>. Re-entrant calling results from a change to the underlying data.</exception>
+    Public Property CurrentCell As DataGridViewCell
         Get
-            If Site IsNot Nothing AndAlso Not String.IsNullOrEmpty(Site.Name) Then _name = Site.Name
-            Return _name
+            If _dataGridViewLinker Is Nothing Then Return Nothing
+            For Each dgvDataGridView As DataGridView In _dataGridViewLinker.GetDataGridViews(Me)
+                Dim dgvcCurrentCell As DataGridViewCell = dgvDataGridView.CurrentCell
+                If dgvcCurrentCell IsNot Nothing Then Return dgvcCurrentCell
+            Next
+            Return Nothing
         End Get
-        Set(value As String)
-            If String.IsNullOrEmpty(value) Then
-                _name = String.Empty
+        Set(value As DataGridViewCell)
+            If _dataGridViewLinker Is Nothing Then Return
+            If value Is Nothing Then
+                For Each dgvDataGridView As DataGridView In _dataGridViewLinker.GetDataGridViews(Me)
+                    dgvDataGridView.CurrentCell = Nothing
+                Next
             Else
-                _name = value
+                Dim dgvValueDataGridView As DataGridView = value?.DataGridView
+                If _dataGridViewLinker.GetDataGridViews(Me).Any(Function(dgv) ReferenceEquals(dgv, dgvValueDataGridView)) Then dgvValueDataGridView.CurrentCell = value
             End If
         End Set
     End Property
-    <Browsable(False)>
-    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
-    Public Property Site As ISite Implements IComponent.Site
-    '''<summary>Gets the value name assigned to the <see cref="DataGridViewLinkingGroup"/>.</summary>
-    '''<returns>The value name assigned to the <see cref="DataGridViewLinkingGroup"/>.</returns>
-    Public Property Value As String
-
-#End Region
-
-#Region "Functions"
-
-    Public Sub Dispose() Implements IDisposable.Dispose
-        Site?.Container?.Remove(Me)
-        RaiseEvent Disposed(Me, EventArgs.Empty)
-    End Sub
-    Public Overrides Function ToString() As String
-        Return Value
-    End Function
+    '''<summary>Gets the row containing the current cell.</summary>
+    '''<returns>The <see cref="DataGridViewRow"/> that represents the row containing the current cell, or <see langword="Nothing"/> if there is no current cell.</returns>
+    Public ReadOnly Property CurrentRow As DataGridViewRow
+        Get
+            If _dataGridViewLinker Is Nothing Then Return Nothing
+            For Each dgvDataGridView As DataGridView In _dataGridViewLinker.GetDataGridViews(Me)
+                Dim dgvrCurrentRow As DataGridViewRow = dgvDataGridView.CurrentRow
+                If dgvrCurrentRow IsNot Nothing Then Return dgvrCurrentRow
+            Next
+            Return Nothing
+        End Get
+    End Property
+    '''<summary>Gets the <see cref="KoerControls.DataGridViewLinker"/> that owns the <see cref="DataGridViewLinkingGroup"/>.</summary>
+    '''<returns>The <see cref="KoerControls.DataGridViewLinker"/> that owns the <see cref="DataGridViewLinkingGroup"/>.</returns>
+    Public ReadOnly Property DataGridViewLinker As DataGridViewLinker
+        Get
+            Return _dataGridViewLinker
+        End Get
+    End Property
 
 #End Region
 

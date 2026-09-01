@@ -157,7 +157,7 @@ Public Class PinStripeList
         Next
         MyBase.Dispose(disposing)
     End Sub
-    '''<summary>Gets each <see cref="PinStripe"/> assigned to the specified <see cref="Control"/>.</summary>
+    '''<summary>Iterates through each <see cref="PinStripe"/> assigned to the specified <see cref="Control"/>.</summary>
     '''<returns>Each <see cref="PinStripe"/> assigned to the specified <see cref="Control"/>.</returns>
     '''<param name="control">The <see cref="Control"/> that can a <see cref="PinStripe"/>.</param>
     Public Shared Iterator Function GetPinStripes(control As Control) As IEnumerable(Of PinStripe)

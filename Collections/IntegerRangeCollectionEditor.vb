@@ -5,7 +5,17 @@ Imports System.ComponentModel.Design
 Public Class IntegerRangeCollectionEditor
     Inherits CollectionEditor
 
-#Region "Protected Items"
+#Region "Initializers"
+
+    '''<summary> Initializes a new instance of the <see cref="IntegerRangeCollectionEditor"/> class using the specified collection type.</summary>
+    '''<param name="type">The type of the collection for this editor to edit.</param>
+    Public Sub New(type As Type)
+        MyBase.New(type)
+    End Sub
+
+#End Region
+
+#Region "Functions"
 
     Protected Overrides Function CreateCollectionItemType() As Type
         Return GetType(IntegerRange)
@@ -18,16 +28,6 @@ Public Class IntegerRangeCollectionEditor
         context?.PropertyDescriptor.SetValue(context.Instance, oResult)
         Return oResult
     End Function
-
-#End Region
-
-#Region "Initializers"
-
-    '''<summary> Initializes a new instance of the <see cref="IntegerRangeCollectionEditor"/> class using the specified collection type.</summary>
-    '''<param name="type">The type of the collection for this editor to edit.</param>
-    Public Sub New(type As Type)
-        MyBase.New(type)
-    End Sub
 
 #End Region
 

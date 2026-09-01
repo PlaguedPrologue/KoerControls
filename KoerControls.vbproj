@@ -120,7 +120,7 @@
       <DependentUpon>DateRangePicker.vb</DependentUpon>
     </Compile>
     <Compile Include="Controls\DateRangePicker\DateRangePicker.vb">
-      <SubType>Form</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\DateRangePicker\DateRangePickerCheckBoxVisibilityState.vb" />
     <Compile Include="Controls\DateRangePicker\DateRangePickerDesigner.vb" />
@@ -160,18 +160,16 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewCodeDomSerializer.vb" />
+    <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewContextMenuStripConverter.vb" />
+    <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewContextMenuStripPropertyDescriptor.vb" />
     <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewDesigner.vb" />
-    <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewToolStripItemCollection.vb" />
-    <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewToolStripItemCollectionConverter.vb" />
-    <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewToolStripItemPropertyDescriptor.vb" />
-    <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewToolStripItemPropertyDescriptorCollection.vb" />
-    <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewToolStripItemSerializationDescriptor.vb" />
+    <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewDefaultContextMenuStripItemCollection.vb" />
+    <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewDefaultContextMenuStripItemCollectionConverter.vb" />
+    <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewDefaultContextMenuStripItemSerializationDescriptor.vb" />
     <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewTypeDescriptor.vb" />
     <Compile Include="Controls\StaticColumnsDataGridView\StaticColumnsDataGridViewTypeDescriptorProvider.vb" />
     <Compile Include="Controls\StaticColumnsDataGridView\StaticDataGridViewColumnCollection.vb" />
     <Compile Include="Controls\StaticColumnsDataGridView\StaticDataGridViewColumnCollectionConverter.vb" />
-    <Compile Include="Controls\StaticColumnsDataGridView\StaticDataGridViewColumnPropertyDescriptor.vb" />
-    <Compile Include="Controls\StaticColumnsDataGridView\StaticDataGridViewColumnPropertyDescriptorCollection.vb" />
     <Compile Include="Controls\StaticColumnsDataGridView\StaticDataGridViewColumnSerializationDescriptor.vb" />
     <Compile Include="Controls\TabManager\TabGroup.vb" />
     <Compile Include="Controls\TabManager\TabGroupCollection.vb" />
@@ -199,6 +197,7 @@
     <Compile Include="Controls\VisualBuffer\VisualBuffer.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\NamedComponent\NamedComponent.vb" />
     <Compile Include="Design\SingleInstanceComponentDesigner.vb" />
     <Compile Include="Design\StringCollectionEditor.StringCollectionForm.vb" />
     <Compile Include="Design\StringCollectionEditor.vb" />
@@ -239,6 +238,18 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Tasks\CancellableTask.vb" />
+    <Compile Include="Tests\TestForm.Designer.vb">
+      <DependentUpon>TestForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\TestForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tests\TestStaticColumnsDataGridView.Designer.vb">
+      <DependentUpon>TestStaticColumnsDataGridView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\TestStaticColumnsDataGridView.vb">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Dialogs\EditingInputBox.resx">
@@ -252,6 +263,12 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tests\TestForm.resx">
+      <DependentUpon>TestForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tests\TestStaticColumnsDataGridView.resx">
+      <DependentUpon>TestStaticColumnsDataGridView.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -270,6 +287,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\StaticColumnsDataGridView\README.txt" />
+    <Content Include="MYTASKS.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

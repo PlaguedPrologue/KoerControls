@@ -25,9 +25,8 @@ Public Class StaticDataGridViewColumnCollection
             Return DataGridView.ColumnCount
         End Get
     End Property
-    '''<summary>Gets the <see cref="StaticColumnsDataGridView"/> upon which the collection preforms column-related operations.</summary>
-    '''<returns>The <see cref="StaticColumnsDataGridView"/> upon which the collection preforms column-related operations</returns>
-    Public ReadOnly Property DataGridView As StaticColumnsDataGridView
+    '''<summary>Gets the <see cref="StaticColumnsDataGridView"/> upon which the collection performs column-related operations.</summary>
+    Friend ReadOnly Property DataGridView As StaticColumnsDataGridView
     Public ReadOnly Property IsSynchronized As Boolean Implements ICollection.IsSynchronized
         Get
             Return DataGridView.Columns.IsSynchronized

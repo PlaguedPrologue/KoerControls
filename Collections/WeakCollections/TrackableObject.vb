@@ -36,7 +36,7 @@ Public MustInherit Class TrackableObject(Of T As TrackableObject(Of T))
             Return _disposed = 1
         End Get
     End Property
-    '''<summary>Gets all active instances of the <see cref="Type"/> <typeparamref name="T"/>.</summary>
+    '''<summary>Iterates through all active instances of the <see cref="Type"/> <typeparamref name="T"/>.</summary>
     '''<returns>All active instances of the <see cref="Type"/> <typeparamref name="T"/>.</returns>
     Public ReadOnly Iterator Property Items As IEnumerable(Of T)
         Get
@@ -73,7 +73,7 @@ Public MustInherit Class TrackableObject(Of T As TrackableObject(Of T))
         Next
         Return Nothing
     End Function
-    '''<summary>Gets each <typeparamref name="T"/> that fulfills the provided <see cref="Func(Of T, TResult)"/>.</summary>
+    '''<summary>Iterates through each <typeparamref name="T"/> that fulfills the provided <see cref="Func(Of T, TResult)"/>.</summary>
     '''<returns>Each <typeparamref name="T"/> that fulfills the provided <see cref="Func(Of T, TResult)"/> if it exists; otherwise, <see langword="Nothing"/></returns>
     '''<param name="predicate">The <see cref="Func(Of T, TResult)"/> to apply to the current tracked instances.</param>
     Public Shared Iterator Function Where(predicate As Func(Of T, Boolean)) As IEnumerable(Of T)

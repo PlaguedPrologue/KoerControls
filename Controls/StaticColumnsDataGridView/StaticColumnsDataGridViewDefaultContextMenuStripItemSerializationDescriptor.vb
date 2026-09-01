@@ -3,7 +3,7 @@ Imports System.Reflection
 
 'Provides property descriptions for each ToolStripItem in a StaticColumnsDataGridView, while removing the ability for the Form designer to create these items
 'Hides ToolStripItems from becoming visible properties to edit in the Properties window
-Friend Class StaticColumnsDataGridViewToolStripItemSerializationDescriptor
+Friend Class StaticColumnsDataGridViewDefaultContextMenuStripItemSerializationDescriptor
     Inherits PropertyDescriptor
 
     Private ReadOnly _field As FieldInfo
@@ -24,7 +24,7 @@ Friend Class StaticColumnsDataGridViewToolStripItemSerializationDescriptor
     'Sets the component type to StaticColumnsDataGridView
     Public Overrides ReadOnly Property ComponentType As Type
         Get
-            Return _field.DeclaringType
+            Return GetType(ToolStripItem)
         End Get
     End Property
     Public Overrides ReadOnly Property DisplayName As String
@@ -54,7 +54,7 @@ Friend Class StaticColumnsDataGridViewToolStripItemSerializationDescriptor
     'Gets the ToolStripItem of the field in the StaticDataGridView
     Public Overrides Function GetValue(component As Object) As Object
         If TypeOf component Is StaticColumnsDataGridView Then Return _field.GetValue(component)
-        If TypeOf component Is StaticColumnsDataGridViewToolStripItemCollection Then Return _field.GetValue(DirectCast(component, StaticColumnsDataGridViewToolStripItemCollection).DataGridView)
+        If TypeOf component Is StaticColumnsDataGridViewDefaultContextMenuStripItemCollection Then Return _field.GetValue(DirectCast(component, StaticColumnsDataGridViewDefaultContextMenuStripItemCollection).ContextMenuStrip)
         Return Nothing
     End Function
     'A ToolStripItem cannot be reset in a StaticColumnsDataGridView

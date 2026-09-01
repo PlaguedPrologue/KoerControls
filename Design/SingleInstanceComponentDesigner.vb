@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.ComponentModel.Design
 
+'''<summary>Extends the design mode behavior of a component. Allows only one instance per designer.</summary>
 Public Class SingleInstanceComponentDesigner
     Inherits ComponentDesigner
 

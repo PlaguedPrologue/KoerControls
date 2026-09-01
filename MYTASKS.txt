@@ -1,0 +1,29 @@
+﻿To Publish
+	Rebuild to make sure it works
+	Open command prompt
+	Run the following commands:
+		cd [Solution Folder Location]
+		git add .
+		git commit -m "[Update Description]"
+		git push
+
+
+Changes since last push
+
+-Controls.DataGridViewLinker.DataGridViewLinkingGroup
+	Made LinkingGroup objects
+-Controls.TabManager.TabGroup
+	Made TabGroup objects
+-Controls.StaticColumnsDataGridView 
+	Fixed issues with getting column properties correctly
+	Made ColumnList and ContextMenuStripItems properties editors into standard readonly Collection Editor Forms
+	Fixed issues with setting DefaultContextMenuStrip property in a StaticColumnsDataGridView inheriting control
+	Fixed issue with selecting ContextMenuStrip and getting ContextMenuStripItems collection
+-All WeakDictionaries
+	Fixed ArgumentNullException descriptions
+-Controls.Highlighter
+	Added KeepHighlightedOnTabStopChildEntry and HighlightedControl properties
+-Controls.TabManager
+	Fixed issues with properties window updating immediately upon TabGroup and AllowReordering properties changing
+-Forms module
+	Removed the Z-Indexing functions, as they are not as explicitly obvious to use as needed

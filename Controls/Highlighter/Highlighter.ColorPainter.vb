@@ -16,6 +16,7 @@ Partial Public Class Highlighter
         Private _containsCursor As Boolean
         Private _highlighted As Boolean
         Private Shared ReadOnly _ownerClickEvent As MethodInfo = GetType(Control).GetMethod("OnClick", BindingFlags.Instance Or BindingFlags.NonPublic)
+        Private Shared ReadOnly _ownerMouseClickEvent As MethodInfo = GetType(Control).GetMethod("OnMouseClick", BindingFlags.Instance Or BindingFlags.NonPublic)
         Private _settingBackgroundColor As Boolean
 
         Private Sub Child_BackColorChanged(sender As Object, e As EventArgs)
@@ -28,39 +29,50 @@ Partial Public Class Highlighter
                 hchColor.SettingBackgroundColor = False 'State that the Control is no longer having its background color set
             End If
         End Sub
-        Private Sub Child_Clicked(sender As Object, e As EventArgs)
+        Private Sub Child_Click(sender As Object, e As EventArgs)
             Dim cClickedControl As Control = TryCast(sender, Control)
             While cClickedControl IsNot Nothing 'Go up the list of parents of the Control clicked
                 If ReferenceEquals(cClickedControl, MyOwner) Then 'Determine if parent is the owning Control
                     _ownerClickEvent?.Invoke(MyOwner, {e}) 'Raise the owning Control's click event
                     Return 'Control clicked, exit
                 End If
-                If cClickedControl.TabStop OrElse _managedControls.Contains(cClickedControl) Then Return 'If the Control clicked can be selected or is in the list of managed Controls in the Highlighter (owning Control already checked), the owning Control cannot be clicked
+                If cClickedControl.TabStop OrElse _highlightOnMouseEnterManagedControls.Contains(cClickedControl) Then Return 'If the Control clicked can be selected or is in the list of managed Controls in the Highlighter (owning Control already checked), the owning Control cannot be clicked
+                cClickedControl = cClickedControl.Parent 'Go up to the next parent
+            End While
+        End Sub
+        Private Sub Child_MouseClick(sender As Object, e As MouseEventArgs)
+            Dim cClickedControl As Control = TryCast(sender, Control)
+            While cClickedControl IsNot Nothing 'Go up the list of parents of the Control clicked
+                If ReferenceEquals(cClickedControl, MyOwner) Then 'Determine if parent is the owning Control
+                    _ownerMouseClickEvent?.Invoke(MyOwner, {e}) 'Raise the owning Control's click event
+                    Return 'Control clicked, exit
+                End If
+                If cClickedControl.TabStop OrElse _highlightOnMouseEnterManagedControls.Contains(cClickedControl) Then Return 'If the Control clicked can be selected or is in the list of managed Controls in the Highlighter (owning Control already checked), the owning Control cannot be clicked
                 cClickedControl = cClickedControl.Parent 'Go up to the next parent
             End While
         End Sub
         Private Sub Child_MouseEnter(sender As Object, e As EventArgs)
-            Dim cClickedControl As Control = TryCast(sender, Control)
-            While cClickedControl IsNot Nothing 'Go up the list of parents of the Control clicked
-                If ReferenceEquals(cClickedControl, MyOwner) Then 'Determine if parent is the owning Control
+            Dim cControlEntered As Control = TryCast(sender, Control)
+            While cControlEntered IsNot Nothing 'Go up the list of parents of the Control clicked
+                If ReferenceEquals(cControlEntered, MyOwner) Then 'Determine if parent is the owning Control
                     _childContainsCursor = True 'State that child Control contains the cursor
                     RefreshHighlighted() 'Referesh the highlight status of the Control
                     Return 'Control clicked, exit
                 End If
-                If cClickedControl.TabStop OrElse _managedControls.Contains(cClickedControl) Then Return 'If the Control clicked can be selected or is in the list of managed Controls in the Highlighter (owning Control already checked), the owning Control cannot be stated as entered
-                cClickedControl = cClickedControl.Parent 'Go up to the next parent
+                If (cControlEntered.TabStop AndAlso _keepHighlightedOnTabStopChildEntryManagedControls.Contains(cControlEntered)) OrElse _highlightOnMouseEnterManagedControls.Contains(cControlEntered) Then Return 'If the Control clicked can be selected or is in the list of managed Controls in the Highlighter (owning Control already checked), the owning Control cannot be stated as entered
+                cControlEntered = cControlEntered.Parent 'Go up to the next parent
             End While
         End Sub
         Private Sub Child_MouseLeave(sender As Object, e As EventArgs)
-            Dim cClickedControl As Control = TryCast(sender, Control)
-            While cClickedControl IsNot Nothing 'Go up the list of parents of the Control clicked
-                If ReferenceEquals(cClickedControl, MyOwner) Then 'Determine if parent is the owning Control
+            Dim cControlLeft As Control = TryCast(sender, Control)
+            While cControlLeft IsNot Nothing 'Go up the list of parents of the Control clicked
+                If ReferenceEquals(cControlLeft, MyOwner) Then 'Determine if parent is the owning Control
                     _childContainsCursor = False 'State that child Control does not contain the cursor
                     RefreshHighlighted() 'Referesh the highlight status of the Control
                     Return 'Control clicked, exit
                 End If
-                If cClickedControl.TabStop OrElse _managedControls.Contains(cClickedControl) Then Return 'If the Control clicked can be selected or is in the list of managed Controls in the Highlighter (owning Control already checked), the owning Control cannot be stated as entered
-                cClickedControl = cClickedControl.Parent 'Go up to the next parent
+                If (cControlLeft.TabStop AndAlso _keepHighlightedOnTabStopChildEntryManagedControls.Contains(cControlLeft)) OrElse _highlightOnMouseEnterManagedControls.Contains(cControlLeft) Then Return 'If the Control clicked can be selected or is in the list of managed Controls in the Highlighter (owning Control already checked), the owning Control cannot be stated as entered
+                cControlLeft = cControlLeft.Parent 'Go up to the next parent
             End While
         End Sub
         Private Sub MyOwner_BackColorChanged(sender As Object, e As EventArgs) Handles MyOwner.BackColorChanged
@@ -74,9 +86,10 @@ Partial Public Class Highlighter
         End Sub
         Private Sub MyOwner_ControlAdded(sender As Object, e As ControlEventArgs) Handles MyOwner.ControlAdded
             AddHandler e.Control.BackColorChanged, AddressOf Child_BackColorChanged
-            AddHandler e.Control.Click, AddressOf Child_Clicked
+            AddHandler e.Control.Click, AddressOf Child_Click
             AddHandler e.Control.ControlAdded, AddressOf MyOwner_ControlAdded
             AddHandler e.Control.ControlRemoved, AddressOf MyOwner_ControlRemoved
+            AddHandler e.Control.MouseClick, AddressOf Child_MouseClick
             AddHandler e.Control.MouseEnter, AddressOf Child_MouseEnter
             AddHandler e.Control.MouseLeave, AddressOf Child_MouseLeave
             _childColors.Add(e.Control, New HighlightableColorHandler(HighlightableColor.FromControl(e.Control)))
@@ -84,9 +97,10 @@ Partial Public Class Highlighter
         End Sub
         Private Sub MyOwner_ControlRemoved(sender As Object, e As ControlEventArgs) Handles MyOwner.ControlRemoved
             RemoveHandler e.Control.BackColorChanged, AddressOf Child_BackColorChanged
-            RemoveHandler e.Control.Click, AddressOf Child_Clicked
+            RemoveHandler e.Control.Click, AddressOf Child_Click
             RemoveHandler e.Control.ControlAdded, AddressOf MyOwner_ControlAdded
             RemoveHandler e.Control.ControlRemoved, AddressOf MyOwner_ControlRemoved
+            RemoveHandler e.Control.MouseClick, AddressOf Child_MouseClick
             RemoveHandler e.Control.MouseEnter, AddressOf Child_MouseEnter
             RemoveHandler e.Control.MouseLeave, AddressOf Child_MouseLeave
             Dim hchControlColor As HighlightableColorHandler = Nothing
@@ -94,6 +108,9 @@ Partial Public Class Highlighter
                 _childColors.Remove(e.Control)
                 If _highlighted Then e.Control.BackColor = hchControlColor.Color.UnhighlightedColor
             End If
+        End Sub
+        Private Sub MyOwner_Disposed(sender As Object, e As EventArgs) Handles MyOwner.Disposed
+            Dispose()
         End Sub
         Private Sub MyOwner_GotFocus(sender As Object, e As EventArgs) Handles MyOwner.GotFocus
             RefreshHighlighted()
@@ -118,12 +135,13 @@ Partial Public Class Highlighter
             MyOwner = owner
 
             _backColor = HighlightableColor.FromARGB(owner.GetDisplayedBackColor) 'Set the highlight BackColor of the owning Control
-            For Each cControl As Control In owner.GetAllControls 'Go through each Control contained in the owning Control
+            For Each cControl As Control In owner.Controls.GetAll(Function(c) Not _highlightOnMouseEnterManagedControls.Contains(c), True) 'Go through each Control contained in the owning Control
                 _childColors.Add(cControl, New HighlightableColorHandler(HighlightableColor.FromControl(cControl))) 'Set the highlight BackColor of the child Control
                 AddHandler cControl.BackColorChanged, AddressOf Child_BackColorChanged
-                AddHandler cControl.Click, AddressOf Child_Clicked
+                AddHandler cControl.Click, AddressOf Child_Click
                 AddHandler cControl.ControlAdded, AddressOf MyOwner_ControlAdded
                 AddHandler cControl.ControlRemoved, AddressOf MyOwner_ControlRemoved
+                AddHandler cControl.MouseClick, AddressOf Child_MouseClick
                 AddHandler cControl.MouseEnter, AddressOf Child_MouseEnter
                 AddHandler cControl.MouseLeave, AddressOf Child_MouseLeave
             Next
@@ -147,10 +165,11 @@ Partial Public Class Highlighter
 
         Public Overridable Sub Dispose() Implements IDisposable.Dispose
             If _highlighted Then
-                For Each cControl As Control In MyOwner.GetAllControls
-                    RemoveHandler cControl.Click, AddressOf Child_Clicked
+                For Each cControl As Control In MyOwner.Controls.GetAll
                     RemoveHandler cControl.ControlAdded, AddressOf MyOwner_ControlAdded
+                    RemoveHandler cControl.Click, AddressOf Child_Click
                     RemoveHandler cControl.ControlRemoved, AddressOf MyOwner_ControlRemoved
+                    RemoveHandler cControl.MouseClick, AddressOf Child_MouseClick
                     RemoveHandler cControl.MouseEnter, AddressOf Child_MouseEnter
                     RemoveHandler cControl.MouseLeave, AddressOf Child_MouseLeave
                     Dim hchControlColor As HighlightableColorHandler = Nothing
@@ -163,10 +182,11 @@ Partial Public Class Highlighter
                 MyOwner.BackColor = _backColor.UnhighlightedColor
 
             Else
-                For Each cControl As Control In MyOwner.GetAllControls
-                    RemoveHandler cControl.Click, AddressOf Child_Clicked
+                For Each cControl As Control In MyOwner.Controls.GetAll
                     RemoveHandler cControl.ControlAdded, AddressOf MyOwner_ControlAdded
+                    RemoveHandler cControl.Click, AddressOf Child_Click
                     RemoveHandler cControl.ControlRemoved, AddressOf MyOwner_ControlRemoved
+                    RemoveHandler cControl.MouseClick, AddressOf Child_MouseClick
                     RemoveHandler cControl.MouseEnter, AddressOf Child_MouseEnter
                     RemoveHandler cControl.MouseLeave, AddressOf Child_MouseLeave
                     Dim hchControlColor As HighlightableColorHandler = Nothing
@@ -182,13 +202,17 @@ Partial Public Class Highlighter
             MyOwner.SuspendLayout() 'Suspend layout to help with UI updates
             MyOwner.BackColor = _backColor.GetColor(bHighlighted) 'Set the background color of the owning Control
             For Each cChild As Control In MyOwner.Controls 'Go through each child Control
-                SetIndirectlyHighlighted(cChild, bHighlighted) 'Refresh the background color of the child Control
+                If TypeOf cChild Is Button Then 'Check if control is not a viable highlight option
+                    cChild.Invalidate() 'Invalidate control to properly update UI
+                Else 'Control is a viable highlight option
+                    SetIndirectlyHighlighted(cChild, bHighlighted) 'Refresh the background color of the child Control
+                End If
             Next
-            MyOwner.ResumeLayout() 'Resume layout to allow UI updates
+            MyOwner.ResumeLayout(True) 'Resume layout to allow UI updates
             _settingBackgroundColor = False 'State that the background color is finished being set
         End Sub
         Protected Overridable Sub SetIndirectlyHighlighted(control As Control, highlighted As Boolean)
-            If _managedControls.Contains(control) Then Return 'Do nothing if Control is in the list of managed Controls for the HIghlighter
+            If _highlightOnMouseEnterManagedControls.Contains(control) Then Return 'Do nothing if Control is in the list of managed Controls for the HIghlighter
             If control.BackColor <> Color.Transparent Then 'If the BackColor of the Control is transparent, there is no need to change the color
                 Dim hchControlColor As HighlightableColorHandler = Nothing
                 If _childColors.TryGetValue(control, hchControlColor) AndAlso Not hchControlColor.SettingBackgroundColor Then 'Determine if Control has a highlightable background color and make sure it is not currently being set
@@ -198,7 +222,11 @@ Partial Public Class Highlighter
                 End If
             End If
             For Each cChild As Control In control.Controls 'Go through each child Control
-                SetIndirectlyHighlighted(cChild, highlighted) 'Refresh the background color of the child Control
+                If TypeOf cChild Is Button Then 'Check if control is not a viable highlight option
+                    cChild.Invalidate() 'Invalidate control to properly update UI
+                Else 'Control is a viable highlight option
+                    SetIndirectlyHighlighted(cChild, highlighted) 'Refresh the background color of the child Control
+                End If
             Next
         End Sub
 

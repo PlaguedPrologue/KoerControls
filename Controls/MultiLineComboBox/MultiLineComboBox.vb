@@ -118,12 +118,12 @@ Public Class MultiLineComboBox
     End Sub
     Protected Overrides Sub OnDropDown(e As EventArgs)
         MyBase.OnDropDown(e)
-        _zIndex = GetZIndex
+        _zIndex = Parent?.Controls.IndexOf(Me)
         BringToFront()
     End Sub
     Protected Overrides Sub OnDropDownClosed(e As EventArgs)
         MyBase.OnDropDownClosed(e)
-        SetZIndex(_zIndex)
+        If Parent IsNot Nothing Then Parent.Controls.SetChildIndex(Me, _zIndex)
         'Entier invoke required to make sure textbox is on top and the control is visually updated correctly.
         'I don't understand why it need to be done this exact way, so please don't change this unless you know what you are doing.
         BeginInvoke(Sub()

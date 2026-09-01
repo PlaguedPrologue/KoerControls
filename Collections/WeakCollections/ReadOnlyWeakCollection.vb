@@ -38,8 +38,8 @@ Public Class ReadOnlyWeakCollection(Of T As {Class, IDisposable})
             Return _source.Count
         End Get
     End Property
-    '''<summary>Gets a <see cref="IEnumerable"/> wrapper around the <see cref="WeakCollection"/>.</summary>
-    '''<returns>A <see cref="IEnumerable"/> wapper around the <see cref="WeakCollection"/>.</returns>
+    '''<summary>Iterates through an <see cref="IEnumerable"/> wrapper around the <see cref="WeakCollection"/>.</summary>
+    '''<returns>An <see cref="IEnumerable"/> wapper around the <see cref="WeakCollection"/>.</returns>
     Public ReadOnly Iterator Property Items As IEnumerable(Of T)
         Get
             For Each tItem As T In _source
@@ -67,7 +67,7 @@ Public Class ReadOnlyWeakCollection(Of T As {Class, IDisposable})
     Public Iterator Function GetEnumerator() As IEnumerator(Of T) Implements IEnumerable(Of T).GetEnumerator
         Yield _source.GetEnumerator
     End Function
-    '''<summary>Gets each <typeparamref name="T"/> that fulfills the provided <see cref="Func(Of T, TResult)"/>.</summary>
+    '''<summary>Iterates through each <typeparamref name="T"/> that fulfills the provided <see cref="Func(Of T, TResult)"/>.</summary>
     '''<returns>Each <typeparamref name="T"/> that fulfills the provided <see cref="Func(Of T, TResult)"/> if it exists; otherwise, <see langword="Nothing"/></returns>
     '''<param name="predicate">A function to test each element for a condition.</param>
     Public Iterator Function Where(predicate As Func(Of T, Boolean)) As IEnumerable(Of T)

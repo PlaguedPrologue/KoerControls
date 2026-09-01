@@ -3,7 +3,7 @@ Imports System.Runtime.InteropServices
 
 Public Module Drawing
 
-    '''<summary>Gets each line of text based on the <see cref="Font"/> and width available.</summary>
+    '''<summary>Iterates through each line of text based on the <see cref="Font"/> and width available.</summary>
     '''<returns>Each line of the text based on the <see cref="Font"/> and width to fill.</returns>
     '''<param name="font">The <see cref="Font"/> of the text.</param>
     '''<param name="text">The text to reformat.</param>

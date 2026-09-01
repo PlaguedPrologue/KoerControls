@@ -48,7 +48,8 @@ Public Class WeakValueDictionary(Of TKey, TValue As {Class, IDisposable})
 #Region "Operators"
 
     Public Function Contains(item As KeyValuePair(Of TKey, TValue)) As Boolean Implements ICollection(Of KeyValuePair(Of TKey, TValue)).Contains
-        If item.Key Is Nothing OrElse item.Value Is Nothing Then Throw New ArgumentNullException("key and value cannot be null.")
+        If item.Key Is Nothing Then Throw New ArgumentNullException(NameOf(item.Key))
+        If item.Value Is Nothing Then Throw New ArgumentNullException(NameOf(item.Value))
         If _removeDisposedEntries Then
             For Each kvpItem As KeyValuePair(Of TKey, WeakReference(Of TValue)) In _instances 'Go through each instance
                 If Equals(kvpItem.Key, item.Key) Then 'Deteremine if desired key is found
@@ -73,7 +74,7 @@ Public Class WeakValueDictionary(Of TKey, TValue As {Class, IDisposable})
         Return False
     End Function
     Public Function ContainsKey(key As TKey) As Boolean Implements IDictionary(Of TKey, TValue).ContainsKey
-        If key Is Nothing Then Throw New ArgumentNullException("key cannot be null.")
+        If key Is Nothing Then Throw New ArgumentNullException(NameOf(key))
         For Each kvpItem As KeyValuePair(Of TKey, WeakReference(Of TValue)) In _instances 'Go through each instance
             If Equals(kvpItem.Key, key) Then Return True 'Return true if desired key is found
         Next
@@ -126,7 +127,7 @@ Public Class WeakValueDictionary(Of TKey, TValue As {Class, IDisposable})
     Public ReadOnly Property IsReadOnly As Boolean = False Implements ICollection(Of KeyValuePair(Of TKey, TValue)).IsReadOnly
     Default Public Property Item(key As TKey) As TValue Implements IDictionary(Of TKey, TValue).Item
         Get
-            If key Is Nothing Then Throw New ArgumentNullException("key cannot be null.")
+            If key Is Nothing Then Throw New ArgumentNullException(NameOf(key))
             If _removeDisposedEntries Then
                 For Each kvpItem As KeyValuePair(Of TKey, WeakReference(Of TValue)) In _instances 'Go through each instance
                     If Equals(kvpItem.Key, key) Then 'Determine if desired key is found
@@ -148,7 +149,8 @@ Public Class WeakValueDictionary(Of TKey, TValue As {Class, IDisposable})
             Return Nothing
         End Get
         Set(value As TValue)
-            If key Is Nothing OrElse value Is Nothing Then Throw New ArgumentNullException("key and value cannot be null.")
+            If key Is Nothing Then Throw New ArgumentNullException(NameOf(key))
+            If value Is Nothing Then Throw New ArgumentNullException(NameOf(value))
             For Each kvpItem As KeyValuePair(Of TKey, WeakReference(Of TValue)) In _instances 'Go through each item
                 If Equals(kvpItem.Key, key) Then 'Determine if desired key is found
                     _instances(key) = New WeakReference(Of TValue)(value) 'Add to instances
@@ -202,11 +204,13 @@ Public Class WeakValueDictionary(Of TKey, TValue As {Class, IDisposable})
 #Region "Functions"
 
     Public Sub Add(item As KeyValuePair(Of TKey, TValue)) Implements ICollection(Of KeyValuePair(Of TKey, TValue)).Add
-        If item.Key Is Nothing OrElse item.Value Is Nothing Then Throw New ArgumentNullException("key and value cannot be null.")
+        If item.Key Is Nothing Then Throw New ArgumentNullException(NameOf(item.Key))
+        If item.Value Is Nothing Then Throw New ArgumentNullException(NameOf(item.Value))
         _instances.TryAdd(item.Key, New WeakReference(Of TValue)(item.Value))
     End Sub
     Public Sub Add(key As TKey, value As TValue) Implements IDictionary(Of TKey, TValue).Add
-        If key Is Nothing OrElse value Is Nothing Then Throw New ArgumentNullException("key and value cannot be null.")
+        If key Is Nothing Then Throw New ArgumentNullException(NameOf(key))
+        If value Is Nothing Then Throw New ArgumentNullException(NameOf(value))
         _instances.TryAdd(key, New WeakReference(Of TValue)(value))
     End Sub
     Public Sub Clear() Implements ICollection(Of KeyValuePair(Of TKey, TValue)).Clear

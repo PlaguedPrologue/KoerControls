@@ -10,9 +10,9 @@ Public Class DataGridViewLinker
 
 #Region "Private Items"
 
-    Private ReadOnly _dataGridViewLinkingGroup As New WeakKeyDictionary(Of DataGridView, DataGridViewLinkingGroup) 'Represents LinkingGroups from this Linker instance assigned to Controls
+    Friend ReadOnly _dataGridViewLinkingGroup As New WeakKeyDictionary(Of DataGridView, DataGridViewLinkingGroup) 'Represents LinkingGroups from this Linker instance assigned to Controls
     Private ReadOnly _linkingGroupManagedDataGridViews As New WeakCollection(Of DataGridView) 'Represents all Controls with at least one LinkingGroup from this Linker instance assigned to it
-    Private ReadOnly _linkingGroups As New DataGridViewLinkingGroupCollection 'Represents the LinkingGroups in this Linker
+    Private ReadOnly _linkingGroups As New DataGridViewLinkingGroupCollection(Me) 'Represents the LinkingGroups in this Linker
     Private _name As String
 
     Private Sub AddHandlers(dataGridView As DataGridView)
@@ -23,11 +23,16 @@ Public Class DataGridViewLinker
     End Function
     Private Sub DataGridView_CurrentCellChanged(sender As Object, e As EventArgs)
         Dim dgvSender As DataGridView = TryCast(sender, DataGridView)
-        If dgvSender Is Nothing OrElse dgvSender.CurrentCell Is Nothing Then Return
+        If dgvSender Is Nothing Then Return
+        Dim dgvcCurrentCell As DataGridViewCell = dgvSender.CurrentCell
+        If dgvcCurrentCell Is Nothing Then Return
         Dim dgvlgLinkingGroup As DataGridViewLinkingGroup = Nothing
         If Not _dataGridViewLinkingGroup.TryGetValue(dgvSender, dgvlgLinkingGroup) Then Return
+
+        dgvlgLinkingGroup.CurrentCell = dgvcCurrentCell
+
         For Each kvpDataGridViewLinkingGroup As KeyValuePair(Of DataGridView, DataGridViewLinkingGroup) In _dataGridViewLinkingGroup
-            If dgvlgLinkingGroup.Value = kvpDataGridViewLinkingGroup.Value.Value Then
+            If ReferenceEquals(dgvlgLinkingGroup, kvpDataGridViewLinkingGroup.Value) Then
                 Dim dgvDataGridView As DataGridView = kvpDataGridViewLinkingGroup.Key
                 If Not ReferenceEquals(dgvSender, dgvDataGridView) Then dgvDataGridView.CurrentCell = Nothing
             End If
@@ -141,6 +146,14 @@ Public Class DataGridViewLinker
         End If
         MyBase.Dispose(disposing)
     End Sub
+    '''<summary>Iterates through each <see cref="DataGridView"/> linked by the specified <see cref="DataGridViewLinkingGroup"/>.</summary>
+    '''<returns>Each <see cref="DataGridView"/> linked by the spedified <see cref="DataGridViewLinkingGroup"/>.</returns>
+    '''<param name="linkingGroup">The <see cref="DataGridViewLinkingGroup"/> to find each <see cref="DataGridView"/> linked in.</param>
+    Public Iterator Function GetDataGridViews(linkingGroup As DataGridViewLinkingGroup) As IEnumerable(Of DataGridView)
+        For Each kvpDataGridViewLinkingGroup As KeyValuePair(Of DataGridView, DataGridViewLinkingGroup) In _dataGridViewLinkingGroup
+            If ReferenceEquals(linkingGroup, kvpDataGridViewLinkingGroup.Value) Then Yield kvpDataGridViewLinkingGroup.Key
+        Next
+    End Function
 
 #End Region
 

@@ -281,7 +281,7 @@ Public Class DateRange
         If _endDate > other._endDate Then Return New DateRange(_startDate, other._endDate)
         Return New DateRange(_startDate, _endDate)
     End Function
-    '''<summary>Merges each overlapping <see cref="DateRange"/>, returning the each joined <see cref="DateRange"/>, sorted from least to greatest.</summary>
+    '''<summary>Merges each overlapping <see cref="DateRange"/>, iterating through the each joined <see cref="DateRange"/>, sorted from least to greatest.</summary>
     '''<returns>Each joined <see cref="DateRange"/>, sorted from least to greatest.</returns>
     Public Shared Iterator Function Join(ranges() As DateRange) As IEnumerable(Of DateRange)
         Dim drBuildingRange As DateRange = Nothing

@@ -66,7 +66,7 @@ KoerControls
 <returns>The smallest possible value of <see cref="T:KoerControls.DateRange"/>.</returns>
 </member>
 <member name="M:KoerControls.DateRange.Join(KoerControls.DateRange[])">
-<summary>Merges each overlapping <see cref="T:KoerControls.DateRange"/>, returning the each joined <see cref="T:KoerControls.DateRange"/>, sorted from least to greatest.</summary>
+<summary>Merges each overlapping <see cref="T:KoerControls.DateRange"/>, iterating through the each joined <see cref="T:KoerControls.DateRange"/>, sorted from least to greatest.</summary>
 <returns>Each joined <see cref="T:KoerControls.DateRange"/>, sorted from least to greatest.</returns>
 </member>
 <member name="M:KoerControls.DateRange.OnEndDateChanged(System.EventArgs)">
@@ -222,11 +222,11 @@ KoerControls
 <returns>The smallest possible value of <see cref="T:KoerControls.IntegerRange"/>.</returns>
 </member>
 <member name="M:KoerControls.IntegerRange.Join(KoerControls.IntegerRange[])">
-<summary>Merges each overlapping <see cref="T:KoerControls.IntegerRange"/>, returning the each joined <see cref="T:KoerControls.IntegerRange"/>, sorted from least to greatest.</summary>
+<summary>Merges each overlapping <see cref="T:KoerControls.IntegerRange"/>, iterating through the each joined <see cref="T:KoerControls.IntegerRange"/>, sorted from least to greatest.</summary>
 <returns>Each joined <see cref="T:KoerControls.IntegerRange"/>, sorted from least to greatest.</returns>
 </member>
 <member name="M:KoerControls.IntegerRange.Join(KoerControls.IntegerRangeCollection)">
-<summary>Merges each overlapping <see cref="T:KoerControls.IntegerRange"/>, returning the each joined <see cref="T:KoerControls.IntegerRange"/>, sorted from least to greatest.</summary>
+<summary>Merges each overlapping <see cref="T:KoerControls.IntegerRange"/>, iterating through the each joined <see cref="T:KoerControls.IntegerRange"/>, sorted from least to greatest.</summary>
 <returns>Each joined <see cref="T:KoerControls.IntegerRange"/>, sorted from least to greatest.</returns>
 </member>
 <member name="M:KoerControls.IntegerRange.OnEndValueChanged(System.EventArgs)">
@@ -646,8 +646,8 @@ KoerControls
 <exception cref="T:System.ArgumentNullException"><paramref name="collection"/> collection is null.</exception>
 </member>
 <member name="P:KoerControls.ReadOnlyWeakCollection`1.Items">
-<summary>Gets a <see cref="T:System.Collections.IEnumerable"/> wrapper around the <see cref="T:KoerControls.WeakCollection`1"/>.</summary>
-<returns>A <see cref="T:System.Collections.IEnumerable"/> wapper around the <see cref="T:KoerControls.WeakCollection`1"/>.</returns>
+<summary>Iterates through an <see cref="T:System.Collections.IEnumerable"/> wrapper around the <see cref="T:KoerControls.WeakCollection`1"/>.</summary>
+<returns>An <see cref="T:System.Collections.IEnumerable"/> wapper around the <see cref="T:KoerControls.WeakCollection`1"/>.</returns>
 </member>
 <member name="M:KoerControls.ReadOnlyWeakCollection`1.FirstOrDefault(System.Func{`0,System.Boolean})">
 <summary>Gets the first <typeparamref name="T"/> that fulfills the provided <see cref="T:System.Func`2"/>.</summary>
@@ -655,7 +655,7 @@ KoerControls
 <param name="predicate">A function to test each element for a condition.</param>
 </member>
 <member name="M:KoerControls.ReadOnlyWeakCollection`1.Where(System.Func{`0,System.Boolean})">
-<summary>Gets each <typeparamref name="T"/> that fulfills the provided <see cref="T:System.Func`2"/>.</summary>
+<summary>Iterates through each <typeparamref name="T"/> that fulfills the provided <see cref="T:System.Func`2"/>.</summary>
 <returns>Each <typeparamref name="T"/> that fulfills the provided <see cref="T:System.Func`2"/> if it exists; otherwise, <see langword="Nothing"/></returns>
 <param name="predicate">A function to test each element for a condition.</param>
 </member>
@@ -671,7 +671,7 @@ KoerControls
 <returns><see langword="True"/> if the <see cref="T:System.Object"/> has been disposed; otherwise, <see langword="False"/>.</returns>
 </member>
 <member name="P:KoerControls.TrackableObject`1.Items">
-<summary>Gets all active instances of the <see cref="T:System.Type"/> <typeparamref name="T"/>.</summary>
+<summary>Iterates through all active instances of the <see cref="T:System.Type"/> <typeparamref name="T"/>.</summary>
 <returns>All active instances of the <see cref="T:System.Type"/> <typeparamref name="T"/>.</returns>
 </member>
 <member name="M:KoerControls.TrackableObject`1.FirstOrDefault(System.Func{`0,System.Boolean})">
@@ -680,7 +680,7 @@ KoerControls
 <param name="predicate">The <see cref="T:System.Func`2"/> to apply to the current tracked instances.</param>
 </member>
 <member name="M:KoerControls.TrackableObject`1.Where(System.Func{`0,System.Boolean})">
-<summary>Gets each <typeparamref name="T"/> that fulfills the provided <see cref="T:System.Func`2"/>.</summary>
+<summary>Iterates through each <typeparamref name="T"/> that fulfills the provided <see cref="T:System.Func`2"/>.</summary>
 <returns>Each <typeparamref name="T"/> that fulfills the provided <see cref="T:System.Func`2"/> if it exists; otherwise, <see langword="Nothing"/></returns>
 <param name="predicate">The <see cref="T:System.Func`2"/> to apply to the current tracked instances.</param>
 </member>
@@ -697,7 +697,7 @@ KoerControls
 <exception cref="T:System.ArgumentNullException"><paramref name="collection"/> collection is null.</exception>
 </member>
 <member name="P:KoerControls.WeakCollection`1.Items">
-<summary>Gets a <see cref="T:System.Collections.IEnumerable"/> wrapper around the <see cref="T:KoerControls.WeakCollection`1"/>.</summary>
+<summary>Iterates through a <see cref="T:System.Collections.IEnumerable"/> wrapper around the <see cref="T:KoerControls.WeakCollection`1"/>.</summary>
 <returns>A <see cref="T:System.Collections.IEnumerable"/> wapper around the <see cref="T:KoerControls.WeakCollection`1"/>.</returns>
 </member>
 <member name="M:KoerControls.WeakCollection`1.Add(`0)">
@@ -718,7 +718,7 @@ KoerControls
 <param name="item">The object to remove from the <see cref="T:KoerControls.WeakCollection`1"/>. The value can be null for reference types.</param>
 </member>
 <member name="M:KoerControls.WeakCollection`1.Where(System.Func{`0,System.Boolean})">
-<summary>Gets each <typeparamref name="T"/> that fulfills the provided <see cref="T:System.Func`2"/>.</summary>
+<summary>Iterates through each <typeparamref name="T"/> that fulfills the provided <see cref="T:System.Func`2"/>.</summary>
 <returns>Each <typeparamref name="T"/> that fulfills the provided <see cref="T:System.Func`2"/> if it exists; otherwise, <see langword="Nothing"/></returns>
 <param name="predicate">A function to test each element for a condition.</param>
 </member>
@@ -888,11 +888,16 @@ KoerControls
 <summary>Gets the name of the component.</summary>
 <returns>The name of the component.</returns>
 </member>
+<member name="M:KoerControls.DataGridViewLinker.GetDataGridViews(KoerControls.DataGridViewLinkingGroup)">
+<summary>Iterates through each <see cref="T:System.Windows.Forms.DataGridView"/> linked by the specified <see cref="T:KoerControls.DataGridViewLinkingGroup"/>.</summary>
+<returns>Each <see cref="T:System.Windows.Forms.DataGridView"/> linked by the spedified <see cref="T:KoerControls.DataGridViewLinkingGroup"/>.</returns>
+<param name="linkingGroup">The <see cref="T:KoerControls.DataGridViewLinkingGroup"/> to find each <see cref="T:System.Windows.Forms.DataGridView"/> linked in.</param>
+</member>
 <member name="T:KoerControls.DataGridViewLinkingGroup">
 <summary>Represents a group that links DataGridViews together.</summary>
 </member>
 <member name="M:KoerControls.DataGridViewLinkingGroup.#ctor">
-<summary>Creates an empty instance of the <see cref="T:KoerControls.DataGridViewLinkingGroup"/> class.</summary>
+<summary>Create a new empty instance of the <see cref="T:KoerControls.DataGridViewLinkingGroup"/> clas.</summary>
 </member>
 <member name="M:KoerControls.DataGridViewLinkingGroup.#ctor(System.String)">
 <summary>Creates a new instance of the <see cref="T:KoerControls.DataGridViewLinkingGroup"/> class.</summary>
@@ -903,16 +908,29 @@ KoerControls
 <param name="value">The name value of the <see cref="T:KoerControls.DataGridViewLinkingGroup"/>.</param>
 <param name="container">The owning <see cref="T:System.ComponentModel.IContainer"/> of the <see cref="T:KoerControls.DataGridViewLinkingGroup"/>.</param>
 </member>
-<member name="P:KoerControls.DataGridViewLinkingGroup.Name">
-<summary>Gets or sets the name of the control in its site.</summary>
-<returns>The name of the control in its site.</returns>
+<member name="P:KoerControls.DataGridViewLinkingGroup.CurrentCell">
+<summary>Gets or sets the currently active cell.</summary>
+<returns>The <see cref="T:System.Windows.Forms.DataGridViewCell"/> that represents the current cell, or null if there is no current cell. The default is the first cell in the first column or null if there are no cells in the control.</returns>
+<exception cref="T:System.InvalidOperationException">The value of this property cannot be set because changes to the current cell cannot be committed or canceled.-or-The specified cell when setting this property is in a hidden row or column. Re-entrant calling is only allowed when the <see cref="T:System.Windows.Forms.DataGridView"/> is bound to a <see cref="P:System.Windows.Forms.DataGridView.DataSource"/>. Re-entrant calling results from a change to the underlying data.</exception>
 </member>
-<member name="P:KoerControls.DataGridViewLinkingGroup.Value">
-<summary>Gets the value name assigned to the <see cref="T:KoerControls.DataGridViewLinkingGroup"/>.</summary>
-<returns>The value name assigned to the <see cref="T:KoerControls.DataGridViewLinkingGroup"/>.</returns>
+<member name="P:KoerControls.DataGridViewLinkingGroup.CurrentRow">
+<summary>Gets the row containing the current cell.</summary>
+<returns>The <see cref="T:System.Windows.Forms.DataGridViewRow"/> that represents the row containing the current cell, or <see langword="Nothing"/> if there is no current cell.</returns>
+</member>
+<member name="P:KoerControls.DataGridViewLinkingGroup.DataGridViewLinker">
+<summary>Gets the <see cref="T:KoerControls.DataGridViewLinker"/> that owns the <see cref="T:KoerControls.DataGridViewLinkingGroup"/>.</summary>
+<returns>The <see cref="T:KoerControls.DataGridViewLinker"/> that owns the <see cref="T:KoerControls.DataGridViewLinkingGroup"/>.</returns>
 </member>
 <member name="T:KoerControls.DataGridViewLinkingGroupCollection">
 <summary>Repersents a collection of data grid view linking groups.</summary>
+</member>
+<member name="M:KoerControls.DataGridViewLinkingGroupCollection.#ctor(KoerControls.DataGridViewLinker)">
+<summary>Creates a new instance of the <see cref="T:KoerControls.DataGridViewLinkingGroupCollection"/> class.</summary>
+<param name="dataGridViewLinker">The <see cref="T:KoerControls.DataGridViewLinker"/> that owns the <see cref="T:KoerControls.DataGridViewLinkingGroupCollection"/>.</param>
+</member>
+<member name="P:KoerControls.DataGridViewLinkingGroupCollection.DataGridViewLinker">
+<summary>Gets the <see cref="T:KoerControls.DataGridViewLinker"/> that owns the <see cref="T:KoerControls.DataGridViewLinkingGroupCollection"/>.</summary>
+<returns>The <see cref="T:KoerControls.DataGridViewLinker"/> that owns the <see cref="T:KoerControls.DataGridViewLinkingGroupCollection"/>.</returns>
 </member>
 <member name="T:KoerControls.DataGridViewLinkingGroupConverter">
 <summary>Provides a type converter to convert a DataGridView LinkingGroup to and from various other representations.</summary>
@@ -1400,6 +1418,10 @@ KoerControls
 <summary>Creates a new instance of the <see cref="T:KoerControls.Highlighter"/> class.</summary>
 <param name="container">The <see cref="T:System.ComponentModel.IContainer"/> that will contain the <see cref="T:KoerControls.Highlighter"/>.</param>
 </member>
+<member name="P:KoerControls.Highlighter.HIghlightedControl">
+<summary>Gets the currently highlighted control if one is highlighted; otherwise, <see langword="Nothing"/>.</summary>
+<returns>The currently highlighted control if one is highlighted; otherwise, <see langword="Nothing"/>.</returns>
+</member>
 <member name="M:KoerControls.Highlighter.GetHighlightOnMouseEnter(System.Windows.Forms.Control)">
 <summary>Determines if the <see cref="T:System.Windows.Forms.Control"/> should highlight upon the mouse entering its bounds.</summary>
 <returns><see langword="True"/> if the <see cref="T:System.Windows.Forms.Control"/> should highlight upon the mouse entering its bounds; otherwise <see langword="False"/>.</returns>
@@ -1407,8 +1429,18 @@ KoerControls
 </member>
 <member name="M:KoerControls.Highlighter.SetHighlightOnMouseEnter(System.Windows.Forms.Control,System.Boolean)">
 <summary>Determines if the <see cref="T:System.Windows.Forms.Control"/> should highlight upon the mouse entering its bounds.</summary>
-<param name="control">The <see cref="T:System.Windows.Forms.Control"/> to get the HighlightOnMouseEnter value of.</param>
+<param name="control">The <see cref="T:System.Windows.Forms.Control"/> to set the HighlightOnMouseEnter value of.</param>
 <param name="value"><see langword="True"/> if the <see cref="T:System.Windows.Forms.Control"/> should highlight upon the mouse entering its bounds; otherwise <see langword="False"/>.</param>
+</member>
+<member name="M:KoerControls.Highlighter.GetKeepHighlightedOnTabStopChildEntry(System.Windows.Forms.Control)">
+<summary>Determines if the <see cref="T:System.Windows.Forms.Control"/> should stay highlight upon the mouse entering a child control's bounds with TabStop = True.</summary>
+<returns><see langword="True"/> if the <see cref="T:System.Windows.Forms.Control"/> should stay highlight upon the mouse entering a child control's bounds with TabStop = True; otherwise <see langword="False"/>.</returns>
+<param name="control">The <see cref="T:System.Windows.Forms.Control"/> to get the KeepHighlightedOnTabStopChildEntry value of.</param>
+</member>
+<member name="M:KoerControls.Highlighter.SetKeepHighlightedOnTabStopChildEntry(System.Windows.Forms.Control,System.Boolean)">
+<summary>Determines if the <see cref="T:System.Windows.Forms.Control"/> should stay highlight upon the mouse entering a child control's bounds with TabStop = True.</summary>
+<param name="control">The <see cref="T:System.Windows.Forms.Control"/> to set the KeepHighlightedOnTabStopChildEntry value of.</param>
+<param name="value"><see langword="True"/> if the <see cref="T:System.Windows.Forms.Control"/> should stay highlight upon the mouse entering a child control's bounds with TabStop = True.</param>
 </member>
 <member name="M:KoerControls.Highlighter.IsHighlighted(System.Windows.Forms.Control)">
 <summary>Determines if the <see cref="T:System.Windows.Forms.Control"/> should highlight upon the mouse entering its bounds.</summary>
@@ -1555,68 +1587,68 @@ KoerControls
 <returns>The <see cref="T:System.Windows.Forms.BorderStyle"/> of the <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.PinStripe.Painter"/> is assigned to.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.PinStripe">
-<summary>Gets the <see cref="!:LincolnControls.PinStripe"/> the <see cref="T:KoerControls.PinStripe.Painter"/> will paint.</summary>
-<returns>The <see cref="!:LincolnControls.PinStripe"/> the <see cref="T:KoerControls.PinStripe.Painter"/> will paint.</returns>
+<summary>Gets the <see cref="T:KoerControls.PinStripe"/> the <see cref="T:KoerControls.PinStripe.Painter"/> will paint.</summary>
+<returns>The <see cref="T:KoerControls.PinStripe"/> the <see cref="T:KoerControls.PinStripe.Painter"/> will paint.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.Thickness">
-<summary>Represents the thickness of the <see cref="T:System.Windows.Forms.Control"/> according to the direction of the <see cref="!:LincolnControls.PinStripe"/>.</summary>
-<returns>The thickness of the <see cref="T:System.Windows.Forms.Control"/> according to the direction of the <see cref="!:LincolnControls.PinStripe"/>.</returns>
+<summary>Represents the thickness of the <see cref="T:System.Windows.Forms.Control"/> according to the direction of the <see cref="T:KoerControls.PinStripe"/>.</summary>
+<returns>The thickness of the <see cref="T:System.Windows.Forms.Control"/> according to the direction of the <see cref="T:KoerControls.PinStripe"/>.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.X1">
-<summary>Represents one of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</summary>
-<remarks>When Type = Chevron Horizontal : The x-value of the back of the trail of the <see cref="!:LincolnControls.PinStripe"/>.
-<para/>When Type = Chevron Vertical : The x-value of the left of the <see cref="!:LincolnControls.PinStripe"/>.
-<para/>When Type = Diagonal : The x-value of the top-left of the <see cref="!:LincolnControls.PinStripe"/>.</remarks>
-<returns>One of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</returns>
+<summary>Represents one of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</summary>
+<remarks>When Type = Chevron Horizontal : The x-value of the back of the trail of the <see cref="T:KoerControls.PinStripe"/>.
+<para/>When Type = Chevron Vertical : The x-value of the left of the <see cref="T:KoerControls.PinStripe"/>.
+<para/>When Type = Diagonal : The x-value of the top-left of the <see cref="T:KoerControls.PinStripe"/>.</remarks>
+<returns>One of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.X2">
-<summary>Represents one of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</summary>
-<remarks>When Type = Chevron Horizontal : The x-value of the lead of the trail of the <see cref="!:LincolnControls.PinStripe"/>.
-<para/>When Type = Chevorn Vertical : The x-value of the lead of trail for the left line of the <see cref="!:LincolnControls.PinStripe"/>.
-<para/>When Type = Diagonal : The x-value of the bottom-right of the <see cref="!:LincolnControls.PinStripe"/>.</remarks>
-<returns>One of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</returns>
+<summary>Represents one of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</summary>
+<remarks>When Type = Chevron Horizontal : The x-value of the lead of the trail of the <see cref="T:KoerControls.PinStripe"/>.
+<para/>When Type = Chevorn Vertical : The x-value of the lead of trail for the left line of the <see cref="T:KoerControls.PinStripe"/>.
+<para/>When Type = Diagonal : The x-value of the bottom-right of the <see cref="T:KoerControls.PinStripe"/>.</remarks>
+<returns>One of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.X3">
-<summary>Represents one of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</summary>.
+<summary>Represents one of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</summary>.
 <remarks>When Type = Chevron Horizontal : Not used.
-<para/>When Type = Chevron Vertical : The x-vale of the lead of the trail for the right line of the <see cref="!:LincolnControls.PinStripe"/>.
+<para/>When Type = Chevron Vertical : The x-vale of the lead of the trail for the right line of the <see cref="T:KoerControls.PinStripe"/>.
 <para/>When Type = Diagonal : Not used.</remarks>
-<returns>One of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</returns>
+<returns>One of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.X4">
-<summary>Represents one of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</summary>
+<summary>Represents one of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</summary>
 <remarks>When Type = Chevron Horizontal : Not used.
-<para/>When Type = Chevron Vertical : The x-vale of the right side of the <see cref="!:LincolnControls.PinStripe"/>.
+<para/>When Type = Chevron Vertical : The x-vale of the right side of the <see cref="T:KoerControls.PinStripe"/>.
 <para/>When Type = Diagonal : Not used.</remarks>
-<returns>One of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</returns>
+<returns>One of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.Y1">
-<summary>Represents one of the y-values in the <see cref="!:LincolnControls.PinStripe"/>.</summary>
-<remarks>When Type = Chevron Horizontal : The y-value of the top of the <see cref="!:LincolnControls.PinStripe"/>.
-<para/>When Type = Chevron Vertical : The y-value of the back of the trail of the <see cref="!:LincolnControls.PinStripe"/>.
-<para/>When Type = Diagonal : The x-value of the top-left of the <see cref="!:LincolnControls.PinStripe"/>.</remarks>
-<returns>One of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</returns>
+<summary>Represents one of the y-values in the <see cref="T:KoerControls.PinStripe"/>.</summary>
+<remarks>When Type = Chevron Horizontal : The y-value of the top of the <see cref="T:KoerControls.PinStripe"/>.
+<para/>When Type = Chevron Vertical : The y-value of the back of the trail of the <see cref="T:KoerControls.PinStripe"/>.
+<para/>When Type = Diagonal : The x-value of the top-left of the <see cref="T:KoerControls.PinStripe"/>.</remarks>
+<returns>One of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.Y2">
-<summary>Represents one of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</summary>
-<remarks>When Type = Chevron Horizontal : The y-value of the lead of trail for the top line of the <see cref="!:LincolnControls.PinStripe"/>.
-<para/>When Type = Chevorn Vertical : The y-value of the lead of the trail of the <see cref="!:LincolnControls.PinStripe"/>.
-<para/>When Type = Diagonal : The y-value of the bottom-right of the <see cref="!:LincolnControls.PinStripe"/>.</remarks>
-<returns>One of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</returns>
+<summary>Represents one of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</summary>
+<remarks>When Type = Chevron Horizontal : The y-value of the lead of trail for the top line of the <see cref="T:KoerControls.PinStripe"/>.
+<para/>When Type = Chevorn Vertical : The y-value of the lead of the trail of the <see cref="T:KoerControls.PinStripe"/>.
+<para/>When Type = Diagonal : The y-value of the bottom-right of the <see cref="T:KoerControls.PinStripe"/>.</remarks>
+<returns>One of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.Y3">
-<summary>Represents one of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</summary>
-<remarks>When Type = Chevron Horizontal : The y-vale of the lead of the trail for the bottom line of the <see cref="!:LincolnControls.PinStripe"/>.
+<summary>Represents one of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</summary>
+<remarks>When Type = Chevron Horizontal : The y-vale of the lead of the trail for the bottom line of the <see cref="T:KoerControls.PinStripe"/>.
 <para/>When Type = Chevron Vertical : Not used.
 <para/>When Type = Diagonal : Not used.</remarks>
-<returns>One of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</returns>
+<returns>One of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.Y4">
-<summary>Represents one of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</summary>
-<remarks>When Type = Chevron Horizontal :  The y-vale of the bottom side of the <see cref="!:LincolnControls.PinStripe"/>.
+<summary>Represents one of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</summary>
+<remarks>When Type = Chevron Horizontal :  The y-vale of the bottom side of the <see cref="T:KoerControls.PinStripe"/>.
 <para/>When Type = Chevron Vertical : Not used.
 <para/>When Type = Diagonal : Not used.</remarks>
-<returns>One of the x-values in the <see cref="!:LincolnControls.PinStripe"/>.</returns>
+<returns>One of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</returns>
 </member>
 <member name="M:KoerControls.PinStripe.Painter.RefreshValues">
 <summary>Refreshes the x and y values to be presented for painting the pin stripe.</summary>
@@ -1734,7 +1766,7 @@ KoerControls
 <param name="value">The <see cref="T:KoerControls.PinStripe"/> to assign to the specified <see cref="T:System.Windows.Forms.Control"/>.</param>
 </member>
 <member name="M:KoerControls.PinStripeList.GetPinStripes(System.Windows.Forms.Control)">
-<summary>Gets each <see cref="T:KoerControls.PinStripe"/> assigned to the specified <see cref="T:System.Windows.Forms.Control"/>.</summary>
+<summary>Iterates through each <see cref="T:KoerControls.PinStripe"/> assigned to the specified <see cref="T:System.Windows.Forms.Control"/>.</summary>
 <returns>Each <see cref="T:KoerControls.PinStripe"/> assigned to the specified <see cref="T:System.Windows.Forms.Control"/>.</returns>
 <param name="control">The <see cref="T:System.Windows.Forms.Control"/> that can a <see cref="T:KoerControls.PinStripe"/>.</param>
 </member>
@@ -1752,52 +1784,53 @@ KoerControls
 </member>
 <member name="T:KoerControls.StaticColumnsDataGridView">
 <summary>Represents a <see cref="T:System.Windows.Forms.DataGridView"/> with pre-defined columns craeted during initialization.</summary>
-<remarks>This class must be inherited to use correctly. To create a new StaticColumnsDataGridView control, do the following:
-<para/>Add a new item to the desired file location. Select 'User Control (Windows Forms)'
-<para/>Open the designer file (expand the file object and double click 'InitializeComponent()') and replace the 'Inherits System.Windows.Forms.UserControl' line at the top with 'Inherits LincolnControls.StaticColumnsDataGridView'.
-<para/>In the main class file, set &lt;ToolBoxItem(True)&gt; above the class declaration.
-<para/>To add/edit columns, go to the designer and add through the 'Properties' window.
-<para/>When finished, rebuild your project and the new control will be available to drop into any Form.</remarks>
+</member>
+<member name="E:KoerControls.StaticColumnsDataGridView.DefaultContextMenuStripChanged">
+<summary>Occurs when the value of the <see cref="P:KoerControls.StaticColumnsDataGridView.DefaultContextMenuStrip"/> property changes.</summary>
 </member>
 <member name="P:KoerControls.StaticColumnsDataGridView.ColumnList">
 <summary>Gets a collection that contains all the columns in the control.</summary>
 <returns>The <see cref="T:KoerControls.StaticDataGridViewColumnCollection"/> that contains all the columns in the <see cref="T:System.Windows.Forms.DataGridView"/> control.</returns>
 </member>
-<member name="P:KoerControls.StaticColumnsDataGridView.ContextMenuStripItems">
-<summary>Gets a collection that contains all the tool strip items in the context menu strip assigned to the control.</summary>
-<returns>The <see cref="T:KoerControls.StaticColumnsDataGridViewToolStripItemCollection"/> that contains each <see cref="T:System.Windows.Forms.ToolStripItem"/> in the <see cref="P:System.Windows.Forms.Control.ContextMenuStrip"/> assigned to the <see cref="T:System.Windows.Forms.DataGridView"/> control</returns>
+<member name="P:KoerControls.StaticColumnsDataGridView.DefaultContextMenuStripItems">
+<summary>Gets a collection that contains all the tool strip items in the default context menu strip assigned to the control.</summary>
+<returns>The <see cref="T:KoerControls.StaticColumnsDataGridViewDefaultContextMenuStripItemCollection"/> that contains each <see cref="T:System.Windows.Forms.ToolStripItem"/> in the <see cref="P:KoerControls.StaticColumnsDataGridView.DefaultContextMenuStrip"/> assigned to the <see cref="T:System.Windows.Forms.DataGridView"/> control</returns>
 </member>
-<member name="P:KoerControls.StaticColumnsDataGridView.PreDefinedCotextMenuStrip">
-<summary>Gets the <see cref="T:System.Windows.Forms.ContextMenuStrip"/> the control will be foreced to use. If no pre defined context menu strip is set, the control may use any context menu strip.</summary>
-<returns>The <see cref="T:System.Windows.Forms.ContextMenuStrip"/> the control will be forced to use.</returns>
+<member name="P:KoerControls.StaticColumnsDataGridView.DefaultContextMenuStrip">
+<summary>Gets the default <see cref="T:System.Windows.Forms.ContextMenuStrip"/> the control will use.</summary>
+<returns>The default <see cref="T:System.Windows.Forms.ContextMenuStrip"/> the control will use.</returns>
+</member>
+<member name="M:KoerControls.StaticColumnsDataGridView.GetDefaultContextMenuStripItem(System.String)">
+<summary>Gets the tool strip item in the context menu strip with the specified name.</summary>
+<returns>The tool strip item with the specified name.</returns>
+<param name="toolStripItemName">The name of the tool strip item to get.</param>
 </member>
 <member name="M:KoerControls.StaticColumnsDataGridView.GetStaticColumn(System.String)">
 <summary>Gets the static column with the specified name.</summary>
 <returns>The static column with the specified name.</returns>
 <param name="columnName">The name of the column to get.</param>
 </member>
-<member name="M:KoerControls.StaticColumnsDataGridView.GetContextMenuStripItem(System.String)">
-<summary>Gets the tool strip item in the context menu strip with the specified name.</summary>
-<returns>The tool strip item with the specified name.</returns>
-<param name="toolStripItemName">The name of the tool strip item to get.</param>
+<member name="M:KoerControls.StaticColumnsDataGridView.OnDefaultContextMenuStripChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.StaticColumnsDataGridView.DefaultContextMenuStripChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> taht contains the event data.</param>
 </member>
-<member name="T:KoerControls.StaticColumnsDataGridViewToolStripItemCollection">
+<member name="T:KoerControls.StaticColumnsDataGridViewDefaultContextMenuStripItemCollection">
 <summary>Represents a static collection of <see cref="T:System.Windows.Forms.ToolStripItem"/> objects asigned to the <see cref="P:System.Windows.Forms.Control.ContextMenuStrip"/> in a <see cref="T:KoerControls.StaticColumnsDataGridView"/>.</summary>
 </member>
-<member name="M:KoerControls.StaticColumnsDataGridViewToolStripItemCollection.#ctor(KoerControls.StaticColumnsDataGridView)">
-<summary>Initializes a new instance of the <see cref="T:KoerControls.StaticColumnsDataGridViewToolStripItemCollection"/> class for the given <see cref="T:KoerControls.StaticColumnsDataGridView"/>.</summary>
-<param name="dataGridView">The <see cref="T:KoerControls.StaticColumnsDataGridView"/> that created this collection.</param>
+<member name="M:KoerControls.StaticColumnsDataGridViewDefaultContextMenuStripItemCollection.#ctor(System.Windows.Forms.ContextMenuStrip)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.StaticColumnsDataGridViewDefaultContextMenuStripItemCollection"/> class for the given <see cref="T:KoerControls.StaticColumnsDataGridView"/>.</summary>
+<param name="contextMenuStrip">The <see cref="P:KoerControls.StaticColumnsDataGridViewDefaultContextMenuStripItemCollection.ContextMenuStrip"/> that created this collection.</param>
 </member>
-<member name="P:KoerControls.StaticColumnsDataGridViewToolStripItemCollection.DataGridView">
-<summary>Gets the <see cref="T:KoerControls.StaticColumnsDataGridView"/> upon which the collection performs column-related operations.</summary>
+<member name="P:KoerControls.StaticColumnsDataGridViewDefaultContextMenuStripItemCollection.ContextMenuStrip">
+<summary>Gets the <see cref="P:KoerControls.StaticColumnsDataGridViewDefaultContextMenuStripItemCollection.ContextMenuStrip"/> upon which the collection performs item-related operations.</summary>
 </member>
-<member name="P:KoerControls.StaticColumnsDataGridViewToolStripItemCollection.Item(System.Int32)">
+<member name="P:KoerControls.StaticColumnsDataGridViewDefaultContextMenuStripItemCollection.Item(System.Int32)">
 <summary>Gets or sets the tool strip item at the given index in the collection.</summary>
 <returns>The <see cref="T:System.Windows.Forms.ToolStripItem"/> at the given index.</returns>
 <param name="index">The zero-based index of the tool strip item to get or set.</param>
 <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is less than zero or greater than the number of tool strip items in the collection minus one.</exception>
 </member>
-<member name="P:KoerControls.StaticColumnsDataGridViewToolStripItemCollection.Item(System.String)">
+<member name="P:KoerControls.StaticColumnsDataGridViewDefaultContextMenuStripItemCollection.Item(System.String)">
 <summary>Gets or sets the tool strip item of the given name in the collection.</summary>
 <returns>The <see cref="T:System.Windows.Forms.ToolStripItem"/> identified by the toolStripItemName parameter.</returns>
 <param name="toolStripItemName">The name of the tool strip item to get or set.</param>
@@ -1811,8 +1844,7 @@ KoerControls
 <param name="dataGridView">The <see cref="T:KoerControls.StaticColumnsDataGridView"/> that created this collection.</param>
 </member>
 <member name="P:KoerControls.StaticDataGridViewColumnCollection.DataGridView">
-<summary>Gets the <see cref="T:KoerControls.StaticColumnsDataGridView"/> upon which the collection preforms column-related operations.</summary>
-<returns>The <see cref="T:KoerControls.StaticColumnsDataGridView"/> upon which the collection preforms column-related operations</returns>
+<summary>Gets the <see cref="T:KoerControls.StaticColumnsDataGridView"/> upon which the collection performs column-related operations.</summary>
 </member>
 <member name="P:KoerControls.StaticDataGridViewColumnCollection.Item(System.Int32)">
 <summary>Gets or sets the column at the given index in the collection.</summary>
@@ -1830,24 +1862,16 @@ KoerControls
 <summary>Represents a group that links TabControls and TabPages together.</summary>
 </member>
 <member name="M:KoerControls.TabGroup.#ctor">
-<summary>Create a new empty instance of the <see cref="T:KoerControls.TabGroup"/> clas.</summary>
+<summary>Create a new empty instance of the <see cref="T:KoerControls.DataGridViewLinkingGroup"/> clas.</summary>
 </member>
 <member name="M:KoerControls.TabGroup.#ctor(System.String)">
-<summary>Creates a new instance of the <see cref="T:KoerControls.TabGroup"/> class.</summary>
-<param name="value">The name value of the <see cref="T:KoerControls.TabGroup"/>.</param>
+<summary>Creates a new instance of the <see cref="T:KoerControls.DataGridViewLinkingGroup"/> class.</summary>
+<param name="value">The name value of the <see cref="T:KoerControls.DataGridViewLinkingGroup"/>.</param>
 </member>
 <member name="M:KoerControls.TabGroup.#ctor(System.String,System.ComponentModel.IContainer)">
-<summary>Creates a new instance of the <see cref="T:KoerControls.TabGroup"/> class.</summary>
-<param name="value">The name value of the <see cref="T:KoerControls.TabGroup"/>.</param>
-<param name="container">The owning <see cref="T:System.ComponentModel.IContainer"/> of the <see cref="T:KoerControls.TabGroup"/>.</param>
-</member>
-<member name="P:KoerControls.TabGroup.Name">
-<summary>Gets or sets the name of the control in its site.</summary>
-<returns>The name of the control in its site.</returns>
-</member>
-<member name="P:KoerControls.TabGroup.Value">
-<summary>Gets the value name assigned to the <see cref="T:KoerControls.TabGroup"/>.</summary>
-<returns>The value name assigned to the <see cref="T:KoerControls.TabGroup"/>.</returns>
+<summary>Creates a new instance of the <see cref="T:KoerControls.DataGridViewLinkingGroup"/> class.</summary>
+<param name="value">The name value of the <see cref="T:KoerControls.DataGridViewLinkingGroup"/>.</param>
+<param name="container">The owning <see cref="T:System.ComponentModel.IContainer"/> of the <see cref="T:KoerControls.DataGridViewLinkingGroup"/>.</param>
 </member>
 <member name="T:KoerControls.TabGroupConverter">
 <summary>Provides a type converter to convert a TabGroup to and from various other representations.</summary>
@@ -1878,15 +1902,15 @@ KoerControls
 <returns>The TabGroup assigned to the specified <see cref="T:System.Windows.Forms.TabControl"/>.</returns>
 <param name="tabControl">The <see cref="T:System.Windows.Forms.TabControl"/> to get the TabGroup of.</param>
 </member>
-<member name="M:KoerControls.TabManager.SetTabGroup(System.Windows.Forms.TabControl,KoerControls.TabGroup)">
-<summary>Assigns the specified TabGroup to the specified <see cref="T:System.Windows.Forms.TabControl"/>.</summary>
-<param name="tabControl">The <see cref="T:System.Windows.Forms.TabControl"/> to set the TabGroup of.</param>
-<param name="value">The TabGroup to assign to the specified <see cref="T:System.Windows.Forms.TabControl"/>.</param>
-</member>
 <member name="M:KoerControls.TabManager.GetTabGroup(System.Windows.Forms.TabPage)">
 <summary>Gets the tab group assigned to a tab page.</summary>
 <returns>The tab group assigned to the <see cref="T:System.Windows.Forms.TabPage"/>.</returns>
 <param name="tabPage">The <see cref="T:System.Windows.Forms.TabPage"/> to get the tab group from.</param>
+</member>
+<member name="M:KoerControls.TabManager.SetTabGroup(System.Windows.Forms.TabControl,KoerControls.TabGroup)">
+<summary>Assigns the specified TabGroup to the specified <see cref="T:System.Windows.Forms.TabControl"/>.</summary>
+<param name="tabControl">The <see cref="T:System.Windows.Forms.TabControl"/> to set the TabGroup of.</param>
+<param name="value">The TabGroup to assign to the specified <see cref="T:System.Windows.Forms.TabControl"/>.</param>
 </member>
 <member name="P:KoerControls.TabManager.TabGroups">
 <summary>Gets or sets each <see cref="T:KoerControls.TabGroup"/> assigned to the <see cref="T:KoerControls.TabManager"/></summary>
@@ -1915,6 +1939,32 @@ KoerControls
 <member name="M:KoerControls.VisualBuffer.Show(System.Windows.Forms.Control)">
 <summary>Displays the <see cref="T:KoerControls.VisualBuffer"/> to the user.</summary>
 <param name="owner">The owning control of the <see cref="T:KoerControls.VisualBuffer"/>.</param>
+</member>
+<member name="T:KoerControls.NamedComponent">
+<summary>Represents a simple, named component that is not visible in the toolbox, often an element in a string-like list.</summary>
+</member>
+<member name="M:KoerControls.NamedComponent.#ctor">
+<summary>Create a new empty instance of the <see cref="T:KoerControls.NamedComponent"/> clas.</summary>
+</member>
+<member name="M:KoerControls.NamedComponent.#ctor(System.String)">
+<summary>Creates a new instance of the <see cref="T:KoerControls.NamedComponent"/> class.</summary>
+<param name="value">The name value of the <see cref="T:KoerControls.NamedComponent"/>.</param>
+</member>
+<member name="M:KoerControls.NamedComponent.#ctor(System.String,System.ComponentModel.IContainer)">
+<summary>Creates a new instance of the <see cref="T:KoerControls.NamedComponent"/> class.</summary>
+<param name="value">The name value of the <see cref="T:KoerControls.NamedComponent"/>.</param>
+<param name="container">The owning <see cref="T:System.ComponentModel.IContainer"/> of the <see cref="T:KoerControls.NamedComponent"/>.</param>
+</member>
+<member name="P:KoerControls.NamedComponent.Name">
+<summary>Gets or sets the name of the control in its site.</summary>
+<returns>The name of the control in its site.</returns>
+</member>
+<member name="P:KoerControls.NamedComponent.Value">
+<summary>Gets the value name assigned to the <see cref="T:KoerControls.NamedComponent"/>.</summary>
+<returns>The value name assigned to the <see cref="T:KoerControls.NamedComponent"/>.</returns>
+</member>
+<member name="T:KoerControls.SingleInstanceComponentDesigner">
+<summary>Extends the design mode behavior of a component. Allows only one instance per designer.</summary>
 </member>
 <member name="M:KoerControls.StringCollectionEditor.StringCollectionForm.GetTextItems">
 <summary>Gets each item currently in the textbox as a string.</summary>
@@ -2043,7 +2093,7 @@ KoerControls
 <param name="linesPerItem">The total lines to display in the selection.</param>
 </member>
 <member name="M:KoerControls.Drawing.GetLinesForWidth(System.Drawing.Font,System.String,System.Int32)">
-<summary>Gets each line of text based on the <see cref="T:System.Drawing.Font"/> and width available.</summary>
+<summary>Iterates through each line of text based on the <see cref="T:System.Drawing.Font"/> and width available.</summary>
 <returns>Each line of the text based on the <see cref="T:System.Drawing.Font"/> and width to fill.</returns>
 <param name="font">The <see cref="T:System.Drawing.Font"/> of the text.</param>
 <param name="text">The text to reformat.</param>
@@ -2077,18 +2127,6 @@ KoerControls
 <param name="control">The <see cref="T:System.Windows.Forms.Control"/> to double buffer.</param>
 <param name="reason">The reason to double buffer the <see cref="T:System.Windows.Forms.Control"/>.</param>
 </member>
-<member name="M:KoerControls.Forms.GetAllControls(System.Windows.Forms.Control)">
-<summary>Flattens the entire control heirarchy that is contained inside the specified control.</summary>
-<returns>The entire control heirarchy that is contained inside the specified control.</returns>
-<param name="control">The control on which to flatten its control heirarchy.</param>
-</member>
-<member name="M:KoerControls.Forms.GetAllControls``1(System.Windows.Forms.Control,System.Boolean)">
-<summary>Flattens the entire control heirarchy of the specified type that is contained inside the specified control.</summary>
-<returns>The entire control heirarchy of the specified type that is contained inside the specified control.</returns>
-<typeparam name="T">The type of control to search for.</typeparam>
-<param name="control">The control on which to flatten its control heirarchy.</param>
-<param name="stopIterationAtTop"><see langword="True"/> if stopping search down a path at the first control of type <typeparamref name="T"/>; otherwise <see langword="False"/> if getting every child of type <typeparamref name="T"/>.</param>
-</member>
 <member name="M:KoerControls.Forms.GetDisplayedBackColor(System.Windows.Forms.Control)">
 <summary>Gets the displayed background color of the <see cref="T:System.Windows.Forms.Control"/> based on the transparency of itself, as well as all of its parent controls.</summary>
 <returns>The displayed background color of the <see cref="T:System.Windows.Forms.Control"/> based on the transparency of itself, as well as all of its parent controls
@@ -2102,16 +2140,11 @@ KoerControls
 <param name="control">The <see cref="T:System.Windows.Forms.Control"/> to get the displayed background color of.</param>
 <param name="color">The expected background color of the <see cref="T:System.Windows.Forms.Control"/></param>
 </member>
-<member name="M:KoerControls.Forms.GetNearetParent``1(System.Windows.Forms.Control)">
+<member name="M:KoerControls.Forms.GetNearestParent``1(System.Windows.Forms.Control)">
 <summary>Gets the nearest parent control of type T.</summary>
 <returns>The nearset parent control of type T if found; othrwise, <see langword="Nothing"/>.</returns>
 <typeparam name="T">The type of the control to search for.</typeparam>
 <param name="this">The control to find its parent controls from.</param>
-</member>
-<member name="M:KoerControls.Forms.GetZIndex(System.Windows.Forms.Control)">
-<summary>Gets the Z-index of a control.</summary>
-<returns>The Z-index of a control.</returns>
-<param name="control">The control for which the Z-index will be changed.</param>
 </member>
 <member name="M:KoerControls.Forms.IsDisposed(System.IDisposable)">
 <summary>Determines if a <see cref="T:System.IDisposable"/> object has been disposed.</summary>
@@ -2124,10 +2157,44 @@ KoerControls
 <param name="control">The <see cref="T:System.Windows.Forms.Control"/> to potentially stop double buffering.</param>
 <param name="reason">The reason to remove for double buffering the <see cref="T:System.Windows.Forms.Control"/>.</param>
 </member>
-<member name="M:KoerControls.Forms.SetZIndex(System.Windows.Forms.Control,System.Int32)">
-<summary>Sets the Z-index of a control.</summary>
-<param name="control">The control for which the Z-index will be changed.</param>
-<param name="ZIndex">The new Z-index of the control.</param>
+<member name="M:KoerControls.Forms.GetAll(System.Windows.Forms.Control.ControlCollection,System.Func{System.Windows.Forms.Control,System.Boolean},System.Boolean)">
+<summary>Flattens the entire control heirarchy that is contained inside the specified control collection.</summary>
+<returns>The entire control heirarchy that is contained inside the specified control collection.</returns>
+<param name="controlCollection">The collection on which to flatten its control heirarchy.</param>
+<param name="filter">An optional filter to apply to the control collection. Leave as <see langword="Nothing"/> to apply no filter,</param>
+<param name="stopAtTop">Stop iterating through a tree of controls if the filter fails, and continue onto the next tree.</param>
+<exception cref="T:System.NullReferenceException"><paramref name="controlCollection"/> is null.</exception>
+</member>
+<member name="M:KoerControls.Forms.GetAll``1(System.Windows.Forms.Control.ControlCollection,System.Boolean)">
+<summary>Flattens the entire control heirarchy of the specified type that is contained inside the specified control collection.</summary>
+<returns>The entire control heirarchy of the specified type that is contained inside the specified control collection.</returns>
+<typeparam name="T">The type of control to search for.</typeparam>
+<param name="controlCollection">The collection on which to flatten its control heirarchy.</param>
+<param name="stopIterationAtTop"><see langword="True"/> if stopping search down a path at the first control of type <typeparamref name="T"/>; otherwise <see langword="False"/> if getting every child of type <typeparamref name="T"/>.</param>
+<exception cref="T:System.NullReferenceException"><paramref name="controlCollection"/> is null</exception>
+</member>
+<member name="M:KoerControls.Forms.GetIndex(System.Windows.Forms.Control.ControlCollection,System.Windows.Forms.Control)">
+<summary>Gets the z-index of the control in the control collection.</summary>
+<returns>The z-index of the control in the control collection.</returns>
+<param name="controlCollection">The <see cref="T:System.Windows.Forms.Control.ControlCollection"/> to find the control in.</param>
+<param name="control">The <see cref="T:System.Windows.Forms.Control"/> to find the z-index of.</param>
+<exception cref="T:System.InvalidOperationException">Owner of the ControlCollection does not match the Parent of the Control.</exception>
+<exception cref="T:System.NullReferenceException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
+</member>
+<member name="M:KoerControls.Forms.Insert(System.Windows.Forms.Control.ControlCollection,System.Windows.Forms.Control,System.Int32)">
+<summary>Inserts the control at the specified z-index of the control collection.</summary>
+<param name="controlCollection">The <see cref="T:System.Windows.Forms.Control.ControlCollection"/> to insert the control into.</param>
+<param name="control">The <see cref="T:System.Windows.Forms.Control"/> is insert into the <see cref="T:System.Windows.Forms.Control.ControlCollection"/>.</param>
+<param name="index">The z-index in which to insert the <see cref="T:System.Windows.Forms.Control"/>.</param>
+<exception cref="T:System.NullReferenceException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
+</member>
+<member name="M:KoerControls.Forms.SetIndex(System.Windows.Forms.Control.ControlCollection,System.Windows.Forms.Control,System.Int32)">
+<summary>Sets z-index of the control in the control collection.</summary>
+<param name="controlCollection">The <see cref="T:System.Windows.Forms.Control.ControlCollection"/> to reorder.</param>
+<param name="control">The <see cref="T:System.Windows.Forms.Control"/> is set the z-index of in the <see cref="T:System.Windows.Forms.Control.ControlCollection"/>.</param>
+<param name="index">The new z-index of which to set the <see cref="T:System.Windows.Forms.Control"/>.</param>
+<exception cref="T:System.InvalidOperationException">Owner of the ControlCollection does not match the Parent of the Control.</exception>
+<exception cref="T:System.NullReferenceException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
 </member>
 <member name="M:KoerControls.Forms.SetItem(System.Windows.Forms.ComboBox,System.String,System.String)">
 <summary>Sets the specified item to a different value.</summary>
