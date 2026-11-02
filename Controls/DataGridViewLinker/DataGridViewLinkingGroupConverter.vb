@@ -17,8 +17,8 @@ Public Class DataGridViewLinkingGroupConverter
         If TypeOf value Is String Then
             Dim sValue As String = value
             If sValue = "(none)" OrElse String.IsNullOrWhiteSpace(sValue) Then Return Nothing
-            Dim dgvlLinker As DataGridViewLinker = TryCast(TryCast(context?.PropertyDescriptor.Attributes(GetType(ExtenderProvidedPropertyAttribute)), ExtenderProvidedPropertyAttribute)?.Provider, DataGridViewLinker)
-            If dgvlLinker Is Nothing Then dgvlLinker = TryCast(context?.Instance, DataGridViewLinker)
+            Dim dgvlLinker As DataGridViewLinker = TryCast(context?.Instance, DataGridViewLinker)
+            If dgvlLinker Is Nothing Then dgvlLinker = TryCast(TryCast(context?.PropertyDescriptor.Attributes(GetType(ExtenderProvidedPropertyAttribute)), ExtenderProvidedPropertyAttribute)?.Provider, DataGridViewLinker)
             If dgvlLinker IsNot Nothing Then
                 Dim dgvlgLinkingGroup As DataGridViewLinkingGroup = dgvlLinker.LinkingGroups.FirstOrDefault(Function(dgvlg) dgvlg.Value = sValue)
                 If dgvlgLinkingGroup IsNot Nothing Then Return dgvlgLinkingGroup
@@ -36,14 +36,12 @@ Public Class DataGridViewLinkingGroupConverter
     End Function
     Public Overrides Function GetStandardValues(context As ITypeDescriptorContext) As StandardValuesCollection
         If context IsNot Nothing Then
-            Dim eppaProperty As ExtenderProvidedPropertyAttribute = TryCast(context.PropertyDescriptor.Attributes(GetType(ExtenderProvidedPropertyAttribute)), ExtenderProvidedPropertyAttribute)
-            If eppaProperty IsNot Nothing Then
-                Dim dgvlLinker As DataGridViewLinker = TryCast(eppaProperty.Provider, DataGridViewLinker)
-                If dgvlLinker IsNot Nothing Then
-                    Dim dgvlgLinkingGroups As New List(Of Object) From {Nothing}
-                    dgvlgLinkingGroups.AddRange(dgvlLinker.LinkingGroups)
-                    Return New StandardValuesCollection(dgvlgLinkingGroups)
-                End If
+            Dim dgvlLinker As DataGridViewLinker = TryCast(context?.Instance, DataGridViewLinker)
+            If dgvlLinker Is Nothing Then dgvlLinker = TryCast(TryCast(context?.PropertyDescriptor.Attributes(GetType(ExtenderProvidedPropertyAttribute)), ExtenderProvidedPropertyAttribute)?.Provider, DataGridViewLinker)
+            If dgvlLinker IsNot Nothing Then
+                Dim dgvlgLinkingGroups As New List(Of Object) From {Nothing}
+                dgvlgLinkingGroups.AddRange(dgvlLinker.LinkingGroups)
+                Return New StandardValuesCollection(dgvlgLinkingGroups)
             End If
         End If
         Return New StandardValuesCollection({Nothing})

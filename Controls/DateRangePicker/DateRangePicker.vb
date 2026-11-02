@@ -485,7 +485,8 @@ Public Class DateRangePicker
     '''<exception cref="ArgumentOutOfRangeException">The set value is less than <see cref="DateRangePicker.MinDate"/> or more than <see cref="DateRangePicker.MaxDate"/>.</exception>
     <Category("Behavior")>
     <Description("The current date/time values for this control.")>
-    <DesignerSerializationVisibility(DesignerSerializationVisibility.Content)>
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)>
+    <TypeConverter(GetType(DateRangeConverter))>
     Public Property Value As DateRange
         Get
             Return MyValue

@@ -24,13 +24,13 @@ Public Class BrokenPinStripe
 
 #Region "Initializers"
 
-    '''<summary>Create a new empty instance of the <see cref="PinStripe"/> clas.</summary>
     Public Sub New()
+        MyBase.New
     End Sub
-    '''<summary>Create a new instance of the <see cref="PinStripe"/> clas.</summary>
-    '''<param name="container">The <see cref="IContainer"/> that will contain the <see cref="PinStripe"/>.</param>
-    Public Sub New(container As IComponent)
-        MyBase.New(container)
+    '''<summary>Creates a new instance of the <see cref="BrokenPinStripe"/> class.</summary>
+    '''<param name="pinStripeList">The <see cref="KoerControls.PinStripeList"/> that will contain the <see cref="BrokenPinStripe"/>.</param>
+    Public Sub New(pinStripeList As PinStripeList)
+        MyBase.New(pinStripeList)
     End Sub
 
 #End Region
@@ -44,13 +44,6 @@ Public Class BrokenPinStripe
 
 #Region "Properties"
 
-    '''<summary>Represents an empty pin stripe with default values.</summary>
-    '''<returns>An empty pin stripe with default values.</returns>
-    Public Overloads Shared ReadOnly Property Empty As BrokenPinStripe
-        Get
-            Return New BrokenPinStripe
-        End Get
-    End Property
     '''<summary>Gets the bounds of each section the <see cref="BrokenPinStripe"/> should occupy.</summary>
     '''<returns>The bounds of each section the <see cref="BrokenPinStripe"/> should occupy</returns>
     <Category("Appearance")>
@@ -75,7 +68,7 @@ Public Class BrokenPinStripe
         _joinedPinStripeLocations = IntegerRange.Join(MyPinStripeLocations)
     End Sub
     Private Function ShouldSerializePinStripeLocations() As Boolean
-        Return MyPinStripeLocations.Count > 0
+        Return MyPinStripeLocations.Any
     End Function
 
 #End Region

@@ -22,7 +22,7 @@ Public Class PinStripeConverter
             If pslPinStripeList IsNot Nothing Then
                 Dim psPinStripe As PinStripe = pslPinStripeList.PinStripes.FirstOrDefault(Function(ps) ps.ToString = sValue)
                 If psPinStripe IsNot Nothing Then Return psPinStripe
-                Return New PinStripe(pslPinStripeList.Container)
+                Return New PinStripe(pslPinStripeList)
             End If
         End If
         Return MyBase.ConvertFrom(context, culture, value)

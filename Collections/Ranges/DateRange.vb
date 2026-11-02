@@ -1,7 +1,9 @@
 ﻿Imports System.ComponentModel
+Imports System.ComponentModel.Design.Serialization
 Imports System.Globalization
 
 '''<summary>Represents a set of consecutive dates expressed by a start <see cref="Date"/> and end <see cref="Date"/>. This structure can be treated as an <see cref="IEnumerable"/> in many ways.</summary>
+<DesignerSerializer(GetType(DateRangeCodeDomSerializer), GetType(CodeDomSerializer))>
 <TypeConverter(GetType(DateRangeConverter))>
 Public Class DateRange
     Implements IComparable(Of DateRange), IEnumerable, IEnumerable(Of Date), IRange(Of Date, DateRange), IReadOnlyCollection(Of Date)
@@ -42,15 +44,15 @@ Public Class DateRange
         If left._endDate = right._endDate Then Return left._startDate > right._startDate 'EndDates match, check StartDates
         Return left._endDate > right._endDate
     End Operator
+    Public Shared Operator <=(left As DateRange, right As DateRange) As Boolean
+        Return Not left > right
+    End Operator
     Public Shared Operator <(left As DateRange, right As DateRange) As Boolean
         If left._startDate = right._startDate Then Return left._endDate < right._endDate 'StartDates match, check EndDates
         Return left._startDate < right._startDate
     End Operator
     Public Shared Operator >=(left As DateRange, right As DateRange) As Boolean
-        Return left._startDate >= right._startDate AndAlso left._endDate >= right._endDate
-    End Operator
-    Public Shared Operator <=(left As DateRange, right As DateRange) As Boolean
-        Return left._startDate <= right._startDate AndAlso left._endDate <= right._endDate
+        Return Not left < right
     End Operator
 
     Public Shared Operator =(left As DateRange, right As Date) As Boolean
@@ -62,14 +64,14 @@ Public Class DateRange
     Public Shared Operator >(left As DateRange, right As Date) As Boolean
         Return left._startDate > right
     End Operator
+    Public Shared Operator <=(left As DateRange, right As Date) As Boolean
+        Return Not left > right
+    End Operator
     Public Shared Operator <(left As DateRange, right As Date) As Boolean
         Return left._endDate < right
     End Operator
     Public Shared Operator >=(left As DateRange, right As Date) As Boolean
-        Return left._endDate >= right
-    End Operator
-    Public Shared Operator <=(left As DateRange, right As Date) As Boolean
-        Return left._startDate <= right
+        Return Not left < right
     End Operator
 
     Public Shared Operator =(left As Date, right As DateRange) As Boolean
@@ -81,14 +83,14 @@ Public Class DateRange
     Public Shared Operator >(left As Date, right As DateRange) As Boolean
         Return left > right._endDate
     End Operator
+    Public Shared Operator <=(left As Date, right As DateRange) As Boolean
+        Return Not left > right
+    End Operator
     Public Shared Operator <(left As Date, right As DateRange) As Boolean
         Return left < right._startDate
     End Operator
     Public Shared Operator >=(left As Date, right As DateRange) As Boolean
-        Return left >= right._startDate
-    End Operator
-    Public Shared Operator <=(left As Date, right As DateRange) As Boolean
-        Return left <= right._endDate
+        Return Not left < right
     End Operator
 
     Public Function CompareTo(obj As DateRange) As Integer Implements IComparable(Of DateRange).CompareTo
@@ -139,7 +141,7 @@ Public Class DateRange
     '''<summary>Initializes a new empty instance of <see cref="DateRange"/> with values of the current date.</summary>
     Public Sub New()
         _startDate = Today
-        _endDate = Today
+        _endDate = _startDate
     End Sub
     '''<summary>Initializes a new instance of the <see cref="DateRange"/> class.</summary>
     '''<param name="value">The start and end <see cref="Date"/> of the <see cref="DateRange"/>.</param>
@@ -150,14 +152,11 @@ Public Class DateRange
     '''<summary>Initializes a new instance of the <see cref="DateRange"/> class.</summary>
     '''<param name="startDate">The start <see cref="Date"/> of the <see cref="DateRange"/>.</param>
     '''<param name="endDate">The end <see cref="Date"/> of the <see cref="DateRange"/>.</param>
+    '''<exception cref="ArgumentException">startDate is greater than endDate.</exception>
     Public Sub New(startDate As Date, endDate As Date)
-        If startDate < endDate Then
-            _startDate = startDate
-            _endDate = endDate
-        Else
-            _startDate = endDate
-            _endDate = startDate
-        End If
+        If startDate > endDate Then Throw New ArgumentException("startDate cannot be greater endDate")
+        _startDate = startDate
+        _endDate = endDate
     End Sub
     '''<summary>Initializes a new instance of the <see cref="DateRange"/> class.</summary>
     '''<param name="startDate">The initial <see cref="Date"/> to reference for the <see cref="DateRange"/>.</param>
@@ -172,6 +171,232 @@ Public Class DateRange
     Public Sub New(length As Integer, endDate As Date)
         _startDate = endDate.AddDays(-length)
         _endDate = endDate
+    End Sub
+    '''<summary>Initializes a new instance of the <see cref="DateRange"/> class to a specified number of ticks.</summary>
+    '''<param name="startTicks">The start date and time expressed in the number of 100-nanosecond intervals that have elapsed since January 1, 0001 at 00:00:00.000 in the Gregorian calendar.</param>
+    '''<param name="endTicks">The end date and time expressed in the number of 100-nanosecond intervals that have elapsed since January 1, 0001 at 00:00:00.000 in the Gregorian calendar.</param>
+    '''<exception cref="ArgumentException">startTicks is greater than endTicks.</exception>
+    '''<exception cref="ArgumentOutOfRangeException">startTicks or endTicks is less than <see cref="DateTime.MinValue"/> or greater than <see cref="DateTime.MaxValue"/>.</exception>
+    Public Sub New(startTicks As Long, endTicks As Long)
+        If startTicks > endTicks Then Throw New ArgumentException("startTicks cannot be greater than endTicks")
+        _startDate = New Date(startTicks)
+        _endDate = New Date(endTicks)
+    End Sub
+    '''<summary>Initializes a new instance of the <see cref="DateRange"/> class to a specified number of ticks and to Coordinated Universal Time (UTC) or local time.</summary>
+    '''<param name="startTicks">The start date and time expressed in the number of 100-nanosecond intervals that have elapsed since January 1, 0001 at 00:00:00.000 in the Gregorian calendar.</param>
+    '''<param name="endTicks">The end date and time expressed in the number of 100-nanosecond intervals that have elapsed since January 1, 0001 at 00:00:00.000 in the Gregorian calendar.</param>
+    '''<param name="kind">One of the enumeration values that indicates whether ticks specifies a local time, Coordinated Universal Time (UTC), or neither.</param>
+    '''<exception cref="ArgumentException">kind is not one of the <see cref="DateTimeKind"/> values.-or- startTicks is greater than endTicks.</exception>
+    '''<exception cref="ArgumentOutOfRangeException">startTicks or endTicks is less than <see cref="DateTime.MinValue"/> or greater than <see cref="DateTime.MaxValue"/>.</exception>
+    Public Sub New(startTicks As Long, endTicks As Long, kind As DateTimeKind)
+        If startTicks > endTicks Then Throw New ArgumentException("startTicks cannot be greater than endTicks")
+        _startDate = New Date(startTicks, kind)
+        _endDate = New Date(endTicks, kind)
+    End Sub
+    '''<summary>Initializes a new instance of the <see cref="DateRange"/> class to the specified year, month, and day.</summary>
+    '''<param name="startYear">The start year (1 through 9999).</param>
+    '''<param name="startMonth">The start month (1 through 12).</param>
+    '''<param name="startDay">The start day (1 through the number of days in the month).</param>
+    '''<param name="endYear">The end year (1 through 9999).</param>
+    '''<param name="endMonth">The end month (1 through 12).</param>
+    '''<param name="endDay">The end day (1 through the number of days in the month).</param>
+    '''<exception cref="ArgumentException">startDate is greater than endDate.</exception>
+    '''<exception cref="ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.</exception>
+    Public Sub New(startYear As Integer, startMonth As Integer, startDay As Integer, endYear As Integer, endMonth As Integer, endDay As Integer)
+        Dim dStartDate As New Date(startYear, startMonth, startDay)
+        Dim dEndDate As New Date(endYear, endMonth, endDay)
+        If dStartDate > dEndDate Then Throw New ArgumentException("startDate cannot be greater than endDate")
+        _startDate = dStartDate
+        _endDate = dEndDate
+    End Sub
+    '''<summary>Initializes a new instance of the <see cref="DateRange"/> class to the specified year, month, and day for the specified calendar.</summary>
+    '''<param name="startYear">The start year (1 through 9999).</param>
+    '''<param name="startMonth">The start month (1 through 12).</param>
+    '''<param name="startDay">The start day (1 through the number of days in the month).</param>
+    '''<param name="endYear">The end year (1 through 9999).</param>
+    '''<param name="endMonth">The end month (1 through 12).</param>
+    '''<param name="endDay">The end day (1 through the number of days in the month).</param>
+    '''<param name="calendar">The calendar that is used to interpret year, month, and day.</param>
+    '''<exception cref="ArgumentException">startDate is greater than endDate.</exception>
+    '''<exception cref="ArgumentNullException">calendar is null.</exception>
+    '''<exception cref="ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.</exception>
+    Public Sub New(startYear As Integer, startMonth As Integer, startDay As Integer, endYear As Integer, endMonth As Integer, endDay As Integer, calendar As Calendar)
+        Dim dStartDate As New Date(startYear, startMonth, startDay, calendar)
+        Dim dEndDate As New Date(endYear, endMonth, endDay, calendar)
+        If dStartDate > dEndDate Then Throw New ArgumentException("startDate cannot be greater than endDate")
+        _startDate = dStartDate
+        _endDate = dEndDate
+    End Sub
+    '''<summary>Initializes a new instance of the <see cref="DateRange"/> class to the specified year, month, day, hour, minute, and second.</summary>
+    '''<param name="startYear">The start year (1 through 9999).</param>
+    '''<param name="startMonth">The start month (1 through 12).</param>
+    '''<param name="startDay">The start day (1 through the number of days in the month).</param>
+    '''<param name="startHour">The start hours (0 through 23).</param>
+    '''<param name="startMinute">The start minutes (0 through 59).</param>
+    '''<param name="startSecond">The start secionds (0 through 59).</param>
+    '''<param name="endYear">The end year (1 through 9999).</param>
+    '''<param name="endMonth">The end month (1 through 12).</param>
+    '''<param name="endDay">The end day (1 through the number of days in the month).</param>
+    '''<param name="endHour">The end hour (1 through 23).</param>
+    '''<param name="endMinute">The end minute (1 through 59).</param>
+    '''<param name="endSecond">The end second (1 through 59).</param>
+    '''<exception cref="ArgumentException">startDate is greater than endDate.</exception>
+    '''<exception cref="ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.</exception>
+    Public Sub New(startYear As Integer, startMonth As Integer, startDay As Integer, startHour As Integer, startMinute As Integer, startSecond As Integer, endYear As Integer, endMonth As Integer, endDay As Integer, endHour As Integer, endMinute As Integer, endSecond As Integer)
+        Dim dStartDate As New Date(startYear, startMonth, startDay, startHour, startMinute, startSecond)
+        Dim dEndDate As New Date(endYear, endMonth, endDay, endHour, endMinute, endSecond)
+        If dStartDate > dEndDate Then Throw New ArgumentException("startDate cannot be greater than endDate")
+        _startDate = dStartDate
+        _endDate = dEndDate
+    End Sub
+    '''<summary>Initializes a new instance of the <see cref="DateRange"/> class to the specified year, month, day, hour, minute, second and Coordinated Universal Time (UTC) or local time.</summary>
+    '''<param name="startYear">The start year (1 through 9999).</param>
+    '''<param name="startMonth">The start month (1 through 12).</param>
+    '''<param name="startDay">The start day (1 through the number of days in the month).</param>
+    '''<param name="startHour">The start hours (0 through 23).</param>
+    '''<param name="startMinute">The start minutes (0 through 59).</param>
+    '''<param name="startSecond">The start secionds (0 through 59).</param>
+    '''<param name="endYear">The end year (1 through 9999).</param>
+    '''<param name="endMonth">The end month (1 through 12).</param>
+    '''<param name="endDay">The end day (1 through the number of days in the month).</param>
+    '''<param name="endHour">The end hour (1 through 23).</param>
+    '''<param name="endMinute">The end minute (1 through 59).</param>
+    '''<param name="endSecond">The end second (1 through 59).</param>
+    '''<param name="kind">One of the enumeration values that indicates whether year, month, day, hour, minute and second specify a local time, Coordinated Universal Time (UTC), or neither.</param>
+    '''<exception cref="ArgumentException">kind is not one of the <see cref="DateTimeKind"/> values.-or- startDate is greater than endDate.</exception>
+    '''<exception cref="ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.</exception>
+    Public Sub New(startYear As Integer, startMonth As Integer, startDay As Integer, startHour As Integer, startMinute As Integer, startSecond As Integer, endYear As Integer, endMonth As Integer, endDay As Integer, endHour As Integer, endMinute As Integer, endSecond As Integer, kind As DateTimeKind)
+        Dim dStartDate As New Date(startYear, startMonth, startDay, startHour, startMinute, startSecond, kind)
+        Dim dEndDate As New Date(endYear, endMonth, endDay, endHour, endMinute, endSecond, kind)
+        If dStartDate > dEndDate Then Throw New ArgumentException("startDate cannot be greater than endDate")
+        _startDate = dStartDate
+        _endDate = dEndDate
+    End Sub
+    '''<summary>Initializes a new instance of the <see cref="DateRange"/> class to the specified year, month, day, hour, minute and second for the specified calendar.</summary>
+    '''<param name="startYear">The start year (1 through 9999).</param>
+    '''<param name="startMonth">The start month (1 through 12).</param>
+    '''<param name="startDay">The start day (1 through the number of days in the month).</param>
+    '''<param name="startHour">The start hours (0 through 23).</param>
+    '''<param name="startMinute">The start minutes (0 through 59).</param>
+    '''<param name="startSecond">The start secionds (0 through 59).</param>
+    '''<param name="endYear">The end year (1 through 9999).</param>
+    '''<param name="endMonth">The end month (1 through 12).</param>
+    '''<param name="endDay">The end day (1 through the number of days in the month).</param>
+    '''<param name="endHour">The end hour (1 through 23).</param>
+    '''<param name="endMinute">The end minute (1 through 59).</param>
+    '''<param name="endSecond">The end second (1 through 59).</param>
+    '''<param name="calendar">The calendar that is used to interpret year, month, and day.</param>
+    '''<exception cref="ArgumentException">startDate is greater than endDate.</exception>
+    '''<exception cref="ArgumentNullException">calendar is null.</exception>
+    '''<exception cref="ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.</exception>
+    Public Sub New(startYear As Integer, startMonth As Integer, startDay As Integer, startHour As Integer, startMinute As Integer, startSecond As Integer, endYear As Integer, endMonth As Integer, endDay As Integer, endHour As Integer, endMinute As Integer, endSecond As Integer, calendar As Calendar)
+        Dim dStartDate As New Date(startYear, startMonth, startDay, startHour, startMinute, startSecond, calendar)
+        Dim dEndDate As New Date(endYear, endMonth, endDay, endHour, endMinute, endSecond, calendar)
+        If dStartDate > dEndDate Then Throw New ArgumentException("startDate cannot be greater than endDate")
+        _startDate = dStartDate
+        _endDate = dEndDate
+    End Sub
+    '''<summary>Initializes a new instance of the <see cref="DateRange"/> class to the specified year, month, day, hour, minute, second, and millisecond.</summary>
+    '''<param name="startYear">The start year (1 through 9999).</param>
+    '''<param name="startMonth">The start month (1 through 12).</param>
+    '''<param name="startDay">The start day (1 through the number of days in the month).</param>
+    '''<param name="startHour">The start hours (0 through 23).</param>
+    '''<param name="startMinute">The start minutes (0 through 59).</param>
+    '''<param name="startSecond">The start secionds (0 through 59).</param>
+    '''<param name="startMilliseconds">The start milliseconds (0 through 999).</param>
+    '''<param name="endYear">The end year (1 through 9999).</param>
+    '''<param name="endMonth">The end month (1 through 12).</param>
+    '''<param name="endDay">The end day (1 through the number of days in the month).</param>
+    '''<param name="endHour">The end hour (1 through 23).</param>
+    '''<param name="endMinute">The end minute (1 through 59).</param>
+    '''<param name="endSecond">The end second (1 through 59).</param>
+    '''<param name="endMilliseconds">The end milliseconds (0 through 999).</param>
+    '''<exception cref="ArgumentException">startDate is greater than endDate.</exception>
+    '''<exception cref="ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.-or- startMillisecond or endMilliseconds is less than 0 or greater than 999.</exception>
+    Public Sub New(startYear As Integer, startMonth As Integer, startDay As Integer, startHour As Integer, startMinute As Integer, startSecond As Integer, startMilliseconds As Integer, endYear As Integer, endMonth As Integer, endDay As Integer, endHour As Integer, endMinute As Integer, endSecond As Integer, endMilliseconds As Integer)
+        Dim dStartDate As New Date(startYear, startMonth, startDay, startHour, startMinute, startSecond, startMilliseconds)
+        Dim dEndDate As New Date(endYear, endMonth, endDay, endHour, endMinute, endSecond, endMilliseconds)
+        If dStartDate > dEndDate Then Throw New ArgumentException("startDate cannot be greater than endDate")
+        _startDate = dStartDate
+        _endDate = dEndDate
+    End Sub
+    '''<summary>Initializes a new instance of the <see cref="DateRange"/> class to the specified year, month, day, hour, minute, millisecond, and Coordinated Universal Time (UTC) or local time.</summary>
+    '''<param name="startYear">The start year (1 through 9999).</param>
+    '''<param name="startMonth">The start month (1 through 12).</param>
+    '''<param name="startDay">The start day (1 through the number of days in the month).</param>
+    '''<param name="startHour">The start hours (0 through 23).</param>
+    '''<param name="startMinute">The start minutes (0 through 59).</param>
+    '''<param name="startSecond">The start secionds (0 through 59).</param>
+    '''<param name="startMilliseconds">The start milliseconds (0 through 999).</param>
+    '''<param name="endYear">The end year (1 through 9999).</param>
+    '''<param name="endMonth">The end month (1 through 12).</param>
+    '''<param name="endDay">The end day (1 through the number of days in the month).</param>
+    '''<param name="endHour">The end hour (1 through 23).</param>
+    '''<param name="endMinute">The end minute (1 through 59).</param>
+    '''<param name="endSecond">The end second (1 through 59).</param>
+    '''<param name="endMilliseconds">The end milliseconds (0 through 999).</param>
+    '''<param name="kind">One of the enumeration values that indicates whether year, month, day, hour, minute and second specify a local time, Coordinated Universal Time (UTC), or neither.</param>
+    '''<exception cref="ArgumentException">kind is not one of the <see cref="DateTimeKind"/> values.-or- startDate is greater than endDate.</exception>
+    '''<exception cref="ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.-or- startMillisecond or endMilliseconds is less than 0 or greater than 999.</exception>
+    Public Sub New(startYear As Integer, startMonth As Integer, startDay As Integer, startHour As Integer, startMinute As Integer, startSecond As Integer, startMilliseconds As Integer, endYear As Integer, endMonth As Integer, endDay As Integer, endHour As Integer, endMinute As Integer, endSecond As Integer, endMilliseconds As Integer, kind As DateTimeKind)
+        Dim dStartDate As New Date(startYear, startMonth, startDay, startHour, startMinute, startSecond, startMilliseconds, kind)
+        Dim dEndDate As New Date(endYear, endMonth, endDay, endHour, endMinute, endSecond, endMilliseconds, kind)
+        If dStartDate > dEndDate Then Throw New ArgumentException("startDate cannot be greater than endDate")
+        _startDate = dStartDate
+        _endDate = dEndDate
+    End Sub
+    '''<summary>Initializes a new instance of the <see cref="DateRange"/> class to the specified year, month, day, hour, minute, second, and millisecond for the specified calendar.</summary>
+    '''<param name="startYear">The start year (1 through 9999).</param>
+    '''<param name="startMonth">The start month (1 through 12).</param>
+    '''<param name="startDay">The start day (1 through the number of days in the month).</param>
+    '''<param name="startHour">The start hours (0 through 23).</param>
+    '''<param name="startMinute">The start minutes (0 through 59).</param>
+    '''<param name="startSecond">The start secionds (0 through 59).</param>
+    '''<param name="startMilliseconds">The start milliseconds (0 through 999).</param>
+    '''<param name="endYear">The end year (1 through 9999).</param>
+    '''<param name="endMonth">The end month (1 through 12).</param>
+    '''<param name="endDay">The end day (1 through the number of days in the month).</param>
+    '''<param name="endHour">The end hour (1 through 23).</param>
+    '''<param name="endMinute">The end minute (1 through 59).</param>
+    '''<param name="endSecond">The end second (1 through 59).</param>
+    '''<param name="endMilliseconds">The end milliseconds (0 through 999).</param>
+    '''<param name="calendar">The calendar that is used to interpret year, month, and day.</param>
+    '''<exception cref="ArgumentException">startDate is greater than endDate.</exception>
+    '''<exception cref="ArgumentNullException">calendar is null.</exception>
+    '''<exception cref="ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.-or- startMillisecond or endMilliseconds is less than 0 or greater than 999.</exception>
+    Public Sub New(startYear As Integer, startMonth As Integer, startDay As Integer, startHour As Integer, startMinute As Integer, startSecond As Integer, startMilliseconds As Integer, endYear As Integer, endMonth As Integer, endDay As Integer, endHour As Integer, endMinute As Integer, endSecond As Integer, endMilliseconds As Integer, calendar As Calendar)
+        Dim dStartDate As New Date(startYear, startMonth, startDay, startHour, startMinute, startSecond, startMilliseconds, calendar)
+        Dim dEndDate As New Date(endYear, endMonth, endDay, endHour, endMinute, endSecond, endMilliseconds, calendar)
+        If dStartDate > dEndDate Then Throw New ArgumentException("startDate cannot be greater than endDate")
+        _startDate = dStartDate
+        _endDate = dEndDate
+    End Sub
+    '''<summary>Initializes a new instance of the <see cref="DateRange"/> class to the specified year, month, day, hour, minute, millisecond, and Coordinated Universal Time (UTC) or local time for the specified calendar.</summary>
+    '''<param name="startYear">The start year (1 through 9999).</param>
+    '''<param name="startMonth">The start month (1 through 12).</param>
+    '''<param name="startDay">The start day (1 through the number of days in the month).</param>
+    '''<param name="startHour">The start hours (0 through 23).</param>
+    '''<param name="startMinute">The start minutes (0 through 59).</param>
+    '''<param name="startSecond">The start secionds (0 through 59).</param>
+    '''<param name="startMilliseconds">The start milliseconds (0 through 999).</param>
+    '''<param name="endYear">The end year (1 through 9999).</param>
+    '''<param name="endMonth">The end month (1 through 12).</param>
+    '''<param name="endDay">The end day (1 through the number of days in the month).</param>
+    '''<param name="endHour">The end hour (1 through 23).</param>
+    '''<param name="endMinute">The end minute (1 through 59).</param>
+    '''<param name="endSecond">The end second (1 through 59).</param>
+    '''<param name="endMilliseconds">The end milliseconds (0 through 999).</param>
+    '''<param name="calendar">The calendar that is used to interpret year, month, and day.</param>
+    '''<param name="kind">One of the enumeration values that indicates whether year, month, day, hour, minute and second specify a local time, Coordinated Universal Time (UTC), or neither.</param>
+    '''<exception cref="ArgumentException">kind is not one of the <see cref="DateTimeKind"/> values.-or- startDate is greater than endDate.</exception>
+    '''<exception cref="ArgumentNullException">calendar is null.</exception>
+    '''<exception cref="ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.-or- startMillisecond or endMilliseconds is less than 0 or greater than 999.</exception>
+    Public Sub New(startYear As Integer, startMonth As Integer, startDay As Integer, startHour As Integer, startMinute As Integer, startSecond As Integer, startMilliseconds As Integer, endYear As Integer, endMonth As Integer, endDay As Integer, endHour As Integer, endMinute As Integer, endSecond As Integer, endMilliseconds As Integer, calendar As Calendar, kind As DateTimeKind)
+        Dim dStartDate As New Date(startYear, startMonth, startDay, startHour, startMinute, startSecond, startMilliseconds, calendar, kind)
+        Dim dEndDate As New Date(endYear, endMonth, endDay, endHour, endMinute, endSecond, endMilliseconds, calendar, kind)
+        If dStartDate > dEndDate Then Throw New ArgumentException("startDate cannot be greater than endDate")
+        _startDate = dStartDate
+        _endDate = dEndDate
     End Sub
 
 #End Region
@@ -202,12 +427,10 @@ Public Class DateRange
         Set(value As Date)
             If value = _endDate Then Return
             If value < _startDate Then
-                _endDate = _startDate
                 _startDate = value
                 OnStartDateChanged(EventArgs.Empty)
-            Else
-                _endDate = value
             End If
+            _endDate = value
             OnEndDateChanged(EventArgs.Empty)
         End Set
     End Property
@@ -241,12 +464,10 @@ Public Class DateRange
         Set(value As Date)
             If value = _startDate Then Return
             If value > _endDate Then
-                _startDate = _endDate
                 _endDate = value
                 OnEndDateChanged(EventArgs.Empty)
-            Else
-                _startDate = value
             End If
+            _startDate = value
             OnStartDateChanged(EventArgs.Empty)
         End Set
     End Property
@@ -403,15 +624,30 @@ Public Class DateRange
     Public Shared Function Parse(s As String) As DateRange
         Dim iStringLength As Integer = s.Length
         Dim bStartDateFound As Boolean = False
-        Dim bEndDateFound As Boolean = False
-        Dim dStartValue As Date
-        Dim dEndValue As Date
+        Dim dStartDate As Date
+        Dim dStartDateTemp As Date
+        Dim iLastStartDateIndex As Integer
         For iIndex As Integer = 0 To iStringLength - 1 'Index through string
-            bStartDateFound = bStartDateFound OrElse Date.TryParse(s.Substring(0, iStringLength - iIndex), dStartValue) 'Try to get start date from front portion of string
-            bEndDateFound = bEndDateFound OrElse Date.TryParse(s.Substring(iIndex, iStringLength - iIndex), dEndValue) 'Try to get end date from end portion of string
-            If bStartDateFound AndAlso bEndDateFound Then Return New DateRange(dStartValue, dEndValue) 'Determine if both start date and end date have been found
+            If Date.TryParse(s.Substring(0, iStringLength - iIndex), dStartDateTemp) Then 'Start date was able to be parsed
+                dStartDate = dStartDateTemp
+                bStartDateFound = True
+                iLastStartDateIndex = iIndex
+                Exit For
+            End If
         Next
-        Throw New FormatException($"Cannot convert the string '{s}' to DateRange.")
+        If Not bStartDateFound Then Throw New FormatException($"Cannot convert the string '{s}' to DateRange.") 'Start date not found, throw
+        Dim bEndDateFound As Boolean = False
+        Dim dEndDate As Date
+        Dim dEndDateTemp As Date
+        For iIndex As Integer = iLastStartDateIndex + 1 To iStringLength - 1 'Index through string starting after where start date ended
+            If Date.TryParse(s.Substring(iIndex, iStringLength - iIndex), dEndDateTemp) Then 'End date was able to be parsed
+                dEndDate = dEndDateTemp
+                bEndDateFound = True
+                Exit For
+            End If
+        Next
+        If Not bEndDateFound Then Throw New FormatException($"Cannot convert the string '{s}' to DateRange.") 'End date not found, throw
+        Return New DateRange(dStartDate, dEndDate)
     End Function
     '''<summary>Converts the string representation of a date and time range to its <see cref="DateRange"/> equivalent by using culture-specific format information and formatting style.</summary>
     '''<returns>An object that is equivalent to the date and time range contained in <paramref name="s"/>, as specified by provider and styles.</returns>
@@ -423,15 +659,30 @@ Public Class DateRange
     Public Shared Function Parse(s As String, provider As IFormatProvider, styles As DateTimeStyles) As DateRange
         Dim iStringLength As Integer = s.Length
         Dim bStartDateFound As Boolean = False
-        Dim bEndDateFound As Boolean = False
-        Dim dStartValue As Date
-        Dim dEndValue As Date
+        Dim dStartDate As Date
+        Dim dStartDateTemp As Date
+        Dim iLastStartDateIndex As Integer
         For iIndex As Integer = 0 To iStringLength - 1 'Index through string
-            bStartDateFound = bStartDateFound OrElse Date.TryParse(s.Substring(0, iStringLength - iIndex), provider, styles, dStartValue) 'Try to get start date from front portion of string
-            bEndDateFound = bEndDateFound OrElse Date.TryParse(s.Substring(iIndex, iStringLength - iIndex), provider, styles, dEndValue) 'Try to get end date from end portion of string
-            If bStartDateFound AndAlso bEndDateFound Then Return New DateRange(dStartValue, dEndValue) 'Determine if both start date and end date have been found
+            If Date.TryParse(s.Substring(0, iStringLength - iIndex), provider, styles, dStartDateTemp) Then 'Start date was able to be parsed
+                dStartDate = dStartDateTemp
+                bStartDateFound = True
+                iLastStartDateIndex = iIndex
+                Exit For
+            End If
         Next
-        Throw New FormatException($"Cannot convert the string '{s}' to DateRange using the specified provider and styles.")
+        If Not bStartDateFound Then Throw New FormatException($"Cannot convert the string '{s}' to DateRange.") 'Start date not found, throw
+        Dim bEndDateFound As Boolean = False
+        Dim dEndDate As Date
+        Dim dEndDateTemp As Date
+        For iIndex As Integer = iLastStartDateIndex + 1 To iStringLength - 1 'Index through string starting after where start date ended
+            If Date.TryParse(s.Substring(iIndex, iStringLength - iIndex), provider, styles, dEndDateTemp) Then 'End date was able to be parsed
+                dEndDate = dEndDateTemp
+                bEndDateFound = True
+                Exit For
+            End If
+        Next
+        If Not bEndDateFound Then Throw New FormatException($"Cannot convert the string '{s}' to DateRange.") 'End date not found, throw
+        Return New DateRange(dStartDate, dEndDate)
     End Function
     '''<summary>Converts the specified string representation of a date and time range to its <see cref="DateRange"/> equivalent using the specified format, culture-specific format information, and  style. The format of the string representation must match the specified format exactly. The method returns a value that indicates whether the conversion succeeded.</summary>
     '''<returns><see langword="True"/> if the <paramref name="s"/> parameter was converted successfully; otherwise, <see langword="False"/>.</returns>
@@ -444,15 +695,30 @@ Public Class DateRange
     Public Shared Function ParseExact(s As String, format As String, provider As IFormatProvider, style As DateTimeStyles) As DateRange
         Dim iStringLength As Integer = s.Length
         Dim bStartDateFound As Boolean = False
-        Dim bEndDateFound As Boolean = False
-        Dim dStartValue As Date
-        Dim dEndValue As Date
+        Dim dStartDate As Date
+        Dim dStartDateTemp As Date
+        Dim iLastStartDateIndex As Integer
         For iIndex As Integer = 0 To iStringLength - 1 'Index through string
-            bStartDateFound = bStartDateFound OrElse Date.TryParseExact(s.Substring(0, iStringLength - iIndex), format, provider, style, dStartValue) 'Try to get start date from front portion of string
-            bEndDateFound = bEndDateFound OrElse Date.TryParseExact(s.Substring(iIndex, iStringLength - iIndex), format, provider, style, dEndValue) 'Try to get end date from end portion of string
-            If bStartDateFound AndAlso bEndDateFound Then Return New DateRange(dStartValue, dEndValue) 'Determine if both start date and end date have been found
+            If Date.TryParseExact(s.Substring(0, iStringLength - iIndex), format, provider, style, dStartDateTemp) Then 'Start date was able to be parsed
+                dStartDate = dStartDateTemp
+                bStartDateFound = True
+                iLastStartDateIndex = iIndex
+                Exit For
+            End If
         Next
-        Throw New FormatException($"Cannot convert the string '{s}' to DateRange using the specified formats, provider, and styles.")
+        If Not bStartDateFound Then Throw New FormatException($"Cannot convert the string '{s}' to DateRange.") 'Start date not found, throw
+        Dim bEndDateFound As Boolean = False
+        Dim dEndDate As Date
+        Dim dEndDateTemp As Date
+        For iIndex As Integer = iLastStartDateIndex + 1 To iStringLength - 1 'Index through string starting after where start date ended
+            If Date.TryParseExact(s.Substring(iIndex, iStringLength - iIndex), format, provider, style, dEndDateTemp) Then 'End date was able to be parsed
+                dEndDate = dEndDateTemp
+                bEndDateFound = True
+                Exit For
+            End If
+        Next
+        If Not bEndDateFound Then Throw New FormatException($"Cannot convert the string '{s}' to DateRange.") 'End date not found, throw
+        Return New DateRange(dStartDate, dEndDate)
     End Function
     '''<summary>Converts the specified string representation of a date and time range to its <see cref="DateRange"/> equivalent using the specified array of formats, culture-specific format information, and style. The format of the string representation must match at least one of the specified formats exactly or an exception is thrown.</summary>
     '''<returns>An object that is equivalent to the date and time range contained in s, as specified by formats, provider, and style.</returns>
@@ -465,15 +731,30 @@ Public Class DateRange
     Public Shared Function ParseExact(s As String, formats() As String, provider As IFormatProvider, style As DateTimeStyles) As DateRange
         Dim iStringLength As Integer = s.Length
         Dim bStartDateFound As Boolean = False
-        Dim bEndDateFound As Boolean = False
-        Dim dStartValue As Date
-        Dim dEndValue As Date
+        Dim dStartDate As Date
+        Dim dStartDateTemp As Date
+        Dim iLastStartDateIndex As Integer
         For iIndex As Integer = 0 To iStringLength - 1 'Index through string
-            bStartDateFound = bStartDateFound OrElse Date.TryParseExact(s.Substring(0, iStringLength - iIndex), formats, provider, style, dStartValue) 'Try to get start date from front portion of string
-            bEndDateFound = bEndDateFound OrElse Date.TryParseExact(s.Substring(iIndex, iStringLength - iIndex), formats, provider, style, dEndValue) 'Try to get end date from end portion of string
-            If bStartDateFound AndAlso bEndDateFound Then Return New DateRange(dStartValue, dEndValue) 'Determine if both start date and end date have been found
+            If Date.TryParseExact(s.Substring(0, iStringLength - iIndex), formats, provider, style, dStartDateTemp) Then 'Start date was able to be parsed
+                dStartDate = dStartDateTemp
+                bStartDateFound = True
+                iLastStartDateIndex = iIndex
+                Exit For
+            End If
         Next
-        Throw New FormatException($"Cannot convert the string '{s}' to DateRange using the specified formats, provider, and styles.")
+        If Not bStartDateFound Then Throw New FormatException($"Cannot convert the string '{s}' to DateRange.") 'Start date not found, throw
+        Dim bEndDateFound As Boolean = False
+        Dim dEndDate As Date
+        Dim dEndDateTemp As Date
+        For iIndex As Integer = iLastStartDateIndex + 1 To iStringLength - 1 'Index through string starting after where start date ended
+            If Date.TryParseExact(s.Substring(iIndex, iStringLength - iIndex), formats, provider, style, dEndDateTemp) Then 'End date was able to be parsed
+                dEndDate = dEndDateTemp
+                bEndDateFound = True
+                Exit For
+            End If
+        Next
+        If Not bEndDateFound Then Throw New FormatException($"Cannot convert the string '{s}' to DateRange.") 'End date not found, throw
+        Return New DateRange(dStartDate, dEndDate)
     End Function
     '''<summary>Converts the specified string representation of a date and time range to its <see cref="DateRange"/> equivalent and returns a value that indicates whether the conversion succeeded.</summary>
     '''<returns><see langword="True"/> if the <paramref name="s"/> parameter was converted successfully; otherwise, <see langword="False"/>.</returns>
@@ -482,19 +763,37 @@ Public Class DateRange
     Public Shared Function TryParse(s As String, ByRef result As DateRange) As Boolean
         Dim iStringLength As Integer = s.Length
         Dim bStartDateFound As Boolean = False
-        Dim bEndDateFound As Boolean = False
         Dim dStartDate As Date
-        Dim dEndDate As Date
+        Dim dStartDateTemp As Date
+        Dim iLastStartDateIndex As Integer
         For iIndex As Integer = 0 To iStringLength - 1 'Index through string
-            bStartDateFound = bStartDateFound OrElse Date.TryParse(s.Substring(0, iStringLength - iIndex), dStartDate) 'Try to get start date from front portion of string
-            bEndDateFound = bEndDateFound OrElse Date.TryParse(s.Substring(iIndex, iStringLength - iIndex), dEndDate) 'Try to get end date from end portion of string
-            If bStartDateFound AndAlso bEndDateFound Then 'Determine if both start date and end date have been found
-                result = New DateRange(dStartDate, dEndDate) 'set result
-                Return True 'Conversion was succesfull
+            If Date.TryParse(s.Substring(0, iStringLength - iIndex), dStartDateTemp) Then 'Start date was able to be parsed
+                dStartDate = dStartDateTemp
+                bStartDateFound = True
+                iLastStartDateIndex = iIndex
+                Exit For
             End If
         Next
-        result = Empty
-        Return False 'Conversion was not succesfull
+        If Not bStartDateFound Then 'Start date not found, conversion was not succesful
+            result = Empty
+            Return False
+        End If
+        Dim bEndDateFound As Boolean = False
+        Dim dEndDate As Date
+        Dim dEndDateTemp As Date
+        For iIndex As Integer = iLastStartDateIndex + 1 To iStringLength - 1 'Index through string starting after where start date ended
+            If Date.TryParse(s.Substring(iIndex, iStringLength - iIndex), dEndDateTemp) Then 'End date was able to be parsed
+                dEndDate = dEndDateTemp
+                bEndDateFound = True
+                Exit For
+            End If
+        Next
+        If Not bEndDateFound Then 'End date not found, conversion was not succesful
+            result = Empty
+            Return False
+        End If
+        result = New DateRange(dStartDate, dEndDate) 'Conversion was succesful
+        Return True
     End Function
     '''<summary>Converts the specified string representation of a date and time range to its <see cref="DateRange"/> equivalent using the specified culture-specific format information and formatting style, and returns a value that indicates whether the conversion succeeded.</summary>
     '''<returns><see langword="True"/> if the <paramref name="s"/> parameter was converted successfully; otherwise, <see langword="False"/>.</returns>
@@ -506,19 +805,37 @@ Public Class DateRange
     Public Shared Function TryParse(s As String, provider As IFormatProvider, styles As DateTimeStyles, ByRef result As DateRange) As Boolean
         Dim iStringLength As Integer = s.Length
         Dim bStartDateFound As Boolean = False
-        Dim bEndDateFound As Boolean = False
         Dim dStartDate As Date
-        Dim dEndDate As Date
+        Dim dStartDateTemp As Date
+        Dim iLastStartDateIndex As Integer
         For iIndex As Integer = 0 To iStringLength - 1 'Index through string
-            bStartDateFound = bStartDateFound OrElse Date.TryParse(s.Substring(0, iStringLength - iIndex), provider, styles, dStartDate) 'Try to get start date from front portion of string
-            bEndDateFound = bEndDateFound OrElse Date.TryParse(s.Substring(iIndex, iStringLength - iIndex), provider, styles, dEndDate) 'Try to get end date from end portion of string
-            If bStartDateFound AndAlso bEndDateFound Then 'Determine if both start date and end date have been found
-                result = New DateRange(dStartDate, dEndDate) 'set result
-                Return True 'Conversion was succesfull
+            If Date.TryParse(s.Substring(0, iStringLength - iIndex), provider, styles, dStartDateTemp) Then 'Start date was able to be parsed
+                dStartDate = dStartDateTemp
+                bStartDateFound = True
+                iLastStartDateIndex = iIndex
+                Exit For
             End If
         Next
-        result = Empty
-        Return False 'Conversion was not succesfull
+        If Not bStartDateFound Then 'Start date not found, conversion was not succesful
+            result = Empty
+            Return False
+        End If
+        Dim bEndDateFound As Boolean = False
+        Dim dEndDate As Date
+        Dim dEndDateTemp As Date
+        For iIndex As Integer = iLastStartDateIndex + 1 To iStringLength - 1 'Index through string starting after where start date ended
+            If Date.TryParse(s.Substring(iIndex, iStringLength - iIndex), provider, styles, dEndDateTemp) Then 'End date was able to be parsed
+                dEndDate = dEndDateTemp
+                bEndDateFound = True
+                Exit For
+            End If
+        Next
+        If Not bEndDateFound Then 'End date not found, conversion was not succesful
+            result = Empty
+            Return False
+        End If
+        result = New DateRange(dStartDate, dEndDate) 'Conversion was succesful
+        Return True
     End Function
     '''<summary>Converts the specified string representation of a date and time range to its <see cref="DateRange"/> equivalent using the specified format, culture-specific format information, and  style. The format of the string representation must match the specified format exactly. The method returns a value that indicates whether the conversion succeeded.</summary>
     '''<returns><see langword="True"/> if the <paramref name="s"/> parameter was converted successfully; otherwise, <see langword="False"/>.</returns>
@@ -531,19 +848,37 @@ Public Class DateRange
     Public Shared Function TryParseExact(s As String, format As String, provider As IFormatProvider, style As DateTimeStyles, ByRef result As DateRange) As Boolean
         Dim iStringLength As Integer = s.Length
         Dim bStartDateFound As Boolean = False
-        Dim bEndDateFound As Boolean = False
-        Dim dStartValue As Date
-        Dim dEndValue As Date
+        Dim dStartDate As Date
+        Dim dStartDateTemp As Date
+        Dim iLastStartDateIndex As Integer
         For iIndex As Integer = 0 To iStringLength - 1 'Index through string
-            bStartDateFound = bStartDateFound OrElse Date.TryParseExact(s.Substring(0, iStringLength - iIndex), format, provider, style, dStartValue) 'Try to get start date from front portion of string
-            bEndDateFound = bEndDateFound OrElse Date.TryParseExact(s.Substring(iIndex, iStringLength - iIndex), format, provider, style, dEndValue) 'Try to get end date from end portion of string
-            If bStartDateFound AndAlso bEndDateFound Then 'Determine if both start date and end date have been found
-                result = New DateRange(dStartValue, dEndValue) 'set result
-                Return True 'Conversion was succesfull
+            If Date.TryParseExact(s.Substring(0, iStringLength - iIndex), format, provider, style, dStartDateTemp) Then 'Start date was able to be parsed
+                dStartDate = dStartDateTemp
+                bStartDateFound = True
+                iLastStartDateIndex = iIndex
+                Exit For
             End If
         Next
-        result = Empty
-        Return False 'Conversion was not succesfull
+        If Not bStartDateFound Then 'Start date not found, conversion was not succesful
+            result = Empty
+            Return False
+        End If
+        Dim bEndDateFound As Boolean = False
+        Dim dEndDate As Date
+        Dim dEndDateTemp As Date
+        For iIndex As Integer = iLastStartDateIndex + 1 To iStringLength - 1 'Index through string starting after where start date ended
+            If Date.TryParseExact(s.Substring(iIndex, iStringLength - iIndex), format, provider, style, dEndDateTemp) Then 'End date was able to be parsed
+                dEndDate = dEndDateTemp
+                bEndDateFound = True
+                Exit For
+            End If
+        Next
+        If Not bEndDateFound Then 'End date not found, conversion was not succesful
+            result = Empty
+            Return False
+        End If
+        result = New DateRange(dStartDate, dEndDate) 'Conversion was succesful
+        Return True
     End Function
     '''<summary>Converts the specified string representation of a date range to its <see cref="DateRange"/> equivalent using the specified array of formats, culture-specific format information, and style. The format of the string representation must match at least one of the specified formats exactly. The method returns a value that indicates whether the conversion succeeded.</summary>
     '''<returns><see langword="True"/> if the <paramref name="s"/> parameter was converted successfully; otherwise, <see langword="False"/>.</returns>
@@ -556,19 +891,37 @@ Public Class DateRange
     Public Shared Function TryParseExact(s As String, formats() As String, provider As IFormatProvider, style As DateTimeStyles, ByRef result As DateRange) As Boolean
         Dim iStringLength As Integer = s.Length
         Dim bStartDateFound As Boolean = False
-        Dim bEndDateFound As Boolean = False
-        Dim dStartValue As Date
-        Dim dEndValue As Date
+        Dim dStartDate As Date
+        Dim dStartDateTemp As Date
+        Dim iLastStartDateIndex As Integer
         For iIndex As Integer = 0 To iStringLength - 1 'Index through string
-            bStartDateFound = bStartDateFound OrElse Date.TryParseExact(s.Substring(0, iStringLength - iIndex), formats, provider, style, dStartValue) 'Try to get start date from front portion of string
-            bEndDateFound = bEndDateFound OrElse Date.TryParseExact(s.Substring(iIndex, iStringLength - iIndex), formats, provider, style, dEndValue) 'Try to get end date from end portion of string
-            If bStartDateFound AndAlso bEndDateFound Then 'Determine if both start date and end date have been found
-                result = New DateRange(dStartValue, dEndValue) 'set result
-                Return True 'Conversion was succesfull
+            If Date.TryParseExact(s.Substring(0, iStringLength - iIndex), formats, provider, style, dStartDateTemp) Then 'Start date was able to be parsed
+                dStartDate = dStartDateTemp
+                bStartDateFound = True
+                iLastStartDateIndex = iIndex
+                Exit For
             End If
         Next
-        result = Empty
-        Return False 'Conversion was not succesfull
+        If Not bStartDateFound Then 'Start date not found, conversion was not succesful
+            result = Empty
+            Return False
+        End If
+        Dim bEndDateFound As Boolean = False
+        Dim dEndDate As Date
+        Dim dEndDateTemp As Date
+        For iIndex As Integer = iLastStartDateIndex + 1 To iStringLength - 1 'Index through string starting after where start date ended
+            If Date.TryParseExact(s.Substring(iIndex, iStringLength - iIndex), formats, provider, style, dEndDateTemp) Then 'End date was able to be parsed
+                dEndDate = dEndDateTemp
+                bEndDateFound = True
+                Exit For
+            End If
+        Next
+        If Not bEndDateFound Then 'End date not found, conversion was not succesful
+            result = Empty
+            Return False
+        End If
+        result = New DateRange(dStartDate, dEndDate) 'Conversion was succesful
+        Return True
     End Function
 
 #End Region

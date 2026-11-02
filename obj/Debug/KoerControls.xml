@@ -36,6 +36,7 @@ KoerControls
 <summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class.</summary>
 <param name="startDate">The start <see cref="T:System.DateTime"/> of the <see cref="T:KoerControls.DateRange"/>.</param>
 <param name="endDate">The end <see cref="T:System.DateTime"/> of the <see cref="T:KoerControls.DateRange"/>.</param>
+<exception cref="T:System.ArgumentException">startDate is greater than endDate.</exception>
 </member>
 <member name="M:KoerControls.DateRange.#ctor(System.DateTime,System.Int32)">
 <summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class.</summary>
@@ -46,6 +47,181 @@ KoerControls
 <summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class.</summary>
 <param name="length">The number of days the <see cref="T:KoerControls.DateRange"/> will span </param>
 <param name="endDate">The last <see cref="T:System.DateTime"/> to reference for the <see cref="T:KoerControls.DateRange"/>.</param>
+</member>
+<member name="M:KoerControls.DateRange.#ctor(System.Int64,System.Int64)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class to a specified number of ticks.</summary>
+<param name="startTicks">The start date and time expressed in the number of 100-nanosecond intervals that have elapsed since January 1, 0001 at 00:00:00.000 in the Gregorian calendar.</param>
+<param name="endTicks">The end date and time expressed in the number of 100-nanosecond intervals that have elapsed since January 1, 0001 at 00:00:00.000 in the Gregorian calendar.</param>
+<exception cref="T:System.ArgumentException">startTicks is greater than endTicks.</exception>
+<exception cref="T:System.ArgumentOutOfRangeException">startTicks or endTicks is less than <see cref="F:System.DateTime.MinValue"/> or greater than <see cref="F:System.DateTime.MaxValue"/>.</exception>
+</member>
+<member name="M:KoerControls.DateRange.#ctor(System.Int64,System.Int64,System.DateTimeKind)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class to a specified number of ticks and to Coordinated Universal Time (UTC) or local time.</summary>
+<param name="startTicks">The start date and time expressed in the number of 100-nanosecond intervals that have elapsed since January 1, 0001 at 00:00:00.000 in the Gregorian calendar.</param>
+<param name="endTicks">The end date and time expressed in the number of 100-nanosecond intervals that have elapsed since January 1, 0001 at 00:00:00.000 in the Gregorian calendar.</param>
+<param name="kind">One of the enumeration values that indicates whether ticks specifies a local time, Coordinated Universal Time (UTC), or neither.</param>
+<exception cref="T:System.ArgumentException">kind is not one of the <see cref="T:System.DateTimeKind"/> values.-or- startTicks is greater than endTicks.</exception>
+<exception cref="T:System.ArgumentOutOfRangeException">startTicks or endTicks is less than <see cref="F:System.DateTime.MinValue"/> or greater than <see cref="F:System.DateTime.MaxValue"/>.</exception>
+</member>
+<member name="M:KoerControls.DateRange.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class to the specified year, month, and day.</summary>
+<param name="startYear">The start year (1 through 9999).</param>
+<param name="startMonth">The start month (1 through 12).</param>
+<param name="startDay">The start day (1 through the number of days in the month).</param>
+<param name="endYear">The end year (1 through 9999).</param>
+<param name="endMonth">The end month (1 through 12).</param>
+<param name="endDay">The end day (1 through the number of days in the month).</param>
+<exception cref="T:System.ArgumentException">startDate is greater than endDate.</exception>
+<exception cref="T:System.ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.</exception>
+</member>
+<member name="M:KoerControls.DateRange.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Globalization.Calendar)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class to the specified year, month, and day for the specified calendar.</summary>
+<param name="startYear">The start year (1 through 9999).</param>
+<param name="startMonth">The start month (1 through 12).</param>
+<param name="startDay">The start day (1 through the number of days in the month).</param>
+<param name="endYear">The end year (1 through 9999).</param>
+<param name="endMonth">The end month (1 through 12).</param>
+<param name="endDay">The end day (1 through the number of days in the month).</param>
+<param name="calendar">The calendar that is used to interpret year, month, and day.</param>
+<exception cref="T:System.ArgumentException">startDate is greater than endDate.</exception>
+<exception cref="T:System.ArgumentNullException">calendar is null.</exception>
+<exception cref="T:System.ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.</exception>
+</member>
+<member name="M:KoerControls.DateRange.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class to the specified year, month, day, hour, minute, and second.</summary>
+<param name="startYear">The start year (1 through 9999).</param>
+<param name="startMonth">The start month (1 through 12).</param>
+<param name="startDay">The start day (1 through the number of days in the month).</param>
+<param name="startHour">The start hours (0 through 23).</param>
+<param name="startMinute">The start minutes (0 through 59).</param>
+<param name="startSecond">The start secionds (0 through 59).</param>
+<param name="endYear">The end year (1 through 9999).</param>
+<param name="endMonth">The end month (1 through 12).</param>
+<param name="endDay">The end day (1 through the number of days in the month).</param>
+<param name="endHour">The end hour (1 through 23).</param>
+<param name="endMinute">The end minute (1 through 59).</param>
+<param name="endSecond">The end second (1 through 59).</param>
+<exception cref="T:System.ArgumentException">startDate is greater than endDate.</exception>
+<exception cref="T:System.ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.</exception>
+</member>
+<member name="M:KoerControls.DateRange.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.DateTimeKind)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class to the specified year, month, day, hour, minute, second and Coordinated Universal Time (UTC) or local time.</summary>
+<param name="startYear">The start year (1 through 9999).</param>
+<param name="startMonth">The start month (1 through 12).</param>
+<param name="startDay">The start day (1 through the number of days in the month).</param>
+<param name="startHour">The start hours (0 through 23).</param>
+<param name="startMinute">The start minutes (0 through 59).</param>
+<param name="startSecond">The start secionds (0 through 59).</param>
+<param name="endYear">The end year (1 through 9999).</param>
+<param name="endMonth">The end month (1 through 12).</param>
+<param name="endDay">The end day (1 through the number of days in the month).</param>
+<param name="endHour">The end hour (1 through 23).</param>
+<param name="endMinute">The end minute (1 through 59).</param>
+<param name="endSecond">The end second (1 through 59).</param>
+<param name="kind">One of the enumeration values that indicates whether year, month, day, hour, minute and second specify a local time, Coordinated Universal Time (UTC), or neither.</param>
+<exception cref="T:System.ArgumentException">kind is not one of the <see cref="T:System.DateTimeKind"/> values.-or- startDate is greater than endDate.</exception>
+<exception cref="T:System.ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.</exception>
+</member>
+<member name="M:KoerControls.DateRange.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Globalization.Calendar)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class to the specified year, month, day, hour, minute and second for the specified calendar.</summary>
+<param name="startYear">The start year (1 through 9999).</param>
+<param name="startMonth">The start month (1 through 12).</param>
+<param name="startDay">The start day (1 through the number of days in the month).</param>
+<param name="startHour">The start hours (0 through 23).</param>
+<param name="startMinute">The start minutes (0 through 59).</param>
+<param name="startSecond">The start secionds (0 through 59).</param>
+<param name="endYear">The end year (1 through 9999).</param>
+<param name="endMonth">The end month (1 through 12).</param>
+<param name="endDay">The end day (1 through the number of days in the month).</param>
+<param name="endHour">The end hour (1 through 23).</param>
+<param name="endMinute">The end minute (1 through 59).</param>
+<param name="endSecond">The end second (1 through 59).</param>
+<param name="calendar">The calendar that is used to interpret year, month, and day.</param>
+<exception cref="T:System.ArgumentException">startDate is greater than endDate.</exception>
+<exception cref="T:System.ArgumentNullException">calendar is null.</exception>
+<exception cref="T:System.ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.</exception>
+</member>
+<member name="M:KoerControls.DateRange.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class to the specified year, month, day, hour, minute, second, and millisecond.</summary>
+<param name="startYear">The start year (1 through 9999).</param>
+<param name="startMonth">The start month (1 through 12).</param>
+<param name="startDay">The start day (1 through the number of days in the month).</param>
+<param name="startHour">The start hours (0 through 23).</param>
+<param name="startMinute">The start minutes (0 through 59).</param>
+<param name="startSecond">The start secionds (0 through 59).</param>
+<param name="startMilliseconds">The start milliseconds (0 through 999).</param>
+<param name="endYear">The end year (1 through 9999).</param>
+<param name="endMonth">The end month (1 through 12).</param>
+<param name="endDay">The end day (1 through the number of days in the month).</param>
+<param name="endHour">The end hour (1 through 23).</param>
+<param name="endMinute">The end minute (1 through 59).</param>
+<param name="endSecond">The end second (1 through 59).</param>
+<param name="endMilliseconds">The end milliseconds (0 through 999).</param>
+<exception cref="T:System.ArgumentException">startDate is greater than endDate.</exception>
+<exception cref="T:System.ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.-or- startMillisecond or endMilliseconds is less than 0 or greater than 999.</exception>
+</member>
+<member name="M:KoerControls.DateRange.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.DateTimeKind)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class to the specified year, month, day, hour, minute, millisecond, and Coordinated Universal Time (UTC) or local time.</summary>
+<param name="startYear">The start year (1 through 9999).</param>
+<param name="startMonth">The start month (1 through 12).</param>
+<param name="startDay">The start day (1 through the number of days in the month).</param>
+<param name="startHour">The start hours (0 through 23).</param>
+<param name="startMinute">The start minutes (0 through 59).</param>
+<param name="startSecond">The start secionds (0 through 59).</param>
+<param name="startMilliseconds">The start milliseconds (0 through 999).</param>
+<param name="endYear">The end year (1 through 9999).</param>
+<param name="endMonth">The end month (1 through 12).</param>
+<param name="endDay">The end day (1 through the number of days in the month).</param>
+<param name="endHour">The end hour (1 through 23).</param>
+<param name="endMinute">The end minute (1 through 59).</param>
+<param name="endSecond">The end second (1 through 59).</param>
+<param name="endMilliseconds">The end milliseconds (0 through 999).</param>
+<param name="kind">One of the enumeration values that indicates whether year, month, day, hour, minute and second specify a local time, Coordinated Universal Time (UTC), or neither.</param>
+<exception cref="T:System.ArgumentException">kind is not one of the <see cref="T:System.DateTimeKind"/> values.-or- startDate is greater than endDate.</exception>
+<exception cref="T:System.ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.-or- startMillisecond or endMilliseconds is less than 0 or greater than 999.</exception>
+</member>
+<member name="M:KoerControls.DateRange.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Globalization.Calendar)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class to the specified year, month, day, hour, minute, second, and millisecond for the specified calendar.</summary>
+<param name="startYear">The start year (1 through 9999).</param>
+<param name="startMonth">The start month (1 through 12).</param>
+<param name="startDay">The start day (1 through the number of days in the month).</param>
+<param name="startHour">The start hours (0 through 23).</param>
+<param name="startMinute">The start minutes (0 through 59).</param>
+<param name="startSecond">The start secionds (0 through 59).</param>
+<param name="startMilliseconds">The start milliseconds (0 through 999).</param>
+<param name="endYear">The end year (1 through 9999).</param>
+<param name="endMonth">The end month (1 through 12).</param>
+<param name="endDay">The end day (1 through the number of days in the month).</param>
+<param name="endHour">The end hour (1 through 23).</param>
+<param name="endMinute">The end minute (1 through 59).</param>
+<param name="endSecond">The end second (1 through 59).</param>
+<param name="endMilliseconds">The end milliseconds (0 through 999).</param>
+<param name="calendar">The calendar that is used to interpret year, month, and day.</param>
+<exception cref="T:System.ArgumentException">startDate is greater than endDate.</exception>
+<exception cref="T:System.ArgumentNullException">calendar is null.</exception>
+<exception cref="T:System.ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.-or- startMillisecond or endMilliseconds is less than 0 or greater than 999.</exception>
+</member>
+<member name="M:KoerControls.DateRange.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Globalization.Calendar,System.DateTimeKind)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.DateRange"/> class to the specified year, month, day, hour, minute, millisecond, and Coordinated Universal Time (UTC) or local time for the specified calendar.</summary>
+<param name="startYear">The start year (1 through 9999).</param>
+<param name="startMonth">The start month (1 through 12).</param>
+<param name="startDay">The start day (1 through the number of days in the month).</param>
+<param name="startHour">The start hours (0 through 23).</param>
+<param name="startMinute">The start minutes (0 through 59).</param>
+<param name="startSecond">The start secionds (0 through 59).</param>
+<param name="startMilliseconds">The start milliseconds (0 through 999).</param>
+<param name="endYear">The end year (1 through 9999).</param>
+<param name="endMonth">The end month (1 through 12).</param>
+<param name="endDay">The end day (1 through the number of days in the month).</param>
+<param name="endHour">The end hour (1 through 23).</param>
+<param name="endMinute">The end minute (1 through 59).</param>
+<param name="endSecond">The end second (1 through 59).</param>
+<param name="endMilliseconds">The end milliseconds (0 through 999).</param>
+<param name="calendar">The calendar that is used to interpret year, month, and day.</param>
+<param name="kind">One of the enumeration values that indicates whether year, month, day, hour, minute and second specify a local time, Coordinated Universal Time (UTC), or neither.</param>
+<exception cref="T:System.ArgumentException">kind is not one of the <see cref="T:System.DateTimeKind"/> values.-or- startDate is greater than endDate.</exception>
+<exception cref="T:System.ArgumentNullException">calendar is null.</exception>
+<exception cref="T:System.ArgumentOutOfRangeException">startYear or endYear is less than 1 or greater than 9999.-or- startMonth or endMonth is less than 1 or greater than 12.-or- startDay or endDay is less than 1 or greater than the number of days in month.-or- startHour or endHour is less than 0 or greater than 23. -or- startMinute or endMinute is less than 0 or greater than 59. -or- startSecond or endSecond is less than 0 or greater than 59.-or- startMillisecond or endMilliseconds is less than 0 or greater than 999.</exception>
 </member>
 <member name="E:KoerControls.DateRange.EndDateChanged">
 <summary>Occurs when the end date is been changed.</summary>
@@ -202,6 +378,7 @@ KoerControls
 <summary>Initializes a new instance of the <see cref="T:KoerControls.IntegerRange"/> class.</summary>
 <param name="startValue">The start <see cref="T:System.Int32"/> of the <see cref="T:KoerControls.IntegerRange"/>.</param>
 <param name="endValue">The end <see cref="T:System.Int32"/> of the <see cref="T:KoerControls.IntegerRange"/>.</param>
+<exception cref="T:System.ArgumentException">startValue is greater than endValue</exception>
 </member>
 <member name="E:KoerControls.IntegerRange.EndValueChanged">
 <summary>Occurs when the end value is been changed.</summary>
@@ -246,9 +423,7 @@ KoerControls
 <summary>Converts the string representation of two numbers to its 32-bit signed integer range equivalent.</summary>
 <returns>A 32-bit signed integer range equivalent to the numbers contained in <paramref name="s"/>.</returns>
 <param name="s">A string containing the numbers to convert.</param>
-<exception cref="T:System.ArgumentNullException"><paramref name="s"/> is null.</exception>
 <exception cref="T:System.FormatException"><paramref name="s"/> is not in the correct format.</exception>
-<exception cref="T:System.OverflowException"><paramref name="s"/> represents a number less than <see cref="F:System.Int32.MinValue"/> or greater than <see cref="F:System.Int32.MaxValue"/>. -or- <paramref name="s"/> includes non-zero, fractional digits.</exception>
 </member>
 <member name="M:KoerControls.IntegerRange.Parse(System.String,System.Globalization.NumberStyles,System.IFormatProvider)">
 <summary>Converts the string representation of two numbers in a specified style and culture-specific format to its 32-bit signed integer range equivalent.</summary>
@@ -257,9 +432,7 @@ KoerControls
 <param name="style">A bitwise combination of enumeration values that indicates the style elements that can be present in <paramref name="s"/>. A typical value to specify is <see cref="F:System.Globalization.NumberStyles.Integer"/>.</param>
 <param name="provider">An object that supplies culture-specific information about the format of <paramref name="s"/>.</param>
 <exception cref="T:System.ArgumentException"><paramref name="style"/> is not a <see cref="T:System.Globalization.NumberStyles"/> value. -or- <paramref name="style"/> is not a combination of <see cref="F:System.Globalization.NumberStyles.AllowHexSpecifier"/> and <see cref="F:System.Globalization.NumberStyles.HexNumber"/> values.</exception>
-<exception cref="T:System.ArgumentNullException"><paramref name="s"/> is null.</exception>
-<exception cref="T:System.FormatException"><paramref name="s"/> is not in a format compliant with <paramref name="style"/>.</exception>
-<exception cref="T:System.OverflowException"><paramref name="s"/> represents a number less than <see cref="F:System.Int32.MinValue"/> or greater than <see cref="F:System.Int32.MaxValue"/>. -or- <paramref name="s"/> includes non-zero, fractional digits.</exception>
+<exception cref="T:System.FormatException"><paramref name="s"/> is not in the correct format.</exception>
 </member>
 <member name="M:KoerControls.IntegerRange.TryParse(System.String,KoerControls.IntegerRange@)">
 <summary>Converts the string representation of two numbers to its 32-bit signed integer range equivalent. A return value indicates whether the conversion succeeded.</summary>
@@ -924,14 +1097,6 @@ KoerControls
 <member name="T:KoerControls.DataGridViewLinkingGroupCollection">
 <summary>Repersents a collection of data grid view linking groups.</summary>
 </member>
-<member name="M:KoerControls.DataGridViewLinkingGroupCollection.#ctor(KoerControls.DataGridViewLinker)">
-<summary>Creates a new instance of the <see cref="T:KoerControls.DataGridViewLinkingGroupCollection"/> class.</summary>
-<param name="dataGridViewLinker">The <see cref="T:KoerControls.DataGridViewLinker"/> that owns the <see cref="T:KoerControls.DataGridViewLinkingGroupCollection"/>.</param>
-</member>
-<member name="P:KoerControls.DataGridViewLinkingGroupCollection.DataGridViewLinker">
-<summary>Gets the <see cref="T:KoerControls.DataGridViewLinker"/> that owns the <see cref="T:KoerControls.DataGridViewLinkingGroupCollection"/>.</summary>
-<returns>The <see cref="T:KoerControls.DataGridViewLinker"/> that owns the <see cref="T:KoerControls.DataGridViewLinkingGroupCollection"/>.</returns>
-</member>
 <member name="T:KoerControls.DataGridViewLinkingGroupConverter">
 <summary>Provides a type converter to convert a DataGridView LinkingGroup to and from various other representations.</summary>
 </member>
@@ -945,13 +1110,13 @@ KoerControls
 <returns><see langword="True"/> if the dataGridViewRow did not need to be rebuilt to fit in the <see cref="T:System.Windows.Forms.DataGridView"/>; otherwise <see langword="False"/>.</returns>
 <param name="dataGridView">The new <see cref="T:System.Windows.Forms.DataGridView"/> of the <see cref="T:KoerControls.AssignableDataGridViewRow"/>.</param>
 <param name="rowIndex">The position at which to insert the row. Enter '-1' to add to the end of the data grid view.</param>
+    '''<exception cref="T:System.ArgumentNullException"><paramref name="dataGridView"/> is null.</exception>
 <exception cref="T:System.IndexOutOfRangeException"><paramref name="rowIndex"/> is less than zero or greater than the number of rows in the collection.</exception>
-<exception cref="T:System.NullReferenceException"><paramref name="dataGridView"/> is null.</exception>
 </member>
 <member name="M:KoerControls.AssignableDataGridViewRow.RebuildOn(System.Windows.Forms.DataGridView)">
 <summary>Removews the last set of cells to make the <see cref="T:KoerControls.AssignableDataGridViewRow"/> cells fit into the <paramref name="dataGridView"/>.</summary>
 <param name="dataGridView">The <see cref="T:System.Windows.Forms.DataGridView"/> the <see cref="T:KoerControls.AssignableDataGridViewRow"/> is required to fit into.</param>
-<exception cref="T:System.NullReferenceException"><paramref name="dataGridView"/> is null.</exception>
+<exception cref="T:System.ArgumentNullException"><paramref name="dataGridView"/> is null.</exception>
 </member>
 <member name="M:KoerControls.AssignableDataGridViewRow.TryAssignToDataGridView(System.Windows.Forms.DataGridView,System.Int32)">
 <summary>Attempts to change the <see cref="T:System.Windows.Forms.DataGridView"/> the <see cref="T:KoerControls.AssignableDataGridViewRow"/> is contained within.</summary>
@@ -960,8 +1125,8 @@ KoerControls
 <param name="dataGridView">The new <see cref="T:System.Windows.Forms.DataGridView"/> of the <see cref="T:KoerControls.AssignableDataGridViewRow"/>.</param>
 <param name="rowIndex">The position at which to insert the row. Enter '-1' to add to the end of the DataGridView.</param>
 <exception cref="T:System.ArgumentException">dataGridViewRow has more cells than there are columns in the DataGridView.</exception>
+    '''<exception cref="T:System.ArgumentNullException"><paramref name="dataGridView"/> is null.</exception>
 <exception cref="T:System.IndexOutOfRangeException"><paramref name="rowIndex"/> is less than zero or greater than the number of rows in the collection.</exception>
-<exception cref="T:System.NullReferenceException"><paramref name="dataGridView"/> is null.</exception>
 </member>
 <member name="T:KoerControls.DataGridViewDateRangePickerCell">
 <summary>Represents an individual cell, containing two instances of <see cref="T:System.Windows.Forms.DateTimePicker"/>, in a <see cref="T:System.Windows.Forms.DataGridView"/> control.</summary>
@@ -1345,6 +1510,341 @@ KoerControls
 <member name="T:KoerControls.DateRangePickerDesigner">
 <summary>Extends the design mode behavior of a <see cref="T:KoerControls.DateRangePicker"/></summary>
 </member>
+<member name="E:KoerControls.DateScroller.ColumnWidthChanged">
+<summary>Occurs when the column width has changed.</summary>
+</member>
+<member name="E:KoerControls.DateScroller.EndDateDateChanged">
+<summary>Occurs when the end date has changed.</summary>
+</member>
+<member name="E:KoerControls.DateScroller.HeaderHeightChanged">
+<summary>Occurs when the header height has changed.</summary>
+</member>
+<member name="E:KoerControls.DateScroller.HeaderVisibleChanged">
+<summary>Occurs when the header visibility has changed.</summary>
+</member>
+<member name="E:KoerControls.DateScroller.ItemHeightChanged">
+<summary>Occurs when the item height has changed.</summary>
+</member>
+<member name="E:KoerControls.DateScroller.StartDateChanged">
+<summary>Occurs when the start date has changed.</summary>
+</member>
+<member name="P:KoerControls.DateScroller.AutoScroll">
+<summary>Gets a value indicating whether the container enables the user to scroll to any controls placed outside of its vidible boundaries.</summary>
+<returns><see langword="True"/> if the container enables auto-scrolling; otherwise, <see langword="False"/>.</returns>
+</member>
+<member name="P:KoerControls.DateScroller.AutoScrollMinSize">
+<summary>Gets the minimum size of the auto-scroll.</summary>
+<returns>A <see cref="T:System.Drawing.Size"/> that determines the minimum size of the virtual area through which the user can scroll.</returns>
+</member>
+<member name="P:KoerControls.DateScroller.AutoScrollMinHeight">
+<summary>Gets the minimum height of the auto-scroll.</summary>
+<returns>An <see cref="T:System.Int32"/> that determines the minimum height of the virtual area through which the user can scroll.</returns>
+</member>
+<member name="P:KoerControls.DateScroller.ColumnWidth">
+<summary>Represents the width of each date column.</summary>
+<returns>An <see cref="T:System.Int32"/> that represents the width of each date column.</returns>
+</member>
+<member name="P:KoerControls.DateScroller.DateRange">
+<summary>The currently scrollable <see cref="T:KoerControls.DateRange"/> of the <see cref="T:KoerControls.DateScroller"/>.</summary>
+<returns>The currently scrollable <see cref="T:KoerControls.DateRange"/> of the <see cref="T:KoerControls.DateScroller"/>.</returns>
+</member>
+<member name="P:KoerControls.DateScroller.HeaderOverlay">
+<summary>Represents the header overlay that displays the dates.</summary>
+<remarks>The header overlay that displays the dates.</remarks>
+</member>
+<member name="P:KoerControls.DateScroller.ItemGroups">
+<summary>Gets or sets each <see cref="T:KoerControls.DateScrollerGroup"/> assigned to the <see cref="T:KoerControls.DateScroller"/>.</summary>
+<returns>Each <see cref="T:KoerControls.DateScrollerGroup"/> assigned to the <see cref="T:KoerControls.DateScroller"/>.</returns>
+</member>
+<member name="P:KoerControls.DateScroller.ItemHeight">
+<summary>Gets or sets the height of each <see cref="T:KoerControls.DateScrollerItem"/>. A <see cref="T:KoerControls.DateScrollerItem"/> can cover multiple columns of height.</summary>
+<returns>An <see cref="T:System.Int32"/> that represents the height of each <see cref="T:KoerControls.DateScrollerItem"/> in pixels.</returns>
+</member>
+<member name="P:KoerControls.DateScroller.ItemPlacement">
+<summary>Determines the placement method of each <see cref="T:KoerControls.DateScrollerItem"/> in the <see cref="T:KoerControls.DateScroller"/>.</summary>
+<returns>One of the <see cref="T:KoerControls.DateScrollerItemPlacement"/> values.</returns>
+</member>
+<member name="P:KoerControls.DateScroller.Padding">
+<summary>Gets or sets padding within the control.</summary>
+<returns>A <see cref="T:System.Windows.Forms.Padding"/> representing the control's internal spacing characteristics.</returns>
+</member>
+<member name="P:KoerControls.DateScroller.Items">
+<summary>Gets each <see cref="T:KoerControls.DateScrollerItem"/> contained in the <see cref="T:KoerControls.DateScroller"/>.</summary>
+<returns>Each <see cref="T:KoerControls.DateScrollerItem"/> contained in the <see cref="T:KoerControls.DateScroller"/>.</returns>
+</member>
+<member name="M:KoerControls.DateScroller.OnColumnWidthChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.DateScroller.ColumnWidthChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="M:KoerControls.DateScroller.OnEndDateChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.DateScroller.EndDateDateChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="M:KoerControls.DateScroller.OnHeaderHeightChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.DateScroller.HeaderHeightChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="M:KoerControls.DateScroller.OnHeaderVisibleChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.DateScroller.HeaderVisibleChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="M:KoerControls.DateScroller.OnItemHeightChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.DateScroller.ItemHeightChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="M:KoerControls.DateScroller.OnStartDateChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.DateScroller.StartDateChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="M:KoerControls.DateScroller.PaintHeaderOverlay(System.Drawing.Graphics,System.Drawing.Rectangle)">
+<summary>Paints the header overlay onto the control.</summary>
+<param name="graphics">The <see cref="T:System.Drawing.Graphics"/> used to paint the item.</param>
+<param name="clipRect">The <see cref="T:System.Drawing.Rectangle"/> that represents the rectangle in which to paint.</param>
+</member>
+<member name="M:KoerControls.DateScroller.PlaceItems">
+<summary>Places <see cref="T:KoerControls.DateScrollerItem"/> item in the <see cref="T:KoerControls.DateScroller"/> with the current <see cref="T:KoerControls.DateScrollerItemPlacement"/> method.</summary>
+</member>
+<member name="M:KoerControls.DateScroller.PlaceItemsCompact(System.Int32,System.Collections.Generic.IEnumerable{KoerControls.DateScrollerItem})">
+<summary>Places each specified <see cref="T:KoerControls.DateScrollerItem"/> in the date scroller with the current <see cref="F:KoerControls.DateScrollerItemPlacement.Compact"/> method.</summary>
+<returns>The last column index placed at.</returns>
+<param name="startColumnIndex">The column index to begin placing items at.</param>
+<param name="items">Each <see cref="T:KoerControls.DateScrollerItem"/> to place.</param>
+</member>
+<member name="M:KoerControls.DateScroller.PlaceItemsWaterfall(System.Int32,System.Collections.Generic.IEnumerable{KoerControls.DateScrollerItem})">
+<summary>Places each specified <see cref="T:KoerControls.DateScrollerItem"/> in the date scroller with the current <see cref="F:KoerControls.DateScrollerItemPlacement.Waterfall"/> method.</summary>
+<returns>The last column index placed at.</returns>
+<param name="startColumnIndex">The column index to begin placing items at.</param>
+<param name="items">Each <see cref="T:KoerControls.DateScrollerItem"/> to place.</param>
+</member>
+<member name="T:KoerControls.DateScrollerGroup">
+<summary>Represents a group that links DateScrollerItems together.</summary>
+</member>
+<member name="M:KoerControls.DateScrollerGroup.#ctor">
+<summary>Create a new empty instance of the <see cref="T:KoerControls.DateScrollerGroup"/> clas.</summary>
+</member>
+<member name="M:KoerControls.DateScrollerGroup.#ctor(System.String)">
+<summary>Creates a new instance of the <see cref="T:KoerControls.DateScrollerGroup"/> class.</summary>
+<param name="value">The name value of the <see cref="T:KoerControls.DateScrollerGroup"/>.</param>
+</member>
+<member name="M:KoerControls.DateScrollerGroup.#ctor(System.String,System.ComponentModel.IContainer)">
+<summary>Creates a new instance of the <see cref="T:KoerControls.DateScrollerGroup"/> class.</summary>
+<param name="value">The name value of the <see cref="T:KoerControls.DateScrollerGroup"/>.</param>
+<param name="container">The owning <see cref="T:System.ComponentModel.IContainer"/> of the <see cref="T:KoerControls.DateScrollerGroup"/>.</param>
+</member>
+<member name="T:KoerControls.DateScrollerGroupConverter">
+<summary>Provides a type converter to convert a DateScrollerGroup to and from various other representations.</summary>
+</member>
+<member name="T:KoerControls.DateScrollerItem">
+<summary>Represents an item with a date range that is inside a DateScroller.</summary>
+</member>
+<member name="M:KoerControls.DateScrollerItem.#ctor">
+<summary>Creates a new instance of the <see cref="T:KoerControls.DateScrollerItem"/> class.</summary>
+</member>
+<member name="M:KoerControls.DateScrollerItem.#ctor(KoerControls.DateScroller)">
+<summary>Creates a new instance of the <see cref="T:KoerControls.DateScrollerItem"/> class.</summary>
+<param name="dateScroller">The <see cref="T:KoerControls.DateScroller"/> that will contain the <see cref="T:KoerControls.DateScrollerItem"/>.</param>
+<exception cref="T:System.ArgumentNullException">dateScroller is null.</exception>
+</member>
+<member name="M:KoerControls.DateScrollerItem.#ctor(KoerControls.DateScroller,KoerControls.DateRange)">
+<summary>Creates a new instance of the <see cref="T:KoerControls.DateScrollerItem"/> class.</summary>
+<param name="dateScroller">The <see cref="T:KoerControls.DateScroller"/> that will contain the <see cref="T:KoerControls.DateScrollerItem"/>.</param>
+<exception cref="T:System.ArgumentNullException">dateScroller -or- dateRange is null.</exception>
+</member>
+<member name="E:KoerControls.DateScrollerItem.ColumnCountChanged">
+<summary>Occurs when the column count has changed.</summary>
+</member>
+<member name="E:KoerControls.DateScrollerItem.ColumnIndexChanged">
+<summary>Occurs when the column index has changed</summary>
+</member>
+<member name="E:KoerControls.DateScrollerItem.DateRangeChanged">
+<summary>Occurs when the date range has chagned.</summary>
+</member>
+<member name="E:KoerControls.DateScrollerItem.ItemGroupChanged">
+<summary>Occurs when the item group has changed.</summary>
+</member>
+<member name="P:KoerControls.DateScrollerItem.Anchor">
+<summary>Gets the edges of the container to which a control is bound and determines how a control is resized with its parent.</summary>
+<returns>A bitwise combination of the <see cref="T:System.Windows.Forms.AnchorStyles"/> values. The default is <see cref="F:System.Windows.Forms.AnchorStyles.Top"/> and <see cref="F:System.Windows.Forms.AnchorStyles.Left"/>.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.AutoSize">
+<summary>Gets a value that indicates whether the control resizes based on its contents.</summary>
+<returns><see langword="True"/> if the control automatically resizes based on its contents; otherwise, <see langword="False"/>.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.AutoSizeMode">
+<summary>Indicates the automatic sizing behavior of the control.</summary>
+<returns>One of the <see cref="T:System.Windows.Forms.AutoSizeMode"/> values.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.Bounds">
+<summary>Gets the size and location of the control including its nonclient elements, in pixels, relative to the parent control.</summary>
+<returns>A <see cref="T:System.Drawing.Rectangle"/> in pixels relative to the parent control that represents the size and location of the control including its nonclient elements.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.ColumnCount">
+<summary>Gets or sets the total number of columns the <see cref="T:KoerControls.DateScrollerItem"/> occupies in the <see cref="T:KoerControls.DateScroller"/>.</summary>
+<returns>The total number of columns the <see cref="T:KoerControls.DateScrollerItem"/> occupies in the <see cref="T:KoerControls.DateScroller"/>.</returns>
+<exception cref="T:System.ArgumentOutOfRangeException">The new value is less than or equal to 0</exception>
+</member>
+<member name="P:KoerControls.DateScrollerItem.ColumnIndex">
+<summary>Gets the column index of the <see cref="T:KoerControls.DateScrollerItem"/> in the <see cref="T:KoerControls.DateScroller"/></summary>
+<returns>The column index of the <see cref="T:KoerControls.DateScrollerItem"/> in the <see cref="T:KoerControls.DateScroller"/>.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.DateRange">
+<summary>Gets or sets the <see cref="T:KoerControls.DateRange"/> the <see cref="T:KoerControls.DateScrollerItem"/> covers.</summary>
+<returns>The <see cref="T:KoerControls.DateRange"/> the <see cref="T:KoerControls.DateScrollerItem"/> covers.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.DateScroller">
+<summary>Gets the owning <see cref="T:KoerControls.DateScroller"/> of the <see cref="T:KoerControls.DateScrollerItem"/>.</summary>
+<returns>The owning <see cref="T:KoerControls.DateScroller"/> of the <see cref="T:KoerControls.DateScrollerItem"/>.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.Dock">
+<summary>Gets which control borders are docked to its parent control and determines how a control is resized with its parent.</summary>
+<returns>One of the <see cref="T:System.Windows.Forms.DockStyle"/> values.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.Height">
+<summary>Gets the height of the control.</summary>
+<returns>The <see cref="T:System.Int32"/> that represents the height of the control in pixels.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.Left">
+<summary>Gets the distance, in pixels, between the left edge of the control and the left edge of its container's client area.</summary>
+<returns>An <see cref="T:System.Int32"/> representing the distance, in pixels, between the left edge of the control and the left edge of its container's client area.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.Location">
+<summary>Gets the coordinates of the upper-left corner of the control relative to the upper-left corner of its container.</summary>
+<returns>The <see cref="T:System.Drawing.Point"/> that represents the upper-left coner of the control relative to the upper-left corner of its container.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.MaximumSize">
+<summary>Gets the size that is the upper limit that <see cref="M:System.Windows.Forms.Control.GetPreferredSize(System.Drawing.Size)"/> can specify.</summary>
+<returns>An ordered pair of <see cref="T:System.Drawing.Size"/> representing the width and height of a rectangle.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.MinimumSize">
+<summary>Gets the size that is the lower limit that <see cref="M:System.Windows.Forms.Control.GetPreferredSize(System.Drawing.Size)"/> can specify.</summary>
+<returns>An ordered pair of <see cref="T:System.Drawing.Size"/> representing the width and height of a rectangle.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.Size">
+<summary>Gets the height and width of the control.</summary>
+<returns>The <see cref="T:System.Drawing.Size"/> that represents the height and width of the control in pixels.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.Top">
+<summary>Gets the distance, in pixels, between the top edge of the control and the top edge of its container's client area.</summary>
+<returns>An <see cref="T:System.Int32"/> representing the distance, in pixels, between the top edge of the control and the top edge of its container's client area.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.Width">
+<summary>Gets the width of the control.</summary>
+<returns>The width of the control in pixels.</returns>
+</member>
+<member name="M:KoerControls.DateScrollerItem.OnColumnCountChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.DateScrollerItem.ColumnCountChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="M:KoerControls.DateScrollerItem.OnColumnIndexChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.DateScrollerItem.ColumnIndexChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="M:KoerControls.DateScrollerItem.OnDateRangeChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.DateScrollerItem.DateRangeChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="M:KoerControls.DateScrollerItem.OnItemGroupChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.DateScrollerItem.ItemGroupChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="T:KoerControls.DateScrollerItemCollection">
+<summary>Represents a collection of date scroller items.</summary>
+</member>
+<member name="M:KoerControls.DateScrollerItemCollection.#ctor(KoerControls.DateScroller)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.DateScrollerItemCollection"/> class that is empty.</summary>
+<param name="owner">The owing <see cref="T:KoerControls.DateScroller"/> of the <see cref="T:System.Collections.ObjectModel.Collection`1"/>.</param>
+<exception cref="T:System.ArgumentNullException">owner is null.</exception>
+</member>
+<member name="P:KoerControls.DateScrollerItemCollection.Owner">
+<summary>Gets the owning <see cref="T:KoerControls.DateScroller"/> of the <see cref="T:System.Collections.ObjectModel.Collection`1"/>.</summary>
+<returns>The owning <see cref="T:KoerControls.DateScroller"/> of the <see cref="T:System.Collections.ObjectModel.Collection`1"/>.</returns>
+</member>
+<member name="T:KoerControls.DateScrollerItemCollectionEditor">
+<summary>Provides a user interface that can edit date scroller item collections at design time.</summary>
+</member>
+<member name="M:KoerControls.DateScrollerItemCollectionEditor.#ctor(System.Type)">
+<summary> Initializes a new instance of the <see cref="T:KoerControls.DateScrollerItemCollectionEditor"/> class using the specified collection type.</summary>
+<param name="type">The type of the collection for this editor to edit.</param>
+</member>
+<member name="T:KoerControls.DateScrollerItemPlacement">
+<summary>Determines the way date scroller items are placed in a date scroller.</summary>
+</member>
+<member name="F:KoerControls.DateScrollerItemPlacement.Waterfall">
+<summary>Items are placed flowing downard so that no two items take up the same column.</summary>
+</member>
+<member name="F:KoerControls.DateScrollerItemPlacement.GroupedWaterfall">
+<summary>Items are placed by group, where the groups are in a waterfall and each group is placed in a waterfall.</summary>
+</member>
+<member name="F:KoerControls.DateScrollerItemPlacement.Compact">
+<summary>items are placed as compact as possible.</summary>
+</member>
+<member name="F:KoerControls.DateScrollerItemPlacement.GroupedCompact">
+<summary>Items are placed by group, where the groups are in a waterfall and each group is placed in a compact way.</summary>
+</member>
+<member name="E:KoerControls.HeaderOverlay.HeightChanged">
+<summary>Occurs when the height has changed.</summary>
+</member>
+<member name="E:KoerControls.HeaderOverlay.VisibleChanged">
+<summary>Occurs when the visibility has changed.</summary>
+</member>
+<member name="M:KoerControls.HeaderOverlay.#ctor(System.Windows.Forms.Control)">
+<summary>Creates a new instance of <see cref="T:KoerControls.HeaderOverlay"/>.</summary>
+<param name="host">The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.HeaderOverlay"/> is in.</param>
+<exception cref="T:System.ArgumentNullException"><paramref name="host"/> is <see langword="Nothing"/> is <see langword="Nothing"/>.</exception>
+</member>
+<member name="M:KoerControls.HeaderOverlay.#ctor(System.Windows.Forms.Control,System.Action{System.Drawing.Graphics,System.Drawing.Rectangle})">
+<summary>Creates a new instance of <see cref="T:KoerControls.HeaderOverlay"/>.</summary>
+<param name="host">The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.HeaderOverlay"/> is in.</param>
+<param name="paintAction">The <see cref="T:System.Action"/> used top paint the header overlay, defined by the host.</param>
+<exception cref="T:System.ArgumentNullException"><paramref name="host"/> is <see langword="Nothing"/> is <see langword="Nothing"/>.</exception>
+</member>
+<member name="M:KoerControls.HeaderOverlay.CreateHandle">
+<summary>Creates a new window handle if one is not already assigned.</summary>
+</member>
+<member name="P:KoerControls.HeaderOverlay.BackColor">
+<summary>Gets or sets the background color for the overlay.</summary>
+<returns>The <see cref="T:System.Drawing.Color"/> that represents the background color of the overlay. The default is the host's background color.</returns>
+</member>
+<member name="P:KoerControls.HeaderOverlay.Font">
+<summary>Gets or sets the font of the text displayed in the overlay.</summary>
+<returns>The <see cref="T:System.Drawing.Font"/> to apply to the text displayed by the overlay. The default is the host's font.</returns>
+</member>
+<member name="P:KoerControls.HeaderOverlay.ForeColor">
+<summary>Gets or sets the foreground color of the overlay.</summary>
+<returns>The foreground <see cref="T:System.Drawing.Color"/> of the overlay. The default is the host's foreground color.</returns>
+</member>
+<member name="P:KoerControls.HeaderOverlay.Handle">
+<summary>Gets the handle for this window.</summary>
+<returns>If successful, an <see cref="T:System.IntPtr"/> representing the handle to the associated <see cref="T:KoerControls.Overlay"/>; otherwise, 0 if no handle is associated with the overlay.</returns>
+</member>
+<member name="P:KoerControls.HeaderOverlay.Height">
+<summary>Represents the height of the <see cref="T:KoerControls.Overlay"/>.</summary>
+<returns>An <see cref="T:System.Int32"/> that represents the height of the <see cref="T:KoerControls.Overlay"/> in pixels.</returns>
+</member>
+<member name="P:KoerControls.HeaderOverlay.Host">
+<summary>Gets the hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.Overlay"/> is contained within.</summary>
+<returns>The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.Overlay"/> is contained within.</returns>
+</member>
+<member name="P:KoerControls.HeaderOverlay.Padding">
+<summary>Gets or sets padding within the control.</summary>
+<returns>A <see cref="T:System.Windows.Forms.Padding"/> representing the control's internal spacing characteristics.</returns>
+</member>
+<member name="P:KoerControls.HeaderOverlay.PaintAction">
+<summary>Gets the action used to paint the overlay.</summary>
+<returns>The action used to paint the overlay.</returns>
+</member>
+<member name="P:KoerControls.HeaderOverlay.Visible">
+<summary>Determines if the overlay will be drawn on its host.</summary>
+<returns><see langword="True"/> if the overlay will be drawn on its host; otherwise, <see langword="False"/>.</returns>
+</member>
+<member name="M:KoerControls.HeaderOverlay.OnHeightChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.HeaderOverlay.HeightChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="M:KoerControls.HeaderOverlay.OnVisibleChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.HeaderOverlay.VisibleChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
 <member name="T:KoerControls.HighlightableColor">
 <summary>Represents a color with a highlighted value and unhighlighted value, and a <see cref="T:System.Boolean"/> to determine if the color is highlighted.</summary>
 </member>
@@ -1550,22 +2050,56 @@ KoerControls
 <returns>The lines per item of the control. The default is 1</returns>
 <exception cref="T:System.ArgumentOutOfRangeException">value is less than 1.</exception>
 </member>
+<member name="P:KoerControls.Overlay.Handle">
+<summary>Gets the handle for this window.</summary>
+<returns>If successful, an <see cref="T:System.IntPtr"/> representing the handle to the associated <see cref="T:KoerControls.Overlay"/>; otherwise, 0 if no handle is associated with the overlay.</returns>
+</member>
+<member name="P:KoerControls.Overlay.Host">
+<summary>The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.Overlay"/> is contained within.</summary>
+</member>
+<member name="P:KoerControls.Overlay.Location">
+<summary>Gets or sets the coordinates of the upper-left corner of the overlay relative to the upper-left corner of its host.</summary>
+<returns>The <see cref="T:System.Drawing.Point"/> that represents the upper-left corner of the overlay relative to the upper-left corner of its host.</returns>
+</member>
+<member name="P:KoerControls.Overlay.MinimumSize">
+<summary>Gets or sets the size that is the lower limit of the <see cref="T:KoerControls.Overlay"/> can specify so long as it fits within the bounds of the host.</summary>
+<returns>An ordered pair of <see cref="T:System.Drawing.Size"/> that representing the width and height of a rectangle.</returns>
+</member>
+<member name="P:KoerControls.Overlay.Size">
+<summary>Gets or sets the height and width of the overlay.</summary>
+<returns>The <see cref="T:System.Drawing.Size"/> that represents the height and width of the overlay in pixels.</returns>
+</member>
+<member name="M:KoerControls.Overlay.#ctor(System.Windows.Forms.Control,System.Action{System.Drawing.Graphics,System.Drawing.Rectangle})">
+<summary>Creates a new instance of <see cref="T:KoerControls.Overlay"/>.</summary>
+<param name="host">The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.Overlay"/> is in.</param>
+<param name="paintAction">The <see cref="T:System.Action"/> used top paint the header overlay, defined by the host.</param>
+<exception cref="T:System.ArgumentNullException"><paramref name="host"/> is <see langword="Nothing"/> -OR- <paramref name="paintAction"/> is <see langword="Nothing"/>.</exception>
+</member>
+<member name="M:KoerControls.Overlay.Attach">
+<summary>Attaches the <see cref="T:KoerControls.Overlay"/> to its  host <see cref="T:System.Windows.Forms.Control"/>.</summary>
+<exception cref="T:System.InvalidOperationException">The host is not hosted on a <see cref="T:System.Windows.Forms.Form"/> while attaching.</exception>
+</member>
+<member name="M:KoerControls.Overlay.Attach(System.Windows.Forms.Control,System.Action{System.Drawing.Graphics,System.Drawing.Rectangle})">
+<summary>Attaches a new <see cref="T:KoerControls.Overlay"/> to the specified host <see cref="T:System.Windows.Forms.Control"/>.</summary>
+<remarks>Place in the <see cref="M:System.Windows.Forms.Control.OnHandleCreated(System.EventArgs)"/> override, after the handle has been created for the host.</remarks>
+<returns>The new <see cref="T:KoerControls.Overlay"/>.</returns>
+<param name="host">The <see cref="T:System.Windows.Forms.Control"/> to attach the new <see cref="T:KoerControls.Overlay"/> to.</param>
+<param name="paintAction">The paint <see cref="T:System.Action"/> that will paint the header on the <see cref="T:System.Windows.Forms.Control"/>.</param>
+<exception cref="T:System.ArgumentNullException"><paramref name="host"/> is <see langword="Nothing"/> -OR- <paramref name="paintAction"/> is <see langword="Nothing"/>.</exception>
+<exception cref="T:System.InvalidOperationException">The <paramref name="host"/> is not hosted on a <see cref="T:System.Windows.Forms.Form"/> while attaching.</exception>
+</member>
+<member name="M:KoerControls.Overlay.CreateHandle">
+<summary>Creates a new window handle if one is not already assigned.</summary>
+</member>
 <member name="T:KoerControls.BrokenPinStripe">
 <summary>Represents a pin stripe that can be painted onto the background of a control. Can be broken up along the length of a Control.</summary>
 </member>
-<member name="M:KoerControls.BrokenPinStripe.#ctor">
-<summary>Create a new empty instance of the <see cref="T:KoerControls.PinStripe"/> clas.</summary>
-</member>
-<member name="M:KoerControls.BrokenPinStripe.#ctor(System.ComponentModel.IComponent)">
-<summary>Create a new instance of the <see cref="T:KoerControls.PinStripe"/> clas.</summary>
-<param name="container">The <see cref="T:System.ComponentModel.IContainer"/> that will contain the <see cref="T:KoerControls.PinStripe"/>.</param>
+<member name="M:KoerControls.BrokenPinStripe.#ctor(KoerControls.PinStripeList)">
+<summary>Creates a new instance of the <see cref="T:KoerControls.BrokenPinStripe"/> class.</summary>
+<param name="pinStripeList">The <see cref="T:KoerControls.PinStripeList"/> that will contain the <see cref="T:KoerControls.BrokenPinStripe"/>.</param>
 </member>
 <member name="E:KoerControls.BrokenPinStripe.PinStripeLocationsChanged">
 <summary>Occurs when the pin stripe locations has changed.</summary>
-</member>
-<member name="P:KoerControls.BrokenPinStripe.Empty">
-<summary>Represents an empty pin stripe with default values.</summary>
-<returns>An empty pin stripe with default values.</returns>
 </member>
 <member name="P:KoerControls.BrokenPinStripe.PinStripeLocations">
 <summary>Gets the bounds of each section the <see cref="T:KoerControls.BrokenPinStripe"/> should occupy.</summary>
@@ -1587,12 +2121,12 @@ KoerControls
 <returns>The <see cref="T:System.Windows.Forms.BorderStyle"/> of the <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.PinStripe.Painter"/> is assigned to.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.PinStripe">
-<summary>Gets the <see cref="T:KoerControls.PinStripe"/> the <see cref="T:KoerControls.PinStripe.Painter"/> will paint.</summary>
-<returns>The <see cref="T:KoerControls.PinStripe"/> the <see cref="T:KoerControls.PinStripe.Painter"/> will paint.</returns>
+<summary>Gets the <see cref="P:KoerControls.PinStripe.Painter.PinStripe"/> the <see cref="T:KoerControls.PinStripe.Painter"/> will paint.</summary>
+<returns>The <see cref="P:KoerControls.PinStripe.Painter.PinStripe"/> the <see cref="T:KoerControls.PinStripe.Painter"/> will paint.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.Thickness">
 <summary>Represents the thickness of the <see cref="T:System.Windows.Forms.Control"/> according to the direction of the <see cref="T:KoerControls.PinStripe"/>.</summary>
-<returns>The thickness of the <see cref="T:System.Windows.Forms.Control"/> according to the direction of the <see cref="T:KoerControls.PinStripe"/>.</returns>
+<returns>The thickness of the <see cref="T:System.Windows.Forms.Control"/> according to the direction of the <see cref="P:KoerControls.PinStripe.Painter.PinStripe"/>.</returns>
 </member>
 <member name="P:KoerControls.PinStripe.Painter.X1">
 <summary>Represents one of the x-values in the <see cref="T:KoerControls.PinStripe"/>.</summary>
@@ -1658,11 +2192,11 @@ KoerControls
 <param name="graphics">The <see cref="T:System.Drawing.Graphics"/> used to paint the <see cref="T:KoerControls.PinStripe"/>.</param>
 </member>
 <member name="M:KoerControls.PinStripe.#ctor">
-<summary>Create a new empty instance of the <see cref="T:KoerControls.PinStripe"/> clas.</summary>
+<summary>Creates a new instance of the <see cref="T:KoerControls.PinStripe"/> class.</summary>
 </member>
-<member name="M:KoerControls.PinStripe.#ctor(System.ComponentModel.IComponent)">
-<summary>Create a new instance of the <see cref="T:KoerControls.PinStripe"/> clas.</summary>
-<param name="container">The <see cref="T:System.ComponentModel.IContainer"/> that will contain the <see cref="T:KoerControls.PinStripe"/>.</param>
+<member name="M:KoerControls.PinStripe.#ctor(KoerControls.PinStripeList)">
+<summary>Creates a new instance of the <see cref="T:KoerControls.PinStripe"/> class.</summary>
+<param name="pinStripeList">The <see cref="T:KoerControls.PinStripeList"/> that will contain the <see cref="T:KoerControls.PinStripe"/>.</param>
 </member>
 <member name="E:KoerControls.PinStripe.ColorChanged">
  <summary>Occurs when the color has changed.</summary>
@@ -1687,11 +2221,7 @@ KoerControls
 <summary>Gets or sets the direction of 'travel' for the <see cref="T:KoerControls.PinStripe"/>.</summary>
 <returns>The direction of 'travel' for the <see cref="T:KoerControls.PinStripe"/>.</returns>
 </member>
-<member name="P:KoerControls.PinStripe.Empty">
-<summary>Represents an empty pin stripe with default values.</summary>
-<returns>An empty pin stripe with default values.</returns>
-</member>
-<member name="P:KoerControls.PinStripe.Owner">
+<member name="P:KoerControls.PinStripe.PinStripeList">
 <summary>Gets the owning <see cref="T:KoerControls.PinStripeList"/> of the <see cref="T:KoerControls.PinStripe"/>.</summary>
 <returns>The owning <see cref="T:KoerControls.PinStripeList"/> of the <see cref="T:KoerControls.PinStripe"/>.</returns>
 </member>
@@ -1734,6 +2264,17 @@ KoerControls
 <member name="T:KoerControls.PinStripeCollection">
 <summary>Repersents a collection of pin stripes.</summary>
 </member>
+<member name="M:KoerControls.PinStripeCollection.#ctor(KoerControls.PinStripeList)">
+<summary>Initializes a new instance of the <see cref="T:KoerControls.PinStripeCollection"/> class that is empty.</summary>
+<param name="owner">The owing <see cref="T:KoerControls.PinStripeList"/> of the <see cref="T:System.Collections.ObjectModel.Collection`1"/>.</param>
+</member>
+<member name="P:KoerControls.PinStripeCollection.Owner">
+<summary>The owning <see cref="T:KoerControls.PinStripeList"/> of the <see cref="T:System.Collections.ObjectModel.Collection`1"/>.</summary>
+</member>
+<member name="M:KoerControls.PinStripeCollection.Add(KoerControls.PinStripe)">
+<summary>Adds an object to the end of the <see cref="T:System.Collections.ObjectModel.Collection`1"/>.</summary>
+<param name="item">The object to be added to the end of the <see cref="T:System.Collections.ObjectModel.Collection`1"/>. The value can be null for reference types.</param>
+</member>
 <member name="T:KoerControls.PinStripeCollectionEditor">
 <summary>Provides a user interface that can edit pin stripe collections at design time.</summary>
 </member>
@@ -1751,10 +2292,6 @@ KoerControls
 <summary>Creates a new instance of the <see cref="T:KoerControls.PinStripeList"/> class.</summary>
 <param name="container">The <see cref="T:System.ComponentModel.IContainer"/> that will contain the <see cref="T:KoerControls.PinStripeList"/>.</param>
 </member>
-<member name="P:KoerControls.PinStripeList.PinStripes">
-<summary>Gets each <see cref="T:KoerControls.PinStripe"/> contained in the <see cref="T:KoerControls.PinStripeList"/>.</summary>
-<returns>Each <see cref="T:KoerControls.PinStripe"/> contained in the <see cref="T:KoerControls.PinStripeList"/>.</returns>
-</member>
 <member name="M:KoerControls.PinStripeList.GetPinStripe(System.Windows.Forms.Control)">
 <summary>Gets the <see cref="T:KoerControls.PinStripe"/> assigned to the specified <see cref="T:System.Windows.Forms.Control"/>.</summary>
 <returns>The <see cref="T:KoerControls.PinStripe"/> assigned to the specified <see cref="T:System.Windows.Forms.Control"/>.</returns>
@@ -1764,6 +2301,10 @@ KoerControls
 <summary>Assigns the specified <see cref="T:KoerControls.PinStripe"/> to the specified <see cref="T:System.Windows.Forms.Control"/>.</summary>
 <param name="control">The <see cref="T:System.Windows.Forms.Control"/> to set the <see cref="T:KoerControls.PinStripe"/> of.</param>
 <param name="value">The <see cref="T:KoerControls.PinStripe"/> to assign to the specified <see cref="T:System.Windows.Forms.Control"/>.</param>
+</member>
+<member name="P:KoerControls.PinStripeList.PinStripes">
+<summary>Gets each <see cref="T:KoerControls.PinStripe"/> contained in the <see cref="T:KoerControls.PinStripeList"/>.</summary>
+<returns>Each <see cref="T:KoerControls.PinStripe"/> contained in the <see cref="T:KoerControls.PinStripeList"/>.</returns>
 </member>
 <member name="M:KoerControls.PinStripeList.GetPinStripes(System.Windows.Forms.Control)">
 <summary>Iterates through each <see cref="T:KoerControls.PinStripe"/> assigned to the specified <see cref="T:System.Windows.Forms.Control"/>.</summary>
@@ -2115,6 +2656,13 @@ KoerControls
 <member name="M:KoerControls.Drawing.TextLineIndexer.CompareWordSwitch(KoerControls.Drawing.TextLineIndexer,System.Int32@)">
 <returns>1 if removing from Me and adding to otherLine is best, -1 if adding to Me and removing from otherLine is best, 0 if no change should happen.</returns>
 </member>
+<member name="M:KoerControls.ExtendedMath.Iterate(System.Double,System.Func{System.Double,System.Double},System.Int32)">
+<summary>Iterates a value through a function a specified number of times.</summary>
+<returns>The value returned after running it through a function a specified number of times.</returns>
+<param name="value">The value to iterate.</param>
+<param name="func">The function to pass the value through.</param>
+<param name="n">The total number of times to iterate.</param>
+</member>
 <member name="M:KoerControls.ExtendedMath.RoundToFloor(System.Int32,System.Int32)">
 <summary>Rounds an integer rounded to the nearest multiple of a specified integer.</summary>
 <returns>An integer rounded to the nearest multiple of a specified integer.</returns>
@@ -2163,7 +2711,7 @@ KoerControls
 <param name="controlCollection">The collection on which to flatten its control heirarchy.</param>
 <param name="filter">An optional filter to apply to the control collection. Leave as <see langword="Nothing"/> to apply no filter,</param>
 <param name="stopAtTop">Stop iterating through a tree of controls if the filter fails, and continue onto the next tree.</param>
-<exception cref="T:System.NullReferenceException"><paramref name="controlCollection"/> is null.</exception>
+<exception cref="T:System.ArgumentNullException"><paramref name="controlCollection"/> is null.</exception>
 </member>
 <member name="M:KoerControls.Forms.GetAll``1(System.Windows.Forms.Control.ControlCollection,System.Boolean)">
 <summary>Flattens the entire control heirarchy of the specified type that is contained inside the specified control collection.</summary>
@@ -2171,30 +2719,30 @@ KoerControls
 <typeparam name="T">The type of control to search for.</typeparam>
 <param name="controlCollection">The collection on which to flatten its control heirarchy.</param>
 <param name="stopIterationAtTop"><see langword="True"/> if stopping search down a path at the first control of type <typeparamref name="T"/>; otherwise <see langword="False"/> if getting every child of type <typeparamref name="T"/>.</param>
-<exception cref="T:System.NullReferenceException"><paramref name="controlCollection"/> is null</exception>
+<exception cref="T:System.ArgumentNullException"><paramref name="controlCollection"/> is null</exception>
 </member>
 <member name="M:KoerControls.Forms.GetIndex(System.Windows.Forms.Control.ControlCollection,System.Windows.Forms.Control)">
 <summary>Gets the z-index of the control in the control collection.</summary>
 <returns>The z-index of the control in the control collection.</returns>
 <param name="controlCollection">The <see cref="T:System.Windows.Forms.Control.ControlCollection"/> to find the control in.</param>
 <param name="control">The <see cref="T:System.Windows.Forms.Control"/> to find the z-index of.</param>
+<exception cref="T:System.ArgumentNullException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
 <exception cref="T:System.InvalidOperationException">Owner of the ControlCollection does not match the Parent of the Control.</exception>
-<exception cref="T:System.NullReferenceException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
 </member>
 <member name="M:KoerControls.Forms.Insert(System.Windows.Forms.Control.ControlCollection,System.Windows.Forms.Control,System.Int32)">
 <summary>Inserts the control at the specified z-index of the control collection.</summary>
 <param name="controlCollection">The <see cref="T:System.Windows.Forms.Control.ControlCollection"/> to insert the control into.</param>
 <param name="control">The <see cref="T:System.Windows.Forms.Control"/> is insert into the <see cref="T:System.Windows.Forms.Control.ControlCollection"/>.</param>
 <param name="index">The z-index in which to insert the <see cref="T:System.Windows.Forms.Control"/>.</param>
-<exception cref="T:System.NullReferenceException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
+<exception cref="T:System.ArgumentNullException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
 </member>
 <member name="M:KoerControls.Forms.SetIndex(System.Windows.Forms.Control.ControlCollection,System.Windows.Forms.Control,System.Int32)">
 <summary>Sets z-index of the control in the control collection.</summary>
 <param name="controlCollection">The <see cref="T:System.Windows.Forms.Control.ControlCollection"/> to reorder.</param>
 <param name="control">The <see cref="T:System.Windows.Forms.Control"/> is set the z-index of in the <see cref="T:System.Windows.Forms.Control.ControlCollection"/>.</param>
 <param name="index">The new z-index of which to set the <see cref="T:System.Windows.Forms.Control"/>.</param>
+<exception cref="T:System.ArgumentNullException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
 <exception cref="T:System.InvalidOperationException">Owner of the ControlCollection does not match the Parent of the Control.</exception>
-<exception cref="T:System.NullReferenceException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
 </member>
 <member name="M:KoerControls.Forms.SetItem(System.Windows.Forms.ComboBox,System.String,System.String)">
 <summary>Sets the specified item to a different value.</summary>

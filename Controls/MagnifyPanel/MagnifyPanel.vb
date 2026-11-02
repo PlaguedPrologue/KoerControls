@@ -72,7 +72,7 @@ Public Class MagnifyPanel
     '''<returns>The x or y values of the point of the smaller section in relation to the top or left of the control.</returns>
     <Category("Visual Elements")>
     <Description("The location on the edge of the panel in which the magnifying lines end at.")>
-    <DesignerSerializationVisibility(DesignerSerializationVisibility.Content)>
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)>
     Public Overridable Property MagnifyLocations As IntegerRange
         Get
             Return MyMagnifyLocations

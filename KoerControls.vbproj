@@ -71,15 +71,17 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\DateRange.vb" />
-    <Compile Include="Collections\DateRangeConverter.vb" />
+    <Compile Include="Collections\Ranges\DateRange.vb" />
+    <Compile Include="Collections\Ranges\DateRangeCodeDomSerializer.vb" />
+    <Compile Include="Collections\Ranges\DateRangeConverter.vb" />
     <Compile Include="Collections\INotifyHashSetChanged.vb" />
-    <Compile Include="Collections\IntegerRange.vb" />
-    <Compile Include="Collections\IntegerRangeCollection.vb" />
-    <Compile Include="Collections\IntegerRangeCollectionEditor.vb" />
-    <Compile Include="Collections\IntegerRangeConverter.vb" />
+    <Compile Include="Collections\Ranges\IntegerRange.vb" />
+    <Compile Include="Collections\Ranges\IntegerRangeCodeDomSerializer.vb" />
+    <Compile Include="Collections\Ranges\IntegerRangeCollection.vb" />
+    <Compile Include="Collections\Ranges\IntegerRangeCollectionEditor.vb" />
+    <Compile Include="Collections\Ranges\IntegerRangeConverter.vb" />
     <Compile Include="Collections\IObservableCollection.vb" />
-    <Compile Include="Collections\IRange.vb" />
+    <Compile Include="Collections\Ranges\IRange.vb" />
     <Compile Include="Collections\NotifyHashSetChangedEventArgs.vb" />
     <Compile Include="Collections\NotifyHashSetChangedEventHandler.vb" />
     <Compile Include="Collections\ObservableHashSet.vb" />
@@ -104,8 +106,6 @@
     </Compile>
     <Compile Include="Controls\DataGridViewLinker\DataGridViewLinkingGroup.vb" />
     <Compile Include="Controls\DataGridViewLinker\DataGridViewLinkingGroupCollection.vb" />
-    <Compile Include="Controls\DataGridViewLinker\DataGridViewLinkingGroupCollectionEditor.DataGridViewLinkingGroupCollectionForm.vb" />
-    <Compile Include="Controls\DataGridViewLinker\DataGridViewLinkingGroupCollectionEditor.vb" />
     <Compile Include="Controls\DataGridViewLinker\DataGridViewLinkingGroupConverter.vb" />
     <Compile Include="Controls\DataGridView\AssignableDataGridViewRow.vb" />
     <Compile Include="Controls\DataGridView\DataGridViewDateRangePickerCell.vb" />
@@ -124,6 +124,22 @@
     </Compile>
     <Compile Include="Controls\DateRangePicker\DateRangePickerCheckBoxVisibilityState.vb" />
     <Compile Include="Controls\DateRangePicker\DateRangePickerDesigner.vb" />
+    <Compile Include="Controls\DateScroller\DateScroller.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DateScroller\DateScrollerGroup.vb" />
+    <Compile Include="Controls\DateScroller\DateScrollerGroupCollection.vb" />
+    <Compile Include="Controls\DateScroller\DateScrollerGroupConverter.vb" />
+    <Compile Include="Controls\DateScroller\DateScrollerItem.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DateScroller\DateScrollerItemCollection.vb" />
+    <Compile Include="Controls\DateScroller\DateScrollerItemCollectionEditor.vb" />
+    <Compile Include="Controls\DateScroller\DateScrollerItemPlacement.vb" />
+    <Compile Include="Controls\NamedComponent\NamedComponentCollection.vb" />
+    <Compile Include="Controls\NamedComponent\NamedComponentCollectionEditor.EditorForm.vb" />
+    <Compile Include="Controls\NamedComponent\NamedComponentCollectionEditor.vb" />
+    <Compile Include="Controls\Overlay\HeaderOverlay.vb" />
     <Compile Include="Controls\Highlighter\HighlightableColor.vb" />
     <Compile Include="Controls\Highlighter\Highlighter.ColorPainter.vb">
       <SubType>Component</SubType>
@@ -145,6 +161,7 @@
     <Compile Include="Controls\MultiLineComboBox\MultiLineComboBox.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\Overlay\Overlay %28Inoperable%29.vb" />
     <Compile Include="Controls\PinStripe\BrokenPinStripe.vb" />
     <Compile Include="Controls\PinStripe\PinStripe.Painter.vb" />
     <Compile Include="Controls\PinStripe\PinStripe.PainterCollection.vb" />
@@ -173,8 +190,6 @@
     <Compile Include="Controls\StaticColumnsDataGridView\StaticDataGridViewColumnSerializationDescriptor.vb" />
     <Compile Include="Controls\TabManager\TabGroup.vb" />
     <Compile Include="Controls\TabManager\TabGroupCollection.vb" />
-    <Compile Include="Controls\TabManager\TabGroupCollectionEditor.TabGroupCollectionForm.vb" />
-    <Compile Include="Controls\TabManager\TabGroupCollectionEditor.vb" />
     <Compile Include="Controls\TabManager\TabGroupConverter.vb" />
     <Compile Include="Controls\TabManager\TabManager.DetachedTabControl.vb">
       <SubType>Component</SubType>
@@ -238,6 +253,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Tasks\CancellableTask.vb" />
+    <Compile Include="Tests\MyTasksView.Designer.vb">
+      <DependentUpon>MyTasksView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\MyTasksView.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Tests\TestForm.Designer.vb">
       <DependentUpon>TestForm.vb</DependentUpon>
     </Compile>
@@ -263,6 +284,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tests\MyTasksView.resx">
+      <DependentUpon>MyTasksView.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tests\TestForm.resx">
       <DependentUpon>TestForm.vb</DependentUpon>

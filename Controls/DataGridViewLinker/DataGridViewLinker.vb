@@ -1,5 +1,4 @@
 ﻿Imports System.ComponentModel
-Imports System.Drawing.Design
 
 <Designer(GetType(SingleInstanceComponentDesigner))>
 <ProvideProperty("LinkingGroup", GetType(DataGridView))>
@@ -12,7 +11,7 @@ Public Class DataGridViewLinker
 
     Friend ReadOnly _dataGridViewLinkingGroup As New WeakKeyDictionary(Of DataGridView, DataGridViewLinkingGroup) 'Represents LinkingGroups from this Linker instance assigned to Controls
     Private ReadOnly _linkingGroupManagedDataGridViews As New WeakCollection(Of DataGridView) 'Represents all Controls with at least one LinkingGroup from this Linker instance assigned to it
-    Private ReadOnly _linkingGroups As New DataGridViewLinkingGroupCollection(Me) 'Represents the LinkingGroups in this Linker
+    Private ReadOnly _linkingGroups As New DataGridViewLinkingGroupCollection 'Represents the LinkingGroups in this Linker
     Private _name As String
 
     Private Sub AddHandlers(dataGridView As DataGridView)
@@ -51,7 +50,6 @@ Public Class DataGridViewLinker
     <Category("Data")>
     <Description("The linking groups available for the owning form.")>
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Content)>
-    <Editor(GetType(DataGridViewLinkingGroupCollectionEditor), GetType(UITypeEditor))>
     Public ReadOnly Property LinkingGroups As DataGridViewLinkingGroupCollection
         Get
             Return _linkingGroups
@@ -65,7 +63,7 @@ Public Class DataGridViewLinker
         _linkingGroups.Clear() 'Clear out each LinkingGroup in the LinkingGroupCollection
     End Sub
     Friend Function ShouldSerializeLinkingGroups() As Boolean
-        Return _linkingGroups.Count > 0
+        Return _linkingGroups.Any
     End Function
     '''<summary>Gets the LinkingGroup assigned to the specified <see cref="DataGridView"/>.</summary>
     '''<returns>The LinkingGroup assigned to the specified <see cref="DataGridView"/>.</returns>
@@ -142,6 +140,9 @@ Public Class DataGridViewLinker
         If disposing Then
             For Each dgvControl As DataGridView In _linkingGroupManagedDataGridViews 'Go through each DataGridView the DataGridViewLinker has DataGridViewLinkingGroups assigned to
                 RemoveHandlers(dgvControl) 'Remove Control handlers
+            Next
+            For Each dgvlLinker As DataGridViewLinkingGroup In _linkingGroups
+                dgvlLinker.Dispose()
             Next
         End If
         MyBase.Dispose(disposing)

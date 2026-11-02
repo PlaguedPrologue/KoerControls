@@ -198,7 +198,7 @@ Public Class LinePanel
             If _orientation = Orientation.Horizontal Then
                 Width = Parent.ClientSize.Width
             Else
-                Width = Parent.ClientSize.Height
+                Height = Parent.ClientSize.Height
             End If
         End If
         RaiseEvent ParentSizeChanged(Me, e)
@@ -245,7 +245,7 @@ Public Class LinePanel
                         Next
                         x = Math.Floor(dX)
                         Dim dWidth As Decimal = 0
-                        For iColumnIndex As Integer = iColumnStart To iColumnStart + iColumnSpan - 1
+                        For iColumnIndex As Integer = Math.Max(0, iColumnStart) To Math.Min(iColumnStart + iColumnSpan, iColumnCount) - 1
                             Dim csColumn As ColumnStyle = csColumns(iColumnIndex)
                             If csColumn.SizeType = SizeType.Absolute Then
                                 dWidth += csColumn.Width
@@ -296,7 +296,7 @@ Public Class LinePanel
                         Next
                         y = Math.Floor(dY)
                         Dim dHeight As Decimal = 0
-                        For iRowIndex As Integer = iRowStart To iRowStart + iRowSpan - 1
+                        For iRowIndex As Integer = Math.Max(0, iRowStart) To Math.Min(iRowStart + iRowSpan, iRowCount) - 1
                             Dim rsRow As RowStyle = rsRows(iRowIndex)
                             If rsRow.SizeType = SizeType.Absolute Then
                                 dHeight += rsRow.Height

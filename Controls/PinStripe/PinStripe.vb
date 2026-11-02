@@ -4,14 +4,16 @@
 <DesignTimeVisible(False)>
 <ToolboxItem(False)>
 Public Class PinStripe
+    Implements IComponent, IDisposable
 
 #Region "Private Items"
 
     Private _color As Color = Color.Transparent
-    Private _highlightColor As HighlightableColor
     Private Const _defaultSpacing As Integer = 50
     Private Const _defaultThickness As Integer = 50
     Private _direction As Direction = Direction.None
+    Private _highlightColor As HighlightableColor
+    Private _pinStripeList As PinStripeList
     Private _spacing As Integer = _defaultSpacing
     Private _thickness As Integer = _defaultThickness
     Private _type As PinStripeType = PinStripeType.None
@@ -20,13 +22,15 @@ Public Class PinStripe
 
 #Region "Initializers"
 
-    '''<summary>Create a new empty instance of the <see cref="PinStripe"/> clas.</summary>
+    '''<summary>Creates a new instance of the <see cref="PinStripe"/> class.</summary>
     Public Sub New()
     End Sub
-    '''<summary>Create a new instance of the <see cref="PinStripe"/> clas.</summary>
-    '''<param name="container">The <see cref="IContainer"/> that will contain the <see cref="PinStripe"/>.</param>
-    Public Sub New(container As IComponent)
-        Owner = TryCast(container, PinStripeList)
+    '''<summary>Creates a new instance of the <see cref="PinStripe"/> class.</summary>
+    '''<param name="pinStripeList">The <see cref="KoerControls.PinStripeList"/> that will contain the <see cref="PinStripe"/>.</param>
+    Public Sub New(pinStripeList As PinStripeList)
+        _pinStripeList = pinStripeList
+        pinStripeList.Container?.Add(Me)
+        pinStripeList.PinStripes.Add(Me)
     End Sub
 
 #End Region
@@ -37,6 +41,7 @@ Public Class PinStripe
     Public Event ColorChanged As EventHandler
     ''' <summary>Occurs when the direction has changed.</summary>
     Public Event DirectionChanged As EventHandler
+    Public Event Disposed As EventHandler Implements IComponent.Disposed
     ''' <summary>Occurs when the spacing has changed.</summary>
     Public Event SpacingChanged As EventHandler
     ''' <summary>Occurs when the thickness has changed.</summary>
@@ -81,17 +86,26 @@ Public Class PinStripe
             If bDirectionChanged Then OnDirectionChanged(EventArgs.Empty)
         End Set
     End Property
-    '''<summary>Represents an empty pin stripe with default values.</summary>
-    '''<returns>An empty pin stripe with default values.</returns>
-    Public Shared ReadOnly Property Empty As PinStripe
-        Get
-            Return New PinStripe
-        End Get
-    End Property
-    '''<summary>Gets the owning <see cref="PinStripeList"/> of the <see cref="PinStripe"/>.</summary>
-    '''<returns>The owning <see cref="PinStripeList"/> of the <see cref="PinStripe"/>.</returns>
+    '''<summary>Gets the owning <see cref="KoerControls.PinStripeList"/> of the <see cref="PinStripe"/>.</summary>
+    '''<returns>The owning <see cref="KoerControls.PinStripeList"/> of the <see cref="PinStripe"/>.</returns>
     <Browsable(False)>
-    Public ReadOnly Property Owner As PinStripeList
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+    Public Property PinStripeList As PinStripeList
+        Get
+            Return _pinStripeList
+        End Get
+        Set(value As PinStripeList)
+            If ReferenceEquals(value, _pinStripeList) Then Return
+
+            _pinStripeList?.PinStripes.Remove(Me)
+            _pinStripeList = value
+            If value?.PinStripes.Contains(Me) Then Return
+            _pinStripeList?.PinStripes.Add(Me)
+        End Set
+    End Property
+    <Browsable(False)>
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+    Public Property Site As ISite Implements IComponent.Site
     '''<summary>Gets or sets the the spacing between each stripes in the <see cref="PinStripe"/>.</summary>
     '''<returns>The spacing between each stripe in the <see cref="PinStripe"/>.</returns>
     <Category("Appearance")>
@@ -143,6 +157,10 @@ Public Class PinStripe
 
 #Region "Functions"
 
+    Public Sub Dispose() Implements IDisposable.Dispose
+        Site?.Container?.Remove(Me)
+        RaiseEvent Disposed(Me, EventArgs.Empty)
+    End Sub
     '''<summary>Determines if the current <see cref="PinStripe"/> is the default <see cref="PinStripe"/>.</summary>
     '''<returns><see langword="True"/> if the current <see cref="PinStripe"/> is the default <see cref="PinStripe"/>; otherwise, <see langword="False"/>.</returns>
     Public Overridable Function IsDefault() As Boolean
@@ -183,7 +201,7 @@ Public Class PinStripe
             Case Else
                 sValue = "No Type"
         End Select
-        Select Case _direction
+        Select Case Direction
             Case Direction.Left
                 sValue = $"{sValue} Left"
             Case Direction.Right

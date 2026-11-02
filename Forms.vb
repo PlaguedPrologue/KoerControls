@@ -1,9 +1,18 @@
-﻿Imports System.Reflection
+﻿Imports System.IO
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms.Control
 
 Public Module Forms
+
+    Friend Sub LogDebug(message As String)
+        Try
+            Directory.CreateDirectory("C:\Temp")
+            File.AppendAllText("C:\Temp\HeaderOverlayDesigner.log", Now.ToString("HH:mm:ss.fff") & "  " & message & Environment.NewLine)
+        Catch
+        End Try
+    End Sub
 
 #Region "Imports"
 
@@ -131,10 +140,10 @@ Public Module Forms
     '''<param name="controlCollection">The collection on which to flatten its control heirarchy.</param>
     '''<param name="filter">An optional filter to apply to the control collection. Leave as <see langword="Nothing"/> to apply no filter,</param>
     '''<param name="stopAtTop">Stop iterating through a tree of controls if the filter fails, and continue onto the next tree.</param>
-    '''<exception cref="NullReferenceException"><paramref name="controlCollection"/> is null.</exception>
+    '''<exception cref="ArgumentNullException"><paramref name="controlCollection"/> is null.</exception>
     <Extension>
     Public Iterator Function GetAll(controlCollection As ControlCollection, Optional filter As Func(Of Control, Boolean) = Nothing, Optional stopAtTop As Boolean = True) As IEnumerable(Of Control)
-        If controlCollection Is Nothing Then Throw New NullReferenceException("Collection cannot be null.")
+        If controlCollection Is Nothing Then Throw New ArgumentNullException(NameOf(controlCollection))
 
         If filter Is Nothing Then
             For Each cControl As Control In controlCollection
@@ -161,10 +170,10 @@ Public Module Forms
     '''<typeparam name="T">The type of control to search for.</typeparam>
     '''<param name="controlCollection">The collection on which to flatten its control heirarchy.</param>
     '''<param name="stopIterationAtTop"><see langword="True"/> if stopping search down a path at the first control of type <typeparamref name="T"/>; otherwise <see langword="False"/> if getting every child of type <typeparamref name="T"/>.</param>
-    '''<exception cref="NullReferenceException"><paramref name="controlCollection"/> is null</exception>
+    '''<exception cref="ArgumentNullException"><paramref name="controlCollection"/> is null</exception>
     <Extension>
     Public Iterator Function GetAll(Of T)(controlCollection As ControlCollection, Optional stopIterationAtTop As Boolean = False) As IEnumerable(Of T)
-        If controlCollection Is Nothing Then Throw New NullReferenceException("Collection cannot be null")
+        If controlCollection Is Nothing Then Throw New ArgumentNullException(NameOf(controlCollection))
 
         For Each cControl As Control In controlCollection
             Dim bIsOfTypeT As Boolean = TypeOf cControl Is T
@@ -184,8 +193,8 @@ Public Module Forms
     '''<returns>The z-index of the control in the control collection.</returns>
     '''<param name="controlCollection">The <see cref="ControlCollection"/> to find the control in.</param>
     '''<param name="control">The <see cref="Control"/> to find the z-index of.</param>
+    '''<exception cref="ArgumentNullException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
     '''<exception cref="InvalidOperationException">Owner of the ControlCollection does not match the Parent of the Control.</exception>
-    '''<exception cref="NullReferenceException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
     <Extension>
     Public Function GetIndex(controlCollection As ControlCollection, control As Control) As Integer
         If controlCollection Is Nothing Then Throw New ArgumentNullException(NameOf(controlCollection))
@@ -203,7 +212,7 @@ Public Module Forms
     '''<param name="controlCollection">The <see cref="ControlCollection"/> to insert the control into.</param>
     '''<param name="control">The <see cref="Control"/> is insert into the <see cref="ControlCollection"/>.</param>
     '''<param name="index">The z-index in which to insert the <see cref="Control"/>.</param>
-    '''<exception cref="NullReferenceException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
+    '''<exception cref="ArgumentNullException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
     <Extension>
     Public Sub Insert(controlCollection As ControlCollection, control As Control, index As Integer)
         If controlCollection Is Nothing Then Throw New ArgumentNullException(NameOf(controlCollection))
@@ -233,8 +242,8 @@ Public Module Forms
     '''<param name="controlCollection">The <see cref="ControlCollection"/> to reorder.</param>
     '''<param name="control">The <see cref="Control"/> is set the z-index of in the <see cref="ControlCollection"/>.</param>
     '''<param name="index">The new z-index of which to set the <see cref="Control"/>.</param>
+    '''<exception cref="ArgumentNullException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
     '''<exception cref="InvalidOperationException">Owner of the ControlCollection does not match the Parent of the Control.</exception>
-    '''<exception cref="NullReferenceException"><paramref name="controlCollection"/> or <paramref name="control"/> is null.</exception>
     <Extension>
     Public Sub SetIndex(controlCollection As ControlCollection, control As Control, index As Integer)
         If controlCollection Is Nothing Then Throw New ArgumentNullException(NameOf(controlCollection))

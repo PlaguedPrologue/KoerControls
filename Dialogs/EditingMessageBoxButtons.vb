@@ -1,6 +1,5 @@
 ﻿'''<summary>Specifies constants defining which buttons to display in an editing dialog box.</summary>
 Public Enum EditingMessageBoxButtons
-
     '''<summary>The dialog box contains the OK button.</summary>
     OK = 0
     '''<summary>The dialog box contains the OK and Cancel buttons.</summary>
@@ -15,5 +14,4 @@ Public Enum EditingMessageBoxButtons
     RetryCancel = 5
     '''<summary>The dialog box contains the OK, Cancel, and Delete buttons.</summary>
     OKCancelDelete = 6
-
 End Enum

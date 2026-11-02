@@ -10,6 +10,37 @@
 
 Changes since last push
 
+-LinePanel
+	Fixed resizing issue when Orientation = Vertical
+-StaticColumnsDataGridView
+	Initializes with ContextMenuStrip = DefaultContextMenuStrip
+-AssignableDataGridViewRow
+	Changed NullReferenceExceptions to ArgumentNullExceptions where required
+-Forms
+	Changed NullReferenceExceptions to ArgumentNullExceptions where required
+-HeaderOverlay
+	New overlay that can be added to custom controls that helps paint a header onto the control
+-DateScroller
+	New control to help with scrolling along with controls that have locations and width relating to dates
+-DateRange and IntegerRange
+	Fixed major issues with setting Start/End values, as well as Parsing
+-NamedComponentCollection
+	Created to allow simpler NamedComponetCollection definitions that do not need to create all the Editor backing files (All contained in the NamedComponentCollectionEditor classes)
+
+
+ToDo
+
+-StaticColumnsDataGridView
+	Implement INotifyPropertyChanged events
+-Overlay
+	Create base Overlay class to build a HeaderOverlay off of. Allow it to build a FooterOverla/etc. off of it.
+-PinStripeConverter
+	Double check that ConvertFrom is actually working as it should. I see a .ToString where something like a ReferenceEquals should be
+-DateScroller
+	Optimize the calculations. Lots of things doing redundant movements and recalculations when certain properties are changed (ItemHeight, etc.)
+
+9/1/2026
+
 -Controls.DataGridViewLinker.DataGridViewLinkingGroup
 	Made LinkingGroup objects
 -Controls.TabManager.TabGroup

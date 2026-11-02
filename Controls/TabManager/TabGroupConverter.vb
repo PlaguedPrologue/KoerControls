@@ -17,8 +17,8 @@ Public Class TabGroupConverter
         If TypeOf value Is String Then
             Dim sValue As String = value
             If sValue = "(none)" OrElse String.IsNullOrWhiteSpace(sValue) Then Return Nothing
-            Dim tmTabManager As TabManager = TryCast(TryCast(context?.PropertyDescriptor.Attributes(GetType(ExtenderProvidedPropertyAttribute)), ExtenderProvidedPropertyAttribute)?.Provider, TabManager)
-            If tmTabManager Is Nothing Then tmTabManager = TryCast(context?.Instance, TabManager)
+            Dim tmTabManager As TabManager = TryCast(context?.Instance, TabManager)
+            If tmTabManager Is Nothing Then tmTabManager = TryCast(TryCast(context?.PropertyDescriptor.Attributes(GetType(ExtenderProvidedPropertyAttribute)), ExtenderProvidedPropertyAttribute)?.Provider, TabManager)
             If tmTabManager IsNot Nothing Then
                 Dim tgTabGroup As TabGroup = tmTabManager.TabGroups.FirstOrDefault(Function(tg) tg.Value = sValue)
                 If tgTabGroup IsNot Nothing Then Return tgTabGroup
@@ -35,14 +35,12 @@ Public Class TabGroupConverter
     End Function
     Public Overrides Function GetStandardValues(context As ITypeDescriptorContext) As StandardValuesCollection
         If context IsNot Nothing Then
-            Dim eppaProperty As ExtenderProvidedPropertyAttribute = TryCast(context.PropertyDescriptor.Attributes(GetType(ExtenderProvidedPropertyAttribute)), ExtenderProvidedPropertyAttribute)
-            If eppaProperty IsNot Nothing Then
-                Dim tmTabManager As TabManager = TryCast(eppaProperty.Provider, TabManager)
-                If tmTabManager IsNot Nothing Then
-                    Dim tgTabGroups As New List(Of Object) From {Nothing}
-                    tgTabGroups.AddRange(tmTabManager.TabGroups)
-                    Return New StandardValuesCollection(tgTabGroups)
-                End If
+            Dim tmTabManager As TabManager = TryCast(context?.Instance, TabManager)
+            If tmTabManager Is Nothing Then tmTabManager = TryCast(TryCast(context?.PropertyDescriptor.Attributes(GetType(ExtenderProvidedPropertyAttribute)), ExtenderProvidedPropertyAttribute)?.Provider, TabManager)
+            If tmTabManager IsNot Nothing Then
+                Dim tgTabGroups As New List(Of Object) From {Nothing}
+                tgTabGroups.AddRange(tmTabManager.TabGroups)
+                Return New StandardValuesCollection(tgTabGroups)
             End If
         End If
         Return New StandardValuesCollection({Nothing})

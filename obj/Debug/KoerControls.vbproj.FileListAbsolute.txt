@@ -11,3 +11,5 @@ C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.vbproj.CoreC
 C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.dll
 C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.xml
 C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.pdb
+C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.MyTasksView.resources
+C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.vbproj.AssemblyReference.cache

@@ -1,6 +1,5 @@
 ﻿Imports System.ComponentModel
 Imports System.ComponentModel.Design
-Imports System.Drawing.Design
 
 '''<summary>A component that can allow TabPages to be reoredred, detached from a TabControl, and attached to another TabControl with the same within the same specified TabGroup.</summary>
 <Designer(GetType(SingleInstanceComponentDesigner))>
@@ -231,7 +230,6 @@ Public Class TabManager
     <Category("Data")>
     <Description("The tab groups available for the owning form.")>
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Content)>
-    <Editor(GetType(TabGroupCollectionEditor), GetType(UITypeEditor))>
     Public ReadOnly Property TabGroups As TabGroupCollection
         Get
             Return _tabGroups
@@ -245,7 +243,7 @@ Public Class TabManager
         _tabGroups.Clear() 'Clear out each TabGroup in the TabGroupCollection
     End Sub
     Friend Function ShouldSerializeTabGroups() As Boolean
-        Return _tabGroups.Count > 0
+        Return _tabGroups.Any
     End Function
 
 #End Region
@@ -256,6 +254,9 @@ Public Class TabManager
         If disposing Then
             For Each tcTabControl As TabControl In _tabGroupManagedTabControls 'Go through each TabControl the TabManager has TabGroups assigned to
                 RemoveHandlers(tcTabControl) 'Remove Control handlers
+            Next
+            For Each tgTabGroup As TabGroup In _tabGroups
+                tgTabGroup.Dispose()
             Next
         End If
         MyBase.Dispose(disposing)

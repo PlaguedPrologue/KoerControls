@@ -134,15 +134,15 @@ Partial Public Class PinStripe
                 Return _borderStyle
             End Get
         End Property
-        '''<summary>Gets the <see cref="KoerControls.PinStripe"/> the <see cref="Painter"/> will paint.</summary>
-        '''<returns>The <see cref="KoerControls.PinStripe"/> the <see cref="Painter"/> will paint.</returns>
+        '''<summary>Gets the <see cref="PinStripe"/> the <see cref="Painter"/> will paint.</summary>
+        '''<returns>The <see cref="PinStripe"/> the <see cref="Painter"/> will paint.</returns>
         Public ReadOnly Property PinStripe As PinStripe
             Get
                 Return MyPinStripe
             End Get
         End Property
         '''<summary>Represents the thickness of the <see cref="Control"/> according to the direction of the <see cref="KoerControls.PinStripe"/>.</summary>
-        '''<returns>The thickness of the <see cref="Control"/> according to the direction of the <see cref="KoerControls.PinStripe"/>.</returns>
+        '''<returns>The thickness of the <see cref="Control"/> according to the direction of the <see cref="PinStripe"/>.</returns>
         Public Property Thickness As Integer
             Get
                 Return _thickness

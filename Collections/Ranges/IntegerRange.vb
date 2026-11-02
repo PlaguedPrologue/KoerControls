@@ -1,7 +1,9 @@
 ﻿Imports System.ComponentModel
+Imports System.ComponentModel.Design.Serialization
 Imports System.Globalization
 
 '''<summary>Represents a set of consecutive dates expressed by a start <see cref="Integer"/> and end <see cref="Integer"/>.</summary>
+<DesignerSerializer(GetType(IntegerRangeCodeDomSerializer), GetType(CodeDomSerializer))>
 <TypeConverter(GetType(IntegerRangeConverter))>
 Public Class IntegerRange
     Implements IComparable(Of IntegerRange), IEnumerable, IEnumerable(Of Integer), IRange(Of Integer, IntegerRange), IReadOnlyCollection(Of Integer)
@@ -30,15 +32,15 @@ Public Class IntegerRange
         If left._endValue = right._endValue Then Return left._startValue > right._startValue 'EndValues match, check StartValues
         Return left._endValue > right._endValue
     End Operator
+    Public Shared Operator <=(left As IntegerRange, right As IntegerRange) As Boolean
+        Return Not left > right
+    End Operator
     Public Shared Operator <(left As IntegerRange, right As IntegerRange) As Boolean
         If left._startValue = right._startValue Then Return left._endValue < right._endValue 'StartValues match, check EndValues
         Return left._startValue < right._startValue
     End Operator
     Public Shared Operator >=(left As IntegerRange, right As IntegerRange) As Boolean
-        Return left._startValue >= right._startValue AndAlso left._endValue >= right._endValue
-    End Operator
-    Public Shared Operator <=(left As IntegerRange, right As IntegerRange) As Boolean
-        Return left._startValue <= right._startValue AndAlso left._endValue <= right._endValue
+        Return Not left < right
     End Operator
 
     Public Shared Operator =(left As IntegerRange, right As Integer) As Boolean
@@ -50,14 +52,14 @@ Public Class IntegerRange
     Public Shared Operator >(left As IntegerRange, right As Integer) As Boolean
         Return left._startValue > right
     End Operator
+    Public Shared Operator <=(left As IntegerRange, right As Integer) As Boolean
+        Return Not left > right
+    End Operator
     Public Shared Operator <(left As IntegerRange, right As Integer) As Boolean
         Return left._endValue < right
     End Operator
     Public Shared Operator >=(left As IntegerRange, right As Integer) As Boolean
-        Return left._endValue >= right
-    End Operator
-    Public Shared Operator <=(left As IntegerRange, right As Integer) As Boolean
-        Return left._startValue <= right
+        Return Not left < right
     End Operator
 
     Public Shared Operator =(left As Integer, right As IntegerRange)
@@ -69,14 +71,14 @@ Public Class IntegerRange
     Public Shared Operator >(left As Integer, right As IntegerRange) As Boolean
         Return left > right._endValue
     End Operator
+    Public Shared Operator <=(left As Integer, right As IntegerRange) As Boolean
+        Return Not left > right
+    End Operator
     Public Shared Operator <(left As Integer, right As IntegerRange) As Boolean
         Return left < right._startValue
     End Operator
     Public Shared Operator >=(left As Integer, right As IntegerRange) As Boolean
-        Return left >= right._startValue
-    End Operator
-    Public Shared Operator <=(left As Integer, right As IntegerRange) As Boolean
-        Return left <= right._endValue
+        Return Not left < right
     End Operator
 
     Public Function CompareTo(obj As IntegerRange) As Integer Implements IComparable(Of IntegerRange).CompareTo
@@ -138,14 +140,11 @@ Public Class IntegerRange
     '''<summary>Initializes a new instance of the <see cref="IntegerRange"/> class.</summary>
     '''<param name="startValue">The start <see cref="Integer"/> of the <see cref="IntegerRange"/>.</param>
     '''<param name="endValue">The end <see cref="Integer"/> of the <see cref="IntegerRange"/>.</param>
+    '''<exception cref="ArgumentException">startValue is greater than endValue</exception>
     Public Sub New(startValue As Integer, endValue As Integer)
-        If startValue < endValue Then
-            _startValue = startValue
-            _endValue = endValue
-        Else
-            _startValue = endValue
-            _endValue = startValue
-        End If
+        If startValue > endValue Then Throw New ArgumentException("startValue cannot be greater than endValue")
+        _startValue = startValue
+        _endValue = endValue
     End Sub
 
 #End Region
@@ -177,12 +176,10 @@ Public Class IntegerRange
         Set(value As Integer)
             If value = _endValue Then Return
             If value < _startValue Then
-                _endValue = _startValue
                 _startValue = value
                 OnStartValueChanged(EventArgs.Empty)
-            Else
-                _endValue = value
             End If
+            _endValue = value
             OnEndValueChanged(EventArgs.Empty)
         End Set
     End Property
@@ -217,12 +214,10 @@ Public Class IntegerRange
         Set(value As Integer)
             If value = _startValue Then Return
             If value > _endValue Then
-                _startValue = _endValue
                 _endValue = value
                 OnEndValueChanged(EventArgs.Empty)
-            Else
-                _startValue = value
             End If
+            _startValue = value
             OnStartValueChanged(EventArgs.Empty)
         End Set
     End Property
@@ -357,25 +352,38 @@ Public Class IntegerRange
     '''<summary>Converts the string representation of two numbers to its 32-bit signed integer range equivalent.</summary>
     '''<returns>A 32-bit signed integer range equivalent to the numbers contained in <paramref name="s"/>.</returns>
     '''<param name="s">A string containing the numbers to convert.</param>
-    '''<exception cref="ArgumentNullException"><paramref name="s"/> is null.</exception>
     '''<exception cref="FormatException"><paramref name="s"/> is not in the correct format.</exception>
-    '''<exception cref="OverflowException"><paramref name="s"/> represents a number less than <see cref="Int32.MinValue"/> or greater than <see cref="Int32.MaxValue"/>. -or- <paramref name="s"/> includes non-zero, fractional digits.</exception>
     Public Shared Function Parse(s As String) As IntegerRange
         Dim iStringLength As Integer = s.Length
         Dim bStartValueFound As Boolean = False
-        Dim bEndValueFound As Boolean = False
         Dim iStartValue As Integer
-        Dim iEndValue As Integer
+        Dim iStartValueTemp As Integer
+        Dim iLastStartDateIndex As Integer
         For iIndex As Integer = 0 To iStringLength - 1 'Index through string
-            Dim sStartValue As String = s.Substring(0, iStringLength - iIndex)
-            bStartValueFound = bStartValueFound OrElse Integer.TryParse(sStartValue, iStartValue) 'Try to get start value from front portion of string
-            If Not bStartValueFound AndAlso Double.TryParse(sStartValue, Nothing) Then Exit For 'Double found, kick out for incorrect format.
-            Dim sEndValue As String = s.Substring(iIndex, iStringLength - iIndex)
-            bEndValueFound = bEndValueFound OrElse Integer.TryParse(sEndValue, iEndValue) 'Try to get end value from end portion of string
-            If Not bEndValueFound AndAlso Double.TryParse(sEndValue, Nothing) Then Exit For 'Double found, kick out for incorrect format.
-            If bStartValueFound AndAlso bEndValueFound Then Return New IntegerRange(iStartValue, iEndValue)  'Determine if both start value and end value have been found
+            If Integer.TryParse(s.Substring(0, iStringLength - iIndex), iStartValueTemp) Then 'Start value was able to be parsed
+                iStartValue = iStartValueTemp
+                bStartValueFound = True
+                iLastStartDateIndex = iIndex
+                Exit For
+            ElseIf Decimal.TryParse(s.Substring(0, iStringLength - iIndex), Nothing) Then 'Double found, incorrect format
+                Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.")
+            End If
         Next
-        Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.")
+        If Not bStartValueFound Then Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.") 'Start value not found, throw
+        Dim bEndValueFound As Boolean = False
+        Dim iEndValue As Integer
+        Dim iEndValueTemp As Integer
+        For iIndex As Integer = iLastStartDateIndex + 1 To iStringLength - 1 'Index through string starting after where start value ended
+            If Integer.TryParse(s.Substring(iIndex, iStringLength - iIndex), iEndValueTemp) Then 'End value was able to be parsed
+                iEndValue = iEndValueTemp
+                bEndValueFound = True
+                Exit For
+            ElseIf Decimal.TryParse(s.Substring(iIndex, iStringLength - iIndex), Nothing) Then 'Double found, incorrect format
+                Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.")
+            End If
+        Next
+        If Not bEndValueFound Then Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.") 'Start value not found, throw
+        Return New IntegerRange(iStartValue, iEndValue)
     End Function
     '''<summary>Converts the string representation of two numbers in a specified style and culture-specific format to its 32-bit signed integer range equivalent.</summary>
     '''<returns>A 32-bit signed integer range equivalent to the two numbers specified in s<paramref name="s"/></returns>
@@ -383,25 +391,38 @@ Public Class IntegerRange
     '''<param name="style">A bitwise combination of enumeration values that indicates the style elements that can be present in <paramref name="s"/>. A typical value to specify is <see cref="NumberStyles.Integer"/>.</param>
     '''<param name="provider">An object that supplies culture-specific information about the format of <paramref name="s"/>.</param>
     '''<exception cref="ArgumentException"><paramref name="style"/> is not a <see cref="NumberStyles"/> value. -or- <paramref name="style"/> is not a combination of <see cref="NumberStyles.AllowHexSpecifier"/> and <see cref="NumberStyles.HexNumber"/> values.</exception>
-    '''<exception cref="ArgumentNullException"><paramref name="s"/> is null.</exception>
-    '''<exception cref="FormatException"><paramref name="s"/> is not in a format compliant with <paramref name="style"/>.</exception>
-    '''<exception cref="OverflowException"><paramref name="s"/> represents a number less than <see cref="Int32.MinValue"/> or greater than <see cref="Int32.MaxValue"/>. -or- <paramref name="s"/> includes non-zero, fractional digits.</exception>
+    '''<exception cref="FormatException"><paramref name="s"/> is not in the correct format.</exception>
     Public Shared Function Parse(s As String, style As NumberStyles, provider As IFormatProvider) As IntegerRange
         Dim iStringLength As Integer = s.Length
         Dim bStartValueFound As Boolean = False
-        Dim bEndValueFound As Boolean = False
         Dim iStartValue As Integer
-        Dim iEndValue As Integer
+        Dim iStartValueTemp As Integer
+        Dim iLastStartDateIndex As Integer
         For iIndex As Integer = 0 To iStringLength - 1 'Index through string
-            Dim sStartValue As String = s.Substring(0, iStringLength - iIndex)
-            bStartValueFound = bStartValueFound OrElse Integer.TryParse(sStartValue, style, provider, iStartValue) 'Try to get start value from front portion of string
-            If Not bStartValueFound AndAlso Double.TryParse(sStartValue, style, provider, Nothing) Then Exit For 'Double found, kick out for incorrect format.
-            Dim sEndValue As String = s.Substring(iIndex, iStringLength - iIndex)
-            bEndValueFound = bEndValueFound OrElse Integer.TryParse(sEndValue, style, provider, iEndValue) 'Try to get end value from end portion of string
-            If Not bEndValueFound AndAlso Double.TryParse(sEndValue, style, provider, Nothing) Then Exit For 'Double found, kick out for incorrrect format.
-            If bStartValueFound AndAlso bEndValueFound Then Return New IntegerRange(iStartValue, iEndValue)  'Determine if both start value and end value have been found
+            If Integer.TryParse(s.Substring(0, iStringLength - iIndex), style, provider, iStartValueTemp) Then 'Start value was able to be parsed
+                iStartValue = iStartValueTemp
+                bStartValueFound = True
+                iLastStartDateIndex = iIndex
+                Exit For
+            ElseIf Decimal.TryParse(s.Substring(0, iStringLength - iIndex), style, provider, Nothing) Then 'Double found, incorrect format
+                Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.")
+            End If
         Next
-        Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange using the specified provider and styles.")
+        If Not bStartValueFound Then Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.") 'Start value not found, throw
+        Dim bEndValueFound As Boolean = False
+        Dim iEndValue As Integer
+        Dim iEndValueTemp As Integer
+        For iIndex As Integer = iLastStartDateIndex + 1 To iStringLength - 1 'Index through string starting after where start value ended
+            If Integer.TryParse(s.Substring(iIndex, iStringLength - iIndex), style, provider, iEndValueTemp) Then 'End value was able to be parsed
+                iEndValue = iEndValueTemp
+                bEndValueFound = True
+                Exit For
+            ElseIf Decimal.TryParse(s.Substring(iIndex, iStringLength - iIndex), style, provider, Nothing) Then 'Double found, incorrect format
+                Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.")
+            End If
+        Next
+        If Not bEndValueFound Then Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.") 'Start value not found, throw
+        Return New IntegerRange(iStartValue, iEndValue)
     End Function
     '''<summary>Converts the string representation of two numbers to its 32-bit signed integer range equivalent. A return value indicates whether the conversion succeeded.</summary>
     '''<returns><see langword="True"/> if <paramref name="s"/> was converted succesfully; otherwise <see langword="False"/></returns>
@@ -410,23 +431,41 @@ Public Class IntegerRange
     Public Shared Function TryParse(s As String, ByRef result As IntegerRange) As Boolean
         Dim iStringLength As Integer = s.Length
         Dim bStartValueFound As Boolean = False
-        Dim bEndValueFound As Boolean = False
         Dim iStartValue As Integer
-        Dim iEndValue As Integer
+        Dim iStartValueTemp As Integer
+        Dim iLastStartDateIndex As Integer
         For iIndex As Integer = 0 To iStringLength - 1 'Index through string
-            Dim sStartValue As String = s.Substring(0, iStringLength - iIndex)
-            bStartValueFound = bStartValueFound OrElse Integer.TryParse(sStartValue, iStartValue) 'Try to get start value from front portion of string
-            If Not bStartValueFound AndAlso Double.TryParse(sStartValue, Nothing) Then Exit For 'Double found, kick out for incorrect format.
-            Dim sEndValue As String = s.Substring(iIndex, iStringLength - iIndex)
-            bEndValueFound = bEndValueFound OrElse Integer.TryParse(sEndValue, iEndValue) 'Try to get end value from end portion of string
-            If Not bEndValueFound AndAlso Double.TryParse(sEndValue, Nothing) Then Exit For 'Double found, kick out for incorrect format.
-            If bStartValueFound AndAlso bEndValueFound Then 'Determine if both start value and end value have been found
-                result = New IntegerRange(iStartValue, iEndValue) 'Set result
-                Return True 'Conversion was succesfull
+            If Integer.TryParse(s.Substring(0, iStringLength - iIndex), iStartValueTemp) Then 'Start value was able to be parsed
+                iStartValue = iStartValueTemp
+                bStartValueFound = True
+                iLastStartDateIndex = iIndex
+                Exit For
+            ElseIf Decimal.TryParse(s.Substring(0, iStringLength - iIndex), Nothing) Then 'Double found, incorrect format
+                Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.")
             End If
         Next
-        result = Empty
-        Return False 'Conversion was not successful.
+        If Not bStartValueFound Then 'Start value not found, conversion was not succesful
+            result = Empty
+            Return False
+        End If
+        Dim bEndValueFound As Boolean = False
+        Dim iEndValue As Integer
+        Dim iEndValueTemp As Integer
+        For iIndex As Integer = iLastStartDateIndex + 1 To iStringLength - 1 'Index through string starting after where start value ended
+            If Integer.TryParse(s.Substring(iIndex, iStringLength - iIndex), iEndValueTemp) Then 'End value was able to be parsed
+                iEndValue = iEndValueTemp
+                bEndValueFound = True
+                Exit For
+            ElseIf Decimal.TryParse(s.Substring(iIndex, iStringLength - iIndex), Nothing) Then 'Double found, incorrect format
+                Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.")
+            End If
+        Next
+        If Not bEndValueFound Then 'Start value not found, conversion was not succesful
+            result = Empty
+            Return False
+        End If
+        result = New IntegerRange(iStartValue, iEndValue)
+        Return True
     End Function
     '''<summary>Converts the string representation of two numbers in a specified style and culture-specific format to its 32-bit signed integer range equivalent. A return value indicates whether the conversion succeeded.</summary>
     '''<returns><see langword="True"/> if <paramref name="s"/> was converted succesfully; otherwise <see langword="False"/></returns>
@@ -438,23 +477,41 @@ Public Class IntegerRange
     Public Shared Function TryParse(s As String, style As NumberStyles, provider As IFormatProvider, ByRef result As IntegerRange) As Boolean
         Dim iStringLength As Integer = s.Length
         Dim bStartValueFound As Boolean = False
-        Dim bEndValueFound As Boolean = False
         Dim iStartValue As Integer
-        Dim iEndValue As Integer
+        Dim iStartValueTemp As Integer
+        Dim iLastStartDateIndex As Integer
         For iIndex As Integer = 0 To iStringLength - 1 'Index through string
-            Dim sStartValue As String = s.Substring(0, iStringLength - iIndex)
-            bStartValueFound = bStartValueFound OrElse Integer.TryParse(sStartValue, style, provider, iStartValue) 'Try to get start value from front portion of string
-            If Not bStartValueFound AndAlso Double.TryParse(sStartValue, style, provider, Nothing) Then Exit For 'Double found, kick out for incorrect format.
-            Dim sEndValue As String = s.Substring(iIndex, iStringLength - iIndex)
-            bEndValueFound = bEndValueFound OrElse Integer.TryParse(sEndValue, style, provider, iEndValue) 'Try to get end value from end portion of string
-            If Not bEndValueFound AndAlso Double.TryParse(sEndValue, style, provider, Nothing) Then Exit For 'Double found, kick out for incorrect format.
-            If bStartValueFound AndAlso bEndValueFound Then 'Determine if both start value and end value have been found
-                result = New IntegerRange(iStartValue, iEndValue) 'Set result
-                Return True 'Conversion was succesfull
+            If Integer.TryParse(s.Substring(0, iStringLength - iIndex), style, provider, iStartValueTemp) Then 'Start value was able to be parsed
+                iStartValue = iStartValueTemp
+                bStartValueFound = True
+                iLastStartDateIndex = iIndex
+                Exit For
+            ElseIf Decimal.TryParse(s.Substring(0, iStringLength - iIndex), style, provider, Nothing) Then 'Double found, incorrect format
+                Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.")
             End If
         Next
-        result = Empty
-        Return False 'Conversion was not successful.
+        If Not bStartValueFound Then 'Start value not found, conversion was not succesful
+            result = Empty
+            Return False
+        End If
+        Dim bEndValueFound As Boolean = False
+        Dim iEndValue As Integer
+        Dim iEndValueTemp As Integer
+        For iIndex As Integer = iLastStartDateIndex + 1 To iStringLength - 1 'Index through string starting after where start value ended
+            If Integer.TryParse(s.Substring(iIndex, iStringLength - iIndex), style, provider, iEndValueTemp) Then 'End value was able to be parsed
+                iEndValue = iEndValueTemp
+                bEndValueFound = True
+                Exit For
+            ElseIf Decimal.TryParse(s.Substring(iIndex, iStringLength - iIndex), style, provider, Nothing) Then 'Double found, incorrect format
+                Throw New FormatException($"Cannot convert the string '{s}' to IntegerRange.")
+            End If
+        Next
+        If Not bEndValueFound Then 'Start value not found, conversion was not succesful
+            result = Empty
+            Return False
+        End If
+        result = New IntegerRange(iStartValue, iEndValue)
+        Return True
     End Function
 
 #End Region

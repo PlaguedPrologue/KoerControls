@@ -17,7 +17,7 @@ Public Class PinStripeList
     Private Shared ReadOnly _controlPainters As New ConditionalWeakTable(Of Control, PinStripe.PainterCollection)
     Private ReadOnly _localControlPainter As New ConditionalWeakTable(Of Control, PinStripe.Painter)
     Private ReadOnly _managedControls As New WeakCollection(Of Control)
-    Private ReadOnly _pinStripes As New PinStripeCollection
+    Private ReadOnly _pinStripes As New PinStripeCollection(Me)
 
     Private Function CanExtend(extendee As Object) As Boolean Implements IExtenderProvider.CanExtend
         Return TypeOf extendee Is Control AndAlso extendee.GetType.GetProperty("BackColor", BindingFlags.Instance Or BindingFlags.Public)?.PropertyType Is GetType(Color)
@@ -37,37 +37,6 @@ Public Class PinStripeList
 
 #Region "Properties"
 
-    '''<summary>Gets each <see cref="PinStripe"/> contained in the <see cref="PinStripeList"/>.</summary>
-    '''<returns>Each <see cref="PinStripe"/> contained in the <see cref="PinStripeList"/>.</returns>
-    <Category("Data")>
-    <Description("The pin stripes available for the owning form.")>
-    <DesignerSerializationVisibility(DesignerSerializationVisibility.Content)>
-    <Editor(GetType(PinStripeCollectionEditor), GetType(UITypeEditor))>
-    Public ReadOnly Property PinStripes As PinStripeCollection
-        Get
-            Return _pinStripes
-        End Get
-    End Property
-    Private Sub ResetPinStripes()
-        For Each cControl As Control In _managedControls 'Go through each Control the PinStripeLIst has PinStripes assigned to
-            Dim pPainter As PinStripe.Painter = Nothing
-            Dim pControlPainters As PinStripe.PainterCollection = Nothing
-            If _localControlPainter.TryGetValue(cControl, pPainter) AndAlso _controlPainters.TryGetValue(cControl, pControlPainters) Then  'Determine if the current PinStripeList contains a Painter assigned to the Control
-                If pControlPainters.Count = 1 Then  'Determine if PainterCollection will be empty upon Painter removal
-                    _controlPainters.Remove(cControl) 'Remove PainterCollection from the Control
-                    pControlPainters.Dispose() 'Dispose the PainterCollection
-                Else 'PainterCollection will not be empty upon Painter removal
-                    pControlPainters.Remove(pPainter) 'Remove Painter from PainterCollection
-                End If
-            End If
-            _localControlPainter.Remove(cControl) 'Remove the Painter from the Control
-        Next
-        _managedControls.Clear() 'Clear all managed Controls
-        _pinStripes.Clear() 'Clear out each PinStripe in the PinStripeList
-    End Sub
-    Private Function ShouldSerializePinStripes() As Boolean
-        Return _pinStripes.Count > 0
-    End Function
     '''<summary>Gets the <see cref="PinStripe"/> assigned to the specified <see cref="Control"/>.</summary>
     '''<returns>The <see cref="PinStripe"/> assigned to the specified <see cref="Control"/>.</returns>
     '''<param name="control">The <see cref="Control"/> to get the <see cref="PinStripe"/> of.</param>
@@ -137,12 +106,18 @@ Public Class PinStripeList
     Friend Function ShouldSerializePinStripe(control As Control) As Boolean
         Return _managedControls.Contains(control)
     End Function
-
-#End Region
-
-#Region "Functions"
-
-    Protected Overrides Sub Dispose(disposing As Boolean)
+    '''<summary>Gets each <see cref="PinStripe"/> contained in the <see cref="PinStripeList"/>.</summary>
+    '''<returns>Each <see cref="PinStripe"/> contained in the <see cref="PinStripeList"/>.</returns>
+    <Category("Data")>
+    <Description("The pin stripes available for the owning form.")>
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Content)>
+    <Editor(GetType(PinStripeCollectionEditor), GetType(UITypeEditor))>
+    Public ReadOnly Property PinStripes As PinStripeCollection
+        Get
+            Return _pinStripes
+        End Get
+    End Property
+    Private Sub ResetPinStripes()
         For Each cControl As Control In _managedControls 'Go through each Control the PinStripeLIst has PinStripes assigned to
             Dim pPainter As PinStripe.Painter = Nothing
             Dim pControlPainters As PinStripe.PainterCollection = Nothing
@@ -154,7 +129,37 @@ Public Class PinStripeList
                     pControlPainters.Remove(pPainter) 'Remove Painter from PainterCollection
                 End If
             End If
+            _localControlPainter.Remove(cControl) 'Remove the Painter from the Control
         Next
+        _managedControls.Clear() 'Clear all managed Controls
+        _pinStripes.Clear() 'Clear out each PinStripe in the PinStripeList
+    End Sub
+    Private Function ShouldSerializePinStripes() As Boolean
+        Return _pinStripes.Any
+    End Function
+
+#End Region
+
+#Region "Functions"
+
+    Protected Overrides Sub Dispose(disposing As Boolean)
+        If disposing Then
+            For Each cControl As Control In _managedControls 'Go through each Control the PinStripeLIst has PinStripes assigned to
+                Dim pPainter As PinStripe.Painter = Nothing
+                Dim pControlPainters As PinStripe.PainterCollection = Nothing
+                If _localControlPainter.TryGetValue(cControl, pPainter) AndAlso _controlPainters.TryGetValue(cControl, pControlPainters) Then  'Determine if the current PinStripeList contains a Painter assigned to the Control
+                    If pControlPainters.Count = 1 Then  'Determine if PainterCollection will be empty upon Painter removal
+                        _controlPainters.Remove(cControl) 'Remove PainterCollection from the Control
+                        pControlPainters.Dispose() 'Dispose the PainterCollection
+                    Else 'PainterCollection will not be empty upon Painter removal
+                        pControlPainters.Remove(pPainter) 'Remove Painter from PainterCollection
+                    End If
+                End If
+            Next
+            For Each psPinStripe As PinStripe In _pinStripes
+                psPinStripe.Dispose()
+            Next
+        End If
         MyBase.Dispose(disposing)
     End Sub
     '''<summary>Iterates through each <see cref="PinStripe"/> assigned to the specified <see cref="Control"/>.</summary>

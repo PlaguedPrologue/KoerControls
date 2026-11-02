@@ -1,6 +1,5 @@
 ﻿'''<summary>Specifies identifiers to indicate the return value of a dialog box.</summary>
 Public Enum EditingDialogResult
-
     '''<summary><see cref="Object">Nothing</see> is returned from the dialog box. This means that the modal dialog coninues running.</summary>
     None = 0
     '''<summary>The dialog box return value is OK (usually sent from a button labeled OK).</summary>
@@ -19,5 +18,4 @@ Public Enum EditingDialogResult
     No = 7
     '''<summary>The dialog box return value is Delete (usually sent from a button labeled Delete).</summary>
     Delete = 8
-
 End Enum

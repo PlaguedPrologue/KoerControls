@@ -14,7 +14,7 @@ Public Class StaticColumnsDataGridView
     Private _columnsInitialized As Boolean = False
     Private _defaultContextMenuStripItems As New StaticColumnsDataGridViewDefaultContextMenuStripItemCollection(DefaultContextMenuStrip)
     Private Shared ReadOnly _defaultContextMenuStrips As New Dictionary(Of Type, ContextMenuStrip)
-    Private Shared _typeDescriptorProvidersAdded As New HashSet(Of Type)
+    Private Shared ReadOnly _typeDescriptorProvidersAdded As New HashSet(Of Type)
 
     Private Sub EnsureColumns()
         If _columnsInitialized Then Return
@@ -51,6 +51,8 @@ Public Class StaticColumnsDataGridView
 
         Dim tType As Type = GetDesignerType()
         If _typeDescriptorProvidersAdded.Add(tType) Then TypeDescriptor.AddProvider(New StaticColumnsDataGridViewTypeDescriptorProvider, tType)
+
+        ContextMenuStrip = DefaultContextMenuStrip
     End Sub
 
 #End Region
