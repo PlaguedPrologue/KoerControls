@@ -4,6 +4,7 @@ C:\Users\tikoerber\source\repos\KoerControls\bin\Debug\KoerControls.xml
 C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.EditingInputBox.resources
 C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.SelectionDialog.resources
 C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.Resources.resources
+C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.MyTasksView.resources
 C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.TestForm.resources
 C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.TestStaticColumnsDataGridView.resources
 C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.vbproj.GenerateResource.cache
@@ -11,5 +12,3 @@ C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.vbproj.CoreC
 C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.dll
 C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.xml
 C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.pdb
-C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.MyTasksView.resources
-C:\Users\tikoerber\source\repos\KoerControls\obj\Debug\KoerControls.vbproj.AssemblyReference.cache

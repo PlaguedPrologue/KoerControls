@@ -231,6 +231,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Drawing.vb" />
+    <Compile Include="EventMonitors\ScrollBarEventMonitor.vb" />
     <Compile Include="ExtendedMath.vb" />
     <Compile Include="Forms.vb" />
     <Compile Include="Layout\Direction.vb" />

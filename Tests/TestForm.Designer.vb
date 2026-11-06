@@ -43,6 +43,7 @@ Partial Class TestForm
         Me.DateScroller1.Controls.Add(Me.DateScrollerItem4)
         Me.DateScroller1.Controls.Add(Me.DateScrollerItem5)
         Me.DateScroller1.DateRange = New KoerControls.DateRange(2026, 10, 18, 0, 0, 0, 0, 2026, 10, 18, 0, 0, 0, 0)
+        Me.DateScroller1.HeaderOverlay.Padding = New System.Windows.Forms.Padding(18)
         Me.DateScroller1.ItemGroups.Add(Me.Group1)
         Me.DateScroller1.ItemGroups.Add(Me.Group2)
         Me.DateScroller1.Items.Add(Me.DateScrollerItem1)
@@ -50,9 +51,10 @@ Partial Class TestForm
         Me.DateScroller1.Items.Add(Me.DateScrollerItem3)
         Me.DateScroller1.Items.Add(Me.DateScrollerItem4)
         Me.DateScroller1.Items.Add(Me.DateScrollerItem5)
-        Me.DateScroller1.Location = New System.Drawing.Point(164, 75)
+        Me.DateScroller1.Location = New System.Drawing.Point(267, 156)
         Me.DateScroller1.Name = "DateScroller1"
-        Me.DateScroller1.Size = New System.Drawing.Size(619, 287)
+        Me.DateScroller1.Padding = New System.Windows.Forms.Padding(5)
+        Me.DateScroller1.Size = New System.Drawing.Size(417, 143)
         Me.DateScroller1.TabIndex = 0
         '
         'DateScrollerItem1

@@ -1544,6 +1544,10 @@ KoerControls
 <summary>Represents the width of each date column.</summary>
 <returns>An <see cref="T:System.Int32"/> that represents the width of each date column.</returns>
 </member>
+<member name="P:KoerControls.DateScroller.CurrentHeaderHeight">
+<summary>The currently visible height of the header of the control.</summary>
+<returns>An <see cref="T:System.Int32"/> that represents the currently visible height of the control.</returns>
+</member>
 <member name="P:KoerControls.DateScroller.DateRange">
 <summary>The currently scrollable <see cref="T:KoerControls.DateRange"/> of the <see cref="T:KoerControls.DateScroller"/>.</summary>
 <returns>The currently scrollable <see cref="T:KoerControls.DateRange"/> of the <see cref="T:KoerControls.DateScroller"/>.</returns>
@@ -1702,6 +1706,10 @@ KoerControls
 <member name="P:KoerControls.DateScrollerItem.Height">
 <summary>Gets the height of the control.</summary>
 <returns>The <see cref="T:System.Int32"/> that represents the height of the control in pixels.</returns>
+</member>
+<member name="P:KoerControls.DateScrollerItem.ItemGroup">
+<summary>Gets the <see cref="T:KoerControls.DateScrollerGroup"/> that contains the <see cref="T:KoerControls.DateScrollerItem"/>.</summary>
+<returns>The <see cref="T:KoerControls.DateScrollerGroup"/> that contains the <see cref="T:KoerControls.DateScrollerItem"/>.</returns>
 </member>
 <member name="P:KoerControls.DateScrollerItem.Left">
 <summary>Gets the distance, in pixels, between the left edge of the control and the left edge of its container's client area.</summary>
@@ -2655,6 +2663,26 @@ KoerControls
 </member>
 <member name="M:KoerControls.Drawing.TextLineIndexer.CompareWordSwitch(KoerControls.Drawing.TextLineIndexer,System.Int32@)">
 <returns>1 if removing from Me and adding to otherLine is best, -1 if adding to Me and removing from otherLine is best, 0 if no change should happen.</returns>
+</member>
+<member name="T:KoerControls.ScrollBarEventMonitor">
+<summary>Monitors accesibility events associated with the scroll values being programatically set in a <see cref="T:System.Windows.Forms.ScrollableControl"/>.</summary>
+</member>
+<member name="E:KoerControls.ScrollBarEventMonitor.ScrollValueSet">
+<summary>Occurs when the the value of a scrollbar is programatically set in a <see cref="T:System.Windows.Forms.ScrollableControl"/>.</summary>
+</member>
+<member name="M:KoerControls.ScrollBarEventMonitor.#ctor(System.Windows.Forms.ScrollableControl)">
+<summary>Initializers a new instance of the <see cref="T:KoerControls.ScrollBarEventMonitor"/> class.</summary>
+<param name="host">The <see cref="T:System.Windows.Forms.ScrollableControl"/> whose scrollbars will be monitored.</param>
+</member>
+<member name="M:KoerControls.ScrollBarEventMonitor.WinEventProc(System.IntPtr,System.UInt32,System.IntPtr,System.Int32,System.Int32,System.UInt32,System.UInt32)">
+<summary>Processes Windows accesibility events received by the event hook.</summary>
+<param name="hWinEventHook">The handle to the registered Windows event hook.</param>
+<param name="eventType">The type of accessibility event that occurred.</param>
+<param name="hwnd">The handle to the window associated with the event.</param>
+<param name="idObject">The identifier of the accessible object associated with the event.</param>
+<param name="idChild">The identifier of the child element associated with the event.</param>
+<param name="idEventThread">The identifier of the thread that generated the event.</param>
+<param name="dwmsEventTime">The timestamp of the event, in milliseconds.</param>
 </member>
 <member name="M:KoerControls.ExtendedMath.Iterate(System.Double,System.Func{System.Double,System.Double},System.Int32)">
 <summary>Iterates a value through a function a specified number of times.</summary>

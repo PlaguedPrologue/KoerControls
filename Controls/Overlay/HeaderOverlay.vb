@@ -4,7 +4,6 @@ Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
 Imports System.Drawing.Text
 Imports System.Runtime.InteropServices
-Imports System.Threading
 Imports System.Windows.Forms.Design.Behavior
 
 Public Class HeaderOverlay
@@ -65,16 +64,17 @@ Public Class HeaderOverlay
 
         AddHandler host.BackColorChanged, AddressOf HostBackColorChanged
         AddHandler host.ClientSizeChanged, AddressOf HostClientSizeChanged
-        AddHandler host.ControlAdded, AddressOf HostControlAdded
         AddHandler host.Disposed, AddressOf HostDisposed
+        AddHandler host.ControlAdded, AddressOf HostControlAdded
         AddHandler host.FontChanged, AddressOf HostFontChanged
         AddHandler host.ForeColorChanged, AddressOf HostForeColorChanged
         AddHandler host.HandleCreated, AddressOf HostHandleCreated
         AddHandler host.Invalidated, AddressOf HostInvalidated
         AddHandler host.LocationChanged, AddressOf HostLocationChanged
         AddHandler host.PaddingChanged, AddressOf HostPaddingChanged
-        If TypeOf host Is ScrollableControl Then AddHandler CType(host, ScrollableControl).Scroll, AddressOf HostScroll
-        If TypeOf host Is Panel Then AddHandler host.StyleChanged, AddressOf HostStyleChanged
+        Dim scHost As ScrollableControl = TryCast(host, ScrollableControl)
+        If scHost IsNot Nothing Then AddHandler scHost.Scroll, AddressOf HostScroll
+        If TryCast(host, Panel) IsNot Nothing Then AddHandler host.StyleChanged, AddressOf HostStyleChanged
 
         If host.IsHandleCreated Then
             CreateHandle()
@@ -102,8 +102,9 @@ Public Class HeaderOverlay
         AddHandler host.Invalidated, AddressOf HostInvalidated
         AddHandler host.LocationChanged, AddressOf HostLocationChanged
         AddHandler host.PaddingChanged, AddressOf HostPaddingChanged
-        If TypeOf host Is ScrollableControl Then AddHandler CType(host, ScrollableControl).Scroll, AddressOf HostScroll
-        If TypeOf host Is Panel Then AddHandler host.StyleChanged, AddressOf HostStyleChanged
+        Dim scHost As ScrollableControl = TryCast(host, ScrollableControl)
+        If scHost IsNot Nothing Then AddHandler scHost.Scroll, AddressOf HostScroll
+        If TryCast(host, Panel) IsNot Nothing Then AddHandler host.StyleChanged, AddressOf HostStyleChanged
 
         If host.IsHandleCreated Then
             CreateHandle()
@@ -118,17 +119,20 @@ Public Class HeaderOverlay
         If cParent Is Nothing OrElse cParent.Handle = IntPtr.Zero Then Return
 
         Dim sHostClientSize As Size = Host.ClientSize
-        _maxHeight = Host.Font.Height + _hostPadding.Vertical
+        _maxHeight = Host.Font.Height + _padding.Vertical
         _height = Math.Min(_maxHeight, sHostClientSize.Height)
         _hostBackColor = Host.BackColor
         _hostBorderStyle = CType(Host, Panel).BorderStyle
+        _hostPadding = Host.Padding
         _hostFont = Host.Font
         _hostForeColor = Host.ForeColor
-        _hostPadding = Host.Padding
         _location = cParent.PointToClient(Host.PointToScreen(Point.Empty))
         _width = sHostClientSize.Width
         Dim cpCreateParams = New CreateParams With {.ExStyle = WS_EX_NOACTIVATE, .Height = _height, .Parent = cParent.Handle, .Style = WS_CHILD Or WS_VISIBLE Or WS_CLIPSIBLINGS, .Width = _width, .X = _location.X, .Y = _location.Y}
         MyBase.CreateHandle(cpCreateParams)
+
+        Dim scHost As ScrollableControl = TryCast(Host, ScrollableControl)
+        If scHost IsNot Nothing Then MyHostScrollBarEventMonitor = New ScrollBarEventMonitor(scHost)
 
         InstallSelectionService()
         InstallZOrderWatch()
@@ -257,14 +261,18 @@ Public Class HeaderOverlay
 
             Dim pPreviousPadding As Padding = _padding
             _padding = value
-            _maxHeight = _font.Height + _padding.Vertical
-            Dim iHeight As Integer = Math.Min(_maxHeight, Host.ClientSize.Height)
-            If iHeight = _height Then
-                RefreshBuffer()
-            Else
-                _height = iHeight
-                PlaceOverlay()
-                OnHeightChanged(EventArgs.Empty)
+
+            If _font IsNot Nothing Then
+                _maxHeight = _font.Height + _padding.Vertical
+                Dim iHeight As Integer = Math.Min(_maxHeight, Host.ClientSize.Height)
+
+                If iHeight = _height Then
+                    RefreshBuffer()
+                Else
+                    _height = iHeight
+                    PlaceOverlay()
+                    OnHeightChanged(EventArgs.Empty)
+                End If
             End If
             NotifyPropertyChanged(Host, NameOf(Padding), pPreviousPadding, value)
         End Set
@@ -381,13 +389,10 @@ Public Class HeaderOverlay
     Private Shared Function GetWindow(hWnd As IntPtr, uCmd As UInteger) As IntPtr
     End Function
     <DllImport("user32.dll", SetLastError:=True)>
-    Private Shared Function IsWindow(hWnd As IntPtr) As Boolean
-    End Function
-    <DllImport("user32.dll", SetLastError:=True)>
     Private Shared Function SetWindowPos(hWnd As IntPtr, hWndInsertAfter As IntPtr, x As Integer, y As Integer, cx As Integer, cy As Integer, uFlags As UInteger) As Boolean
     End Function
 
-    Private _scrollFinishedToken As CancellationTokenSource
+    Private WithEvents MyHostScrollBarEventMonitor As ScrollBarEventMonitor
 
     Private Sub HostBackColorChanged(sender As Object, e As EventArgs)
         If Handle = IntPtr.Zero OrElse Host Is Nothing Then Return
@@ -476,24 +481,11 @@ Public Class HeaderOverlay
 
         Padding = _hostPadding
     End Sub
-    Private Async Sub HostScroll(sender As Object, e As ScrollEventArgs)
+    Private Sub HostScroll(sender As Object, e As ScrollEventArgs)
         If e.ScrollOrientation <> ScrollOrientation.HorizontalScroll Then Return
+        Dim scHost As ScrollableControl = TryCast(Host, ScrollableControl)
+        If scHost Is Nothing Then Return
         RefreshBuffer()
-
-        _scrollFinishedToken?.Cancel()
-        _scrollFinishedToken?.Dispose()
-        Dim ctsScrollToken As New CancellationTokenSource
-        _scrollFinishedToken = ctsScrollToken
-        Try
-            Await Task.Delay(10, ctsScrollToken.Token)
-            If ctsScrollToken.IsCancellationRequested Then Return
-            _behaviorService?.SyncSelection()
-            _behaviorService?.Invalidate()
-        Catch ex As TaskCanceledException
-        Finally
-            If ReferenceEquals(_scrollFinishedToken, ctsScrollToken) Then _scrollFinishedToken = Nothing
-            ctsScrollToken.Dispose()
-        End Try
     End Sub
     Private Sub HostStyleChanged(sender As Object, e As EventArgs)
         If Handle = IntPtr.Zero OrElse Host Is Nothing Then Return
@@ -521,6 +513,12 @@ Public Class HeaderOverlay
         _location = pLocation
         _width = iWidth
         PlaceOverlay()
+    End Sub
+    Private Sub MyHostScrollBarEventMonitor_ScrollValueSet(sender As Object, e As ScrollEventArgs) Handles MyHostScrollBarEventMonitor.ScrollValueSet
+        If e.ScrollOrientation <> ScrollOrientation.HorizontalScroll Then Return
+        Dim scHost As ScrollableControl = TryCast(Host, ScrollableControl)
+        If scHost Is Nothing Then Return
+        RefreshBuffer()
     End Sub
     Protected Overridable Sub PlaceOverlay()
         If Handle = IntPtr.Zero OrElse Host Is Nothing OrElse Host.Handle = IntPtr.Zero Then Return
@@ -615,6 +613,7 @@ Public Class HeaderOverlay
 
     Private Const HTTRANSPARENT As Integer = -1
     Private Const WM_ERASEBKGND As Integer = &H14
+    Private Const WM_HSCROLL As Integer = &H114
     Private Const WM_NCHITTEST As Integer = &H84
     Private Const WM_PAINT As Integer = &HF
 

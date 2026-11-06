@@ -10,6 +10,24 @@
 
 Changes since last push
 
+-DateScroller & HeaderOverlay
+	Fixed issues in how the HeaderOverlay interacts with the DateScroller
+
+
+
+ToDo
+
+-StaticColumnsDataGridView
+	Implement INotifyPropertyChanged events
+-Overlay
+	Create base Overlay class to build a HeaderOverlay off of. Allow it to build a FooterOverla/etc. off of it.
+-PinStripeConverter
+	Double check that ConvertFrom is actually working as it should. I see a .ToString where something like a ReferenceEquals should be
+
+
+
+11/2/2026
+
 -LinePanel
 	Fixed resizing issue when Orientation = Vertical
 -StaticColumnsDataGridView
@@ -28,16 +46,6 @@ Changes since last push
 	Created to allow simpler NamedComponetCollection definitions that do not need to create all the Editor backing files (All contained in the NamedComponentCollectionEditor classes)
 
 
-ToDo
-
--StaticColumnsDataGridView
-	Implement INotifyPropertyChanged events
--Overlay
-	Create base Overlay class to build a HeaderOverlay off of. Allow it to build a FooterOverla/etc. off of it.
--PinStripeConverter
-	Double check that ConvertFrom is actually working as it should. I see a .ToString where something like a ReferenceEquals should be
--DateScroller
-	Optimize the calculations. Lots of things doing redundant movements and recalculations when certain properties are changed (ItemHeight, etc.)
 
 9/1/2026
 

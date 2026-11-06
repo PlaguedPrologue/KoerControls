@@ -59,7 +59,6 @@ Public Class DateScroller
 
     Public Sub New()
         MyBase.AutoScroll = True
-        DoubleBuffered = True
     End Sub
 
 #End Region
@@ -117,6 +116,15 @@ Public Class DateScroller
             Invalidate()
             OnColumnWidthChanged(EventArgs.Empty)
         End Set
+    End Property
+    '''<summary>The currently visible height of the header of the control.</summary>
+    '''<returns>An <see cref="Integer"/> that represents the currently visible height of the control.</returns>
+    <Browsable(False)>
+    Public ReadOnly Property CurrentHeaderHeight As Integer
+        Get
+            If MyHeaderOverlay?.Visible Then Return MyHeaderOverlay.Height
+            Return 0
+        End Get
     End Property
     '''<summary>The currently scrollable <see cref="KoerControls.DateRange"/> of the <see cref="DateScroller"/>.</summary>
     '''<returns>The currently scrollable <see cref="KoerControls.DateRange"/> of the <see cref="DateScroller"/>.</returns>
