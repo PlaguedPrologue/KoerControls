@@ -162,6 +162,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\Overlay\Overlay %28Inoperable%29.vb" />
+    <Compile Include="Controls\Overlay\OverlayDockStyle.vb" />
     <Compile Include="Controls\PinStripe\BrokenPinStripe.vb" />
     <Compile Include="Controls\PinStripe\PinStripe.Painter.vb" />
     <Compile Include="Controls\PinStripe\PinStripe.PainterCollection.vb" />

@@ -46,22 +46,22 @@ Public Class DateScrollerItem
     Private Sub MyDateScroller_HeaderHeightChanged(sender As Object, e As EventArgs) Handles MyDateScroller.HeaderHeightChanged
         Dim pOwnerPadding As Padding = MyDateScroller.Padding
         Dim iOwnerVerticalPadding As Integer = pOwnerPadding.Vertical
-        MyBase.Bounds = New Rectangle(MyBase.Left, MyDateScroller.CurrentHeaderHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + iOwnerVerticalPadding) * _columnIndex, MyBase.Width, MyDateScroller.ItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
+        MyBase.Bounds = New Rectangle(MyBase.Left, MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + iOwnerVerticalPadding) * _columnIndex, MyBase.Width, MyDateScroller.ItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
     End Sub
     Private Sub MyDateScroller_HeaderOverlayVisibleChanged(sender As Object, e As EventArgs) Handles MyDateScroller.HeaderVisibleChanged
         Dim pOwnerPadding As Padding = MyDateScroller.Padding
         Dim iOwnerVerticalPadding As Integer = pOwnerPadding.Vertical
-        MyBase.Bounds = New Rectangle(MyBase.Left, MyDateScroller.CurrentHeaderHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + iOwnerVerticalPadding) * _columnIndex, MyBase.Width, MyDateScroller.ItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
+        MyBase.Bounds = New Rectangle(MyBase.Left, MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + iOwnerVerticalPadding) * _columnIndex, MyBase.Width, MyDateScroller.ItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
     End Sub
     Private Sub MyDateScroller_ItemHeightChanged(sender As Object, e As EventArgs) Handles MyDateScroller.ItemHeightChanged
         Dim pOwnerPadding As Padding = MyDateScroller.Padding
         Dim iOwnerVerticalPadding As Integer = pOwnerPadding.Vertical
-        MyBase.Bounds = New Rectangle(MyBase.Left, MyDateScroller.CurrentHeaderHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + iOwnerVerticalPadding) * _columnIndex, MyBase.Width, MyDateScroller.ItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
+        MyBase.Bounds = New Rectangle(MyBase.Left, MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + iOwnerVerticalPadding) * _columnIndex, MyBase.Width, MyDateScroller.ItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
     End Sub
     Private Sub MyDateScroller_PaddingChanged(sender As Object, e As EventArgs) Handles MyDateScroller.PaddingChanged
         Dim pOwnerPadding As Padding = MyDateScroller.Padding
         Dim iOwnerVerticalPadding As Integer = pOwnerPadding.Vertical
-        MyBase.Bounds = New Rectangle(MyBase.Left, MyDateScroller.CurrentHeaderHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + iOwnerVerticalPadding) * _columnIndex, MyBase.Width, MyDateScroller.ItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
+        MyBase.Bounds = New Rectangle(MyBase.Left, MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + iOwnerVerticalPadding) * _columnIndex, MyBase.Width, MyDateScroller.ItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
     End Sub
     Private Sub MyDateScroller_StartDateChanged(sender As Object, e As EventArgs) Handles MyDateScroller.StartDateChanged
         MyBase.Left = DateDiff(DateInterval.Day, MyDateScroller.DateRange.StartDate, MyDateRange.StartDate) * MyDateScroller.ColumnWidth + MyDateScroller.Padding.Left - 2
@@ -114,7 +114,7 @@ Public Class DateScrollerItem
             Dim pOwnerPadding As Padding = MyDateScroller.Padding
             Dim iOwnerVerticalPadding As Integer = pOwnerPadding.Vertical
             Dim iOwnerItemHeight As Integer = MyDateScroller.ItemHeight
-            MyBase.Bounds = New Rectangle(DateDiff(DateInterval.Day, MyDateScroller.DateRange.StartDate, MyDateRange.StartDate) * iOwnerColumnWidth + pOwnerPadding.Left - 1, MyDateScroller.CurrentHeaderHeight + pOwnerPadding.Top + (iOwnerItemHeight + iOwnerVerticalPadding) * _columnIndex, (MyDateRange.Length + 1) * iOwnerColumnWidth - pOwnerPadding.Horizontal - 1, iOwnerItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
+            MyBase.Bounds = New Rectangle(DateDiff(DateInterval.Day, MyDateScroller.DateRange.StartDate, MyDateRange.StartDate) * iOwnerColumnWidth + pOwnerPadding.Left - 1, MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (iOwnerItemHeight + iOwnerVerticalPadding) * _columnIndex, (MyDateRange.Length + 1) * iOwnerColumnWidth - pOwnerPadding.Horizontal - 1, iOwnerItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
             MyDateScroller.PlaceItems()
         End If
     End Sub
@@ -206,7 +206,7 @@ Public Class DateScrollerItem
             _columnIndex = value
 
             Dim pOwnerPadding As Padding = MyDateScroller.Padding
-            If MyDateScroller IsNot Nothing Then MyBase.Top = MyDateScroller.CurrentHeaderHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + pOwnerPadding.Vertical) * value
+            If MyDateScroller IsNot Nothing Then MyBase.Top = MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + pOwnerPadding.Vertical) * value
             OnColumnIndexChanged(EventArgs.Empty)
         End Set
     End Property
@@ -377,7 +377,7 @@ Public Class DateScrollerItem
             Dim pOwnerPadding As Padding = MyDateScroller.Padding
             Dim iOwnerVerticalPadding As Integer = pOwnerPadding.Vertical
             Dim iOwnerItemHeight As Integer = MyDateScroller.ItemHeight
-            MyBase.Bounds = New Rectangle(DateDiff(DateInterval.Day, MyDateScroller.DateRange.StartDate, MyDateRange.StartDate) * iOwnerColumnWidth + pOwnerPadding.Left - 1, MyDateScroller.CurrentHeaderHeight + pOwnerPadding.Top + (iOwnerItemHeight + iOwnerVerticalPadding) * _columnIndex, (MyDateRange.Length + 1) * iOwnerColumnWidth - pOwnerPadding.Horizontal - 1, iOwnerItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
+            MyBase.Bounds = New Rectangle(DateDiff(DateInterval.Day, MyDateScroller.DateRange.StartDate, MyDateRange.StartDate) * iOwnerColumnWidth + pOwnerPadding.Left - 1, MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (iOwnerItemHeight + iOwnerVerticalPadding) * _columnIndex, (MyDateRange.Length + 1) * iOwnerColumnWidth - pOwnerPadding.Horizontal - 1, iOwnerItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
             MyDateScroller.PlaceItems()
         End If
     End Sub

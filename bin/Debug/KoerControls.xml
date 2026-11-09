@@ -1544,10 +1544,6 @@ KoerControls
 <summary>Represents the width of each date column.</summary>
 <returns>An <see cref="T:System.Int32"/> that represents the width of each date column.</returns>
 </member>
-<member name="P:KoerControls.DateScroller.CurrentHeaderHeight">
-<summary>The currently visible height of the header of the control.</summary>
-<returns>An <see cref="T:System.Int32"/> that represents the currently visible height of the control.</returns>
-</member>
 <member name="P:KoerControls.DateScroller.DateRange">
 <summary>The currently scrollable <see cref="T:KoerControls.DateRange"/> of the <see cref="T:KoerControls.DateScroller"/>.</summary>
 <returns>The currently scrollable <see cref="T:KoerControls.DateRange"/> of the <see cref="T:KoerControls.DateScroller"/>.</returns>
@@ -2058,46 +2054,119 @@ KoerControls
 <returns>The lines per item of the control. The default is 1</returns>
 <exception cref="T:System.ArgumentOutOfRangeException">value is less than 1.</exception>
 </member>
+<member name="E:KoerControls.Overlay.HeightChanged">
+<summary>Occurs when the height has changed</summary>
+</member>
+<member name="E:KoerControls.Overlay.LocationChanged">
+<summary>Occurs when the location has changed.</summary>
+</member>
+<member name="E:KoerControls.Overlay.VisibleChanged">
+<summary>Occurs when the visibility has changed.</summary>
+</member>
+<member name="E:KoerControls.Overlay.WidthChanged">
+<summary>Occurs when the width has changed.</summary>
+</member>
+<member name="M:KoerControls.Overlay.#ctor(System.Windows.Forms.Control)">
+<summary>Creates a new instance of <see cref="T:KoerControls.HeaderOverlay"/>.</summary>
+<param name="host">The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.HeaderOverlay"/> is in.</param>
+<exception cref="T:System.ArgumentNullException"><paramref name="host"/> is <see langword="Nothing"/> is <see langword="Nothing"/>.</exception>
+</member>
+<member name="M:KoerControls.Overlay.#ctor(System.Windows.Forms.Control,System.Action{System.Drawing.Graphics,System.Drawing.Rectangle})">
+<summary>Creates a new instance of <see cref="T:KoerControls.HeaderOverlay"/>.</summary>
+<param name="host">The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.HeaderOverlay"/> is in.</param>
+<param name="paintAction">The <see cref="T:System.Action"/> used top paint the header overlay, defined by the host.</param>
+<exception cref="T:System.ArgumentNullException"><paramref name="host"/> is <see langword="Nothing"/> is <see langword="Nothing"/>.</exception>
+</member>
+<member name="M:KoerControls.Overlay.CreateHandle">
+<summary>Creates a new window handle if one is not already assigned.</summary>
+</member>
+<member name="P:KoerControls.Overlay.BackColor">
+<summary>Gets or sets the background color for the overlay.</summary>
+<returns>The <see cref="T:System.Drawing.Color"/> that represents the background color of the overlay. The default is the host's background color.</returns>
+</member>
+<member name="P:KoerControls.Overlay.DisplayedHeight">
+<summary>Gets the displayed height of the overlay in pixels.</summary>
+<return>An <see cref="T:System.Int32"/> that represents the displayed height of the overlay in pixels.</return>
+</member>
+<member name="P:KoerControls.Overlay.DisplayedWidth">
+<summary>Gets the displayed width of the overlay in pixels.</summary>
+<return>An <see cref="T:System.Int32"/> that represents the displayed width of the overlay in pixels.</return>
+</member>
+<member name="P:KoerControls.Overlay.Dock">
+<summary>Gets or sets which control borders are docked to its parent control and determines how a control is resized with its parent.</summary>
+<returns>One of the <see cref="T:KoerControls.OverlayDockStyle"/> values. The default is <see cref="F:KoerControls.OverlayDockStyle.Top"/>.</returns>
+<exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The value assigned is not one of the <see cref="T:KoerControls.OverlayDockStyle"/> values.</exception>
+</member>
+<member name="P:KoerControls.Overlay.Font">
+<summary>Gets or sets the font of the text displayed in the overlay.</summary>
+<returns>The <see cref="T:System.Drawing.Font"/> to apply to the text displayed by the overlay. The default is the host's font.</returns>
+</member>
+<member name="P:KoerControls.Overlay.ForeColor">
+<summary>Gets or sets the foreground color of the overlay.</summary>
+<returns>The foreground <see cref="T:System.Drawing.Color"/> of the overlay. The default is the host's foreground color.</returns>
+</member>
 <member name="P:KoerControls.Overlay.Handle">
 <summary>Gets the handle for this window.</summary>
 <returns>If successful, an <see cref="T:System.IntPtr"/> representing the handle to the associated <see cref="T:KoerControls.Overlay"/>; otherwise, 0 if no handle is associated with the overlay.</returns>
 </member>
+<member name="P:KoerControls.Overlay.Height">
+<summary>Gets or sets the width of the control when its dock is <see cref="F:KoerControls.OverlayDockStyle.Top"/> or <see cref="F:KoerControls.OverlayDockStyle.Bottom"/>.</summary>
+<remarks>When set to 0, the height will automatically fit the text height and the internal padding for one line of text.</remarks>
+<returns>An <see cref="T:System.Int32"/> that represents the width of the overlay when its dock is <see cref="F:KoerControls.OverlayDockStyle.Top"/> or <see cref="F:KoerControls.OverlayDockStyle.Bottom"/>.</returns>
+</member>
 <member name="P:KoerControls.Overlay.Host">
-<summary>The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.Overlay"/> is contained within.</summary>
+<summary>Gets the hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.Overlay"/> is contained within.</summary>
+<returns>The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.Overlay"/> is contained within.</returns>
 </member>
-<member name="P:KoerControls.Overlay.Location">
-<summary>Gets or sets the coordinates of the upper-left corner of the overlay relative to the upper-left corner of its host.</summary>
-<returns>The <see cref="T:System.Drawing.Point"/> that represents the upper-left corner of the overlay relative to the upper-left corner of its host.</returns>
+<member name="P:KoerControls.Overlay.Padding">
+<summary>Gets or sets padding within the control.</summary>
+<returns>A <see cref="T:System.Windows.Forms.Padding"/> representing the control's internal spacing characteristics.</returns>
 </member>
-<member name="P:KoerControls.Overlay.MinimumSize">
-<summary>Gets or sets the size that is the lower limit of the <see cref="T:KoerControls.Overlay"/> can specify so long as it fits within the bounds of the host.</summary>
-<returns>An ordered pair of <see cref="T:System.Drawing.Size"/> that representing the width and height of a rectangle.</returns>
+<member name="P:KoerControls.Overlay.PaintAction">
+<summary>Gets the action used to paint the overlay.</summary>
+<returns>The action used to paint the overlay.</returns>
 </member>
-<member name="P:KoerControls.Overlay.Size">
-<summary>Gets or sets the height and width of the overlay.</summary>
-<returns>The <see cref="T:System.Drawing.Size"/> that represents the height and width of the overlay in pixels.</returns>
+<member name="P:KoerControls.Overlay.Visible">
+<summary>Determines if the overlay will be drawn on its host.</summary>
+<returns><see langword="True"/> if the overlay will be drawn on its host; otherwise, <see langword="False"/>.</returns>
 </member>
-<member name="M:KoerControls.Overlay.#ctor(System.Windows.Forms.Control,System.Action{System.Drawing.Graphics,System.Drawing.Rectangle})">
-<summary>Creates a new instance of <see cref="T:KoerControls.Overlay"/>.</summary>
-<param name="host">The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.Overlay"/> is in.</param>
-<param name="paintAction">The <see cref="T:System.Action"/> used top paint the header overlay, defined by the host.</param>
-<exception cref="T:System.ArgumentNullException"><paramref name="host"/> is <see langword="Nothing"/> -OR- <paramref name="paintAction"/> is <see langword="Nothing"/>.</exception>
+<member name="P:KoerControls.Overlay.Width">
+<summary>Gets or sets the width of the control when its dock is <see cref="F:KoerControls.OverlayDockStyle.Left"/> or <see cref="F:KoerControls.OverlayDockStyle.Right"/>.</summary>
+<returns>An <see cref="T:System.Int32"/> that represents the width of the overlay when its dock is <see cref="F:KoerControls.OverlayDockStyle.Left"/> or <see cref="F:KoerControls.OverlayDockStyle.Right"/>.</returns>
 </member>
-<member name="M:KoerControls.Overlay.Attach">
-<summary>Attaches the <see cref="T:KoerControls.Overlay"/> to its  host <see cref="T:System.Windows.Forms.Control"/>.</summary>
-<exception cref="T:System.InvalidOperationException">The host is not hosted on a <see cref="T:System.Windows.Forms.Form"/> while attaching.</exception>
+<member name="M:KoerControls.Overlay.OnHeightChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.Overlay.HeightChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
 </member>
-<member name="M:KoerControls.Overlay.Attach(System.Windows.Forms.Control,System.Action{System.Drawing.Graphics,System.Drawing.Rectangle})">
-<summary>Attaches a new <see cref="T:KoerControls.Overlay"/> to the specified host <see cref="T:System.Windows.Forms.Control"/>.</summary>
-<remarks>Place in the <see cref="M:System.Windows.Forms.Control.OnHandleCreated(System.EventArgs)"/> override, after the handle has been created for the host.</remarks>
-<returns>The new <see cref="T:KoerControls.Overlay"/>.</returns>
-<param name="host">The <see cref="T:System.Windows.Forms.Control"/> to attach the new <see cref="T:KoerControls.Overlay"/> to.</param>
-<param name="paintAction">The paint <see cref="T:System.Action"/> that will paint the header on the <see cref="T:System.Windows.Forms.Control"/>.</param>
-<exception cref="T:System.ArgumentNullException"><paramref name="host"/> is <see langword="Nothing"/> -OR- <paramref name="paintAction"/> is <see langword="Nothing"/>.</exception>
-<exception cref="T:System.InvalidOperationException">The <paramref name="host"/> is not hosted on a <see cref="T:System.Windows.Forms.Form"/> while attaching.</exception>
+<member name="M:KoerControls.Overlay.OnLocationChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.Overlay.LocationChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
 </member>
-<member name="M:KoerControls.Overlay.CreateHandle">
-<summary>Creates a new window handle if one is not already assigned.</summary>
+<member name="M:KoerControls.Overlay.OnVisibleChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.Overlay.VisibleChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="M:KoerControls.Overlay.OnWidthChanged(System.EventArgs)">
+<summary>Raises the <see cref="E:KoerControls.Overlay.WidthChanged"/> event.</summary>
+<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+</member>
+<member name="M:KoerControls.Overlay.PlaceOverlay">
+<summary>Places the overlay based on the expected size and position.</summary>
+</member>
+<member name="T:KoerControls.OverlayDockStyle">
+<summary>Specifies the position and manner in which an overlay is docked.</summary>
+</member>
+<member name="F:KoerControls.OverlayDockStyle.Top">
+<summary>The overlay's top edge is docked to the top of its host.</summary>
+</member>
+<member name="F:KoerControls.OverlayDockStyle.Bottom">
+<summary>The overlay's bottom edge is docked to the bottom of its host.</summary>
+</member>
+<member name="F:KoerControls.OverlayDockStyle.Left">
+<summary>The overlay's left edge is docked to the left of its host.</summary>
+</member>
+<member name="F:KoerControls.OverlayDockStyle.Right">
+<summary>The overlay's right edge is docke to the right of its host.</summary>
 </member>
 <member name="T:KoerControls.BrokenPinStripe">
 <summary>Represents a pin stripe that can be painted onto the background of a control. Can be broken up along the length of a Control.</summary>

@@ -8,7 +8,7 @@ Public Class DateScroller
 #Region "Private Items"
 
     Private WithEvents MyDateRange As DateRange = DateRange.Empty
-    Private WithEvents MyHeaderOverlay As New HeaderOverlay(Me, AddressOf PaintHeaderOverlay)
+    Private WithEvents MyHeaderOverlay As New Overlay(Me, AddressOf PaintHeaderOverlay)
 
     Private _borderWidth As Integer = Width - ClientSize.Width
     Private _columnWidth As Integer = 100
@@ -117,15 +117,6 @@ Public Class DateScroller
             OnColumnWidthChanged(EventArgs.Empty)
         End Set
     End Property
-    '''<summary>The currently visible height of the header of the control.</summary>
-    '''<returns>An <see cref="Integer"/> that represents the currently visible height of the control.</returns>
-    <Browsable(False)>
-    Public ReadOnly Property CurrentHeaderHeight As Integer
-        Get
-            If MyHeaderOverlay?.Visible Then Return MyHeaderOverlay.Height
-            Return 0
-        End Get
-    End Property
     '''<summary>The currently scrollable <see cref="KoerControls.DateRange"/> of the <see cref="DateScroller"/>.</summary>
     '''<returns>The currently scrollable <see cref="KoerControls.DateRange"/> of the <see cref="DateScroller"/>.</returns>
     <Category("Data")>
@@ -156,7 +147,7 @@ Public Class DateScroller
     '''<remarks>The header overlay that displays the dates.</remarks>
     <TypeConverter(GetType(ExpandableObjectConverter))>
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Content)>
-    Public ReadOnly Property HeaderOverlay As HeaderOverlay
+    Public ReadOnly Property HeaderOverlay As Overlay
         Get
             Return MyHeaderOverlay
         End Get

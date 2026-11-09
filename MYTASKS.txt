@@ -10,8 +10,8 @@
 
 Changes since last push
 
--DateScroller & HeaderOverlay
-	Fixed issues in how the HeaderOverlay interacts with the DateScroller
+-Overlay, DateScroller, DateScrollerItem
+	Reworked in preparation of making it a Component class that can be added to any control
 
 
 
@@ -20,9 +20,18 @@ ToDo
 -StaticColumnsDataGridView
 	Implement INotifyPropertyChanged events
 -Overlay
-	Create base Overlay class to build a HeaderOverlay off of. Allow it to build a FooterOverla/etc. off of it.
+	Create base Overlay class to build a HeaderOverlay off of. Allow it to build a FooterOverlay/etc. off of it
 -PinStripeConverter
 	Double check that ConvertFrom is actually working as it should. I see a .ToString where something like a ReferenceEquals should be
+-DateScroller
+	Make newly added DateScrollerItems added to a DateScroller during DesignTime pop up immediately
+
+
+
+11/6/2026
+
+-DateScroller & HeaderOverlay
+	Fixed issues in how the HeaderOverlay interacts with the DateScroller
 
 
 
