@@ -62,38 +62,34 @@ Public Class AutoSizeLabel
     End Sub
     '''<summary>Reiszes the control auto resizes to allow its text to fill the available width.</summary>
     Protected Overridable Shadows Sub Resize()
-        Try
-            Dim sNewLines As IEnumerable(Of String)
-            Dim sNewText As String
-            Dim iNewHeight As Integer
+        Dim sNewLines As IEnumerable(Of String)
+        Dim sNewText As String
+        Dim iNewHeight As Integer
 
-            'Resize when parent is available and dock set
-            If Parent IsNot Nothing Then
-                Select Case Dock
-                    Case DockStyle.Top, DockStyle.Bottom
-                        sNewLines = Font.GetLinesForWidth(_text, ClientSize.Width - Padding.Horizontal) 'Get new lines for the text 
-                        sNewText = String.Join(vbNewLine, sNewLines) 'Get new text 
-                        If MyBase.Text <> sNewText Then MyBase.Text = sNewText 'Replace text if necessary
-                        iNewHeight = Font.Height * sNewLines.Count + Padding.Vertical 'Get new height
-                        Dim iNewWidth As Integer = Parent.ClientSize.Width - Parent.Padding.Horizontal
-                        If Height <> iNewHeight OrElse Width <> iNewWidth Then Size = New Size(iNewWidth, iNewHeight) 'Set size if necessary
-                        Return
-                    Case DockStyle.Left, DockStyle.Right
-                        sNewText = String.Join(vbNewLine, Font.GetLinesForWidth(_text, ClientSize.Width)) 'Get new text
-                        If MyBase.Text <> sNewText Then MyBase.Text = sNewText 'Replace text if necessary
-                        Return
-                End Select
-            End If
+        'Resize when parent is available and dock set
+        If Parent IsNot Nothing Then
+            Select Case Dock
+                Case DockStyle.Top, DockStyle.Bottom
+                    sNewLines = Font.GetLinesForWidth(_text, ClientSize.Width - Padding.Horizontal) 'Get new lines for the text 
+                    sNewText = String.Join(vbNewLine, sNewLines) 'Get new text 
+                    If MyBase.Text <> sNewText Then MyBase.Text = sNewText 'Replace text if necessary
+                    iNewHeight = Font.Height * sNewLines.Count + Padding.Vertical 'Get new height
+                    Dim iNewWidth As Integer = Parent.ClientSize.Width - Parent.Padding.Horizontal
+                    If Height <> iNewHeight OrElse Width <> iNewWidth Then Size = New Size(iNewWidth, iNewHeight) 'Set size if necessary
+                    Return
+                Case DockStyle.Left, DockStyle.Right
+                    sNewText = String.Join(vbNewLine, Font.GetLinesForWidth(_text, ClientSize.Width)) 'Get new text
+                    If MyBase.Text <> sNewText Then MyBase.Text = sNewText 'Replace text if necessary
+                    Return
+            End Select
+        End If
 
-            'Resize when parent not available or dock not set
-            sNewLines = Font.GetLinesForWidth(_text, ClientSize.Width) 'Get new lines for the text
-            sNewText = String.Join(vbNewLine, sNewLines) 'Get new text
-            If MyBase.Text <> sNewText Then MyBase.Text = sNewText 'Replace text if necessary
-            iNewHeight = Font.Height * sNewLines.Count + Padding.Vertical 'Get new height 
-            If Height <> iNewHeight Then Height = iNewHeight 'Set height if necessary
-        Catch ex As Exception
-            Throw New Exception(ex.Message, ex)
-        End Try
+        'Resize when parent not available or dock not set
+        sNewLines = Font.GetLinesForWidth(_text, ClientSize.Width) 'Get new lines for the text
+        sNewText = String.Join(vbNewLine, sNewLines) 'Get new text
+        If MyBase.Text <> sNewText Then MyBase.Text = sNewText 'Replace text if necessary
+        iNewHeight = Font.Height * sNewLines.Count + Padding.Vertical 'Get new height 
+        If Height <> iNewHeight Then Height = iNewHeight 'Set height if necessary
     End Sub
 
 #End Region

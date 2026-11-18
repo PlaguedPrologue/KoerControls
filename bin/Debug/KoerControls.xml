@@ -1540,6 +1540,11 @@ KoerControls
 <summary>Gets the minimum height of the auto-scroll.</summary>
 <returns>An <see cref="T:System.Int32"/> that determines the minimum height of the virtual area through which the user can scroll.</returns>
 </member>
+<member name="P:KoerControls.DateScroller.AutoScrollMode">
+<summary>Determines the visibility of each scroll bar.</summary>
+<returns>A <see cref="T:KoerControls.AutoScrollMode"/> that represents the visibility of each scroll bar.</returns>
+<exception cref="T:System.ArgumentOutOfRangeException">value is not an <see cref="T:KoerControls.AutoScrollMode"/> value.</exception>
+</member>
 <member name="P:KoerControls.DateScroller.ColumnWidth">
 <summary>Represents the width of each date column.</summary>
 <returns>An <see cref="T:System.Int32"/> that represents the width of each date column.</returns>
@@ -1751,6 +1756,9 @@ KoerControls
 <summary>Raises the <see cref="E:KoerControls.DateScrollerItem.ItemGroupChanged"/> event.</summary>
 <param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
 </member>
+<member name="M:KoerControls.DateScrollerItem.PlaceItem">
+<summary>Places the item based on its index, column count, date range, and its parent DateScroller's properties.</summary>
+</member>
 <member name="T:KoerControls.DateScrollerItemCollection">
 <summary>Represents a collection of date scroller items.</summary>
 </member>
@@ -1785,69 +1793,11 @@ KoerControls
 <member name="F:KoerControls.DateScrollerItemPlacement.GroupedCompact">
 <summary>Items are placed by group, where the groups are in a waterfall and each group is placed in a compact way.</summary>
 </member>
-<member name="E:KoerControls.HeaderOverlay.HeightChanged">
-<summary>Occurs when the height has changed.</summary>
+<member name="F:KoerControls.DateScrollerItemPlacement.UserDefined">
+<summary>Items are manually placed by the user.</summary>
 </member>
-<member name="E:KoerControls.HeaderOverlay.VisibleChanged">
-<summary>Occurs when the visibility has changed.</summary>
-</member>
-<member name="M:KoerControls.HeaderOverlay.#ctor(System.Windows.Forms.Control)">
-<summary>Creates a new instance of <see cref="T:KoerControls.HeaderOverlay"/>.</summary>
-<param name="host">The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.HeaderOverlay"/> is in.</param>
-<exception cref="T:System.ArgumentNullException"><paramref name="host"/> is <see langword="Nothing"/> is <see langword="Nothing"/>.</exception>
-</member>
-<member name="M:KoerControls.HeaderOverlay.#ctor(System.Windows.Forms.Control,System.Action{System.Drawing.Graphics,System.Drawing.Rectangle})">
-<summary>Creates a new instance of <see cref="T:KoerControls.HeaderOverlay"/>.</summary>
-<param name="host">The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.HeaderOverlay"/> is in.</param>
-<param name="paintAction">The <see cref="T:System.Action"/> used top paint the header overlay, defined by the host.</param>
-<exception cref="T:System.ArgumentNullException"><paramref name="host"/> is <see langword="Nothing"/> is <see langword="Nothing"/>.</exception>
-</member>
-<member name="M:KoerControls.HeaderOverlay.CreateHandle">
-<summary>Creates a new window handle if one is not already assigned.</summary>
-</member>
-<member name="P:KoerControls.HeaderOverlay.BackColor">
-<summary>Gets or sets the background color for the overlay.</summary>
-<returns>The <see cref="T:System.Drawing.Color"/> that represents the background color of the overlay. The default is the host's background color.</returns>
-</member>
-<member name="P:KoerControls.HeaderOverlay.Font">
-<summary>Gets or sets the font of the text displayed in the overlay.</summary>
-<returns>The <see cref="T:System.Drawing.Font"/> to apply to the text displayed by the overlay. The default is the host's font.</returns>
-</member>
-<member name="P:KoerControls.HeaderOverlay.ForeColor">
-<summary>Gets or sets the foreground color of the overlay.</summary>
-<returns>The foreground <see cref="T:System.Drawing.Color"/> of the overlay. The default is the host's foreground color.</returns>
-</member>
-<member name="P:KoerControls.HeaderOverlay.Handle">
-<summary>Gets the handle for this window.</summary>
-<returns>If successful, an <see cref="T:System.IntPtr"/> representing the handle to the associated <see cref="T:KoerControls.Overlay"/>; otherwise, 0 if no handle is associated with the overlay.</returns>
-</member>
-<member name="P:KoerControls.HeaderOverlay.Height">
-<summary>Represents the height of the <see cref="T:KoerControls.Overlay"/>.</summary>
-<returns>An <see cref="T:System.Int32"/> that represents the height of the <see cref="T:KoerControls.Overlay"/> in pixels.</returns>
-</member>
-<member name="P:KoerControls.HeaderOverlay.Host">
-<summary>Gets the hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.Overlay"/> is contained within.</summary>
-<returns>The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.Overlay"/> is contained within.</returns>
-</member>
-<member name="P:KoerControls.HeaderOverlay.Padding">
-<summary>Gets or sets padding within the control.</summary>
-<returns>A <see cref="T:System.Windows.Forms.Padding"/> representing the control's internal spacing characteristics.</returns>
-</member>
-<member name="P:KoerControls.HeaderOverlay.PaintAction">
-<summary>Gets the action used to paint the overlay.</summary>
-<returns>The action used to paint the overlay.</returns>
-</member>
-<member name="P:KoerControls.HeaderOverlay.Visible">
-<summary>Determines if the overlay will be drawn on its host.</summary>
-<returns><see langword="True"/> if the overlay will be drawn on its host; otherwise, <see langword="False"/>.</returns>
-</member>
-<member name="M:KoerControls.HeaderOverlay.OnHeightChanged(System.EventArgs)">
-<summary>Raises the <see cref="E:KoerControls.HeaderOverlay.HeightChanged"/> event.</summary>
-<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
-</member>
-<member name="M:KoerControls.HeaderOverlay.OnVisibleChanged(System.EventArgs)">
-<summary>Raises the <see cref="E:KoerControls.HeaderOverlay.VisibleChanged"/> event.</summary>
-<param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
+<member name="T:KoerControls.DateScrollerItemTypeDescriptorProvider">
+<summary>Privides the <see cref="T:KoerControls.DateScrollerItemTypeDescriptor"/> for a class that implements a <see cref="T:KoerControls.DateScrollerItem"/>.</summary>
 </member>
 <member name="T:KoerControls.HighlightableColor">
 <summary>Represents a color with a highlighted value and unhighlighted value, and a <see cref="T:System.Boolean"/> to determine if the color is highlighted.</summary>
@@ -2060,25 +2010,37 @@ KoerControls
 <member name="E:KoerControls.Overlay.LocationChanged">
 <summary>Occurs when the location has changed.</summary>
 </member>
+<member name="E:KoerControls.Overlay.Paint">
+<summary>Occurs when the Overlay has been painted.</summary>
+</member>
 <member name="E:KoerControls.Overlay.VisibleChanged">
 <summary>Occurs when the visibility has changed.</summary>
 </member>
 <member name="E:KoerControls.Overlay.WidthChanged">
 <summary>Occurs when the width has changed.</summary>
 </member>
+<member name="M:KoerControls.Overlay.#ctor">
+<summary>Creates a new instance of the <see cref="T:KoerControls.Overlay"/> class.</summary>
+</member>
 <member name="M:KoerControls.Overlay.#ctor(System.Windows.Forms.Control)">
-<summary>Creates a new instance of <see cref="T:KoerControls.HeaderOverlay"/>.</summary>
-<param name="host">The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.HeaderOverlay"/> is in.</param>
+<summary>Creates a new instance of <see cref="T:KoerControls.Overlay"/>.</summary>
+<param name="host">The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.Overlay"/> is in.</param>
 <exception cref="T:System.ArgumentNullException"><paramref name="host"/> is <see langword="Nothing"/> is <see langword="Nothing"/>.</exception>
 </member>
 <member name="M:KoerControls.Overlay.#ctor(System.Windows.Forms.Control,System.Action{System.Drawing.Graphics,System.Drawing.Rectangle})">
-<summary>Creates a new instance of <see cref="T:KoerControls.HeaderOverlay"/>.</summary>
-<param name="host">The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.HeaderOverlay"/> is in.</param>
+<summary>Creates a new instance of <see cref="T:KoerControls.Overlay"/>.</summary>
+<param name="host">The hosting <see cref="T:System.Windows.Forms.Control"/> the <see cref="T:KoerControls.Overlay"/> is in.</param>
 <param name="paintAction">The <see cref="T:System.Action"/> used top paint the header overlay, defined by the host.</param>
 <exception cref="T:System.ArgumentNullException"><paramref name="host"/> is <see langword="Nothing"/> is <see langword="Nothing"/>.</exception>
 </member>
+<member name="M:KoerControls.Overlay.AttachToHost">
+<summary>Attaches the <see cref="T:KoerControls.Overlay"/> to the host and adds the required actions to help refresh the <see cref="T:KoerControls.Overlay"/> as its host redraws.</summary>
+</member>
 <member name="M:KoerControls.Overlay.CreateHandle">
 <summary>Creates a new window handle if one is not already assigned.</summary>
+</member>
+<member name="M:KoerControls.Overlay.DetachFromHost">
+<summary>Detaches the <see cref="T:KoerControls.Overlay"/> from its current host.</summary>
 </member>
 <member name="P:KoerControls.Overlay.BackColor">
 <summary>Gets or sets the background color for the overlay.</summary>
@@ -2142,6 +2104,10 @@ KoerControls
 <summary>Raises the <see cref="E:KoerControls.Overlay.LocationChanged"/> event.</summary>
 <param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
 </member>
+<member name="M:KoerControls.Overlay.OnPaint(System.Windows.Forms.PaintEventArgs)">
+<summary>Raises the <see cref="E:KoerControls.Overlay.Paint"/> event.</summary>
+<param name="e">The <see cref="T:System.Windows.Forms.PaintEventArgs"/> that contains the event data.</param>
+</member>
 <member name="M:KoerControls.Overlay.OnVisibleChanged(System.EventArgs)">
 <summary>Raises the <see cref="E:KoerControls.Overlay.VisibleChanged"/> event.</summary>
 <param name="e">The <see cref="T:System.EventArgs"/> that contains the event data.</param>
@@ -2152,6 +2118,10 @@ KoerControls
 </member>
 <member name="M:KoerControls.Overlay.PlaceOverlay">
 <summary>Places the overlay based on the expected size and position.</summary>
+</member>
+<member name="M:KoerControls.Overlay.RefreshBounds(System.Boolean)">
+<summary>Forces the <see cref="T:KoerControls.Overlay"/> to referesh its bounds to correcty attach to its host.</summary>
+<param name="forceRefreshBuffer"><see langword="True"/> if the <see cref="T:KoerControls.Overlay"/> should redraw even if the bounds do not change; otherwise, <see langword="False"/>.</param>
 </member>
 <member name="T:KoerControls.OverlayDockStyle">
 <summary>Specifies the position and manner in which an overlay is docked.</summary>
@@ -2453,6 +2423,9 @@ KoerControls
 <returns>The <see cref="T:System.Windows.Forms.ToolStripItem"/> identified by the toolStripItemName parameter.</returns>
 <param name="toolStripItemName">The name of the tool strip item to get or set.</param>
 <exception cref="T:System.ArgumentNullException"><paramref name="toolStripItemName"/> is null.</exception>
+</member>
+<member name="T:KoerControls.StaticColumnsDataGridViewTypeDescriptorProvider">
+<summary>Privides the <see cref="T:KoerControls.StaticColumnsDataGridViewTypeDescriptor"/> for a class that implements a <see cref="T:KoerControls.StaticColumnsDataGridView"/>.</summary>
 </member>
 <member name="T:KoerControls.StaticDataGridViewColumnCollection">
 <summary>Represents a static collection of <see cref="T:System.Windows.Forms.DataGridViewColumn"/> objects in a <see cref="T:KoerControls.StaticColumnsDataGridView"/>.</summary>
@@ -2864,6 +2837,21 @@ KoerControls
 <summary>Gets the bounding rectangle for the tab of the control.</summary>
 <returns>A <see cref="T:System.Drawing.Rectangle"/> that represents the bounds for the tab of the control.</returns>
 <param name="tabPage">The <see cref="T:System.Windows.Forms.TabPage"/> to get the tab rectangle from.</param>
+</member>
+<member name="T:KoerControls.AutoScrollMode">
+<summary>Determines what scroll bars on a <see cref="T:System.Windows.Forms.ScrollableControl"/> can become visible as needed.</summary>
+</member>
+<member name="F:KoerControls.AutoScrollMode.None">
+<summary>No scroll bars will be visible.</summary>
+</member>
+<member name="F:KoerControls.AutoScrollMode.Horizontal">
+<summary>Only the horizontal scroll bar will be visible as needed.</summary>
+</member>
+<member name="F:KoerControls.AutoScrollMode.Vertical">
+<summary>Only the vertical scroll bar will be visible as needed.</summary>
+</member>
+<member name="F:KoerControls.AutoScrollMode.All">
+<summary>Both scroll bars will be visible as needed.</summary>
 </member>
 <member name="T:KoerControls.Direction">
 <summary>Represents a direction.</summary>

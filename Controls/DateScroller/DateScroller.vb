@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Drawing.Design
+Imports System.Runtime.InteropServices
 
 <ToolboxItem(True)>
 Public Class DateScroller
@@ -7,9 +8,34 @@ Public Class DateScroller
 
 #Region "Private Items"
 
+    Private Const GWL_STYLE As Integer = -16
+    Private Const WM_NCCALCSIZE As Integer = &H83
+    Private Const WS_HSCROLL As Integer = &H100000
+    Private Const WS_VSCROLL As Integer = &H200000
+
+    <DllImport("user32.dll", EntryPoint:="GetWindowLong", SetLastError:=True)>
+    Private Shared Function GetWindowLong(hWnd As IntPtr, nIndex As Integer) As Integer
+    End Function
+
+    <StructLayout(LayoutKind.Sequential)>
+    Private Structure NCCALCSIZE_PARAMS
+        Public rgrc0 As RECT
+        Public rgrc1 As RECT
+        Public rgrc2 As RECT
+        Public lppos As IntPtr
+    End Structure
+    <StructLayout(LayoutKind.Sequential)>
+    Private Structure RECT
+        Public Left As Integer
+        Public Top As Integer
+        Public Right As Integer
+        Public Bottom As Integer
+    End Structure
+
     Private WithEvents MyDateRange As DateRange = DateRange.Empty
     Private WithEvents MyHeaderOverlay As New Overlay(Me, AddressOf PaintHeaderOverlay)
 
+    Private _autoScrollMode As AutoScrollMode = AutoScrollMode.All
     Private _borderWidth As Integer = Width - ClientSize.Width
     Private _columnWidth As Integer = 100
     Private _itemPlacement As DateScrollerItemPlacement = DateScrollerItemPlacement.Waterfall
@@ -98,6 +124,22 @@ Public Class DateScroller
         End Get
         Set(value As Integer)
             MyBase.AutoScrollMinSize = New Size(MyBase.AutoScrollMinSize.Width, value)
+        End Set
+    End Property
+    '''<summary>Determines the visibility of each scroll bar.</summary>
+    '''<returns>A <see cref="KoerControls.AutoScrollMode"/> that represents the visibility of each scroll bar.</returns>
+    '''<exception cref="ArgumentOutOfRangeException">value is not an <see cref="KoerControls.AutoScrollMode"/> value.</exception>
+    <Category("Layout")>
+    <Description("Determine if the horizontal scroll bar is visible.")>
+    <DefaultValue(AutoScrollMode.All)>
+    Public Property AutoScrollMode As AutoScrollMode
+        Get
+            Return _autoScrollMode
+        End Get
+        Set(value As AutoScrollMode)
+            If Not [Enum].IsDefined(GetType(AutoScrollMode), value) Then Throw New ArgumentOutOfRangeException(NameOf(value))
+            If value = _autoScrollMode Then Return
+            _autoScrollMode = value
         End Set
     End Property
     '''<summary>Represents the width of each date column.</summary>
@@ -313,6 +355,9 @@ Public Class DateScroller
         If BorderStyle = BorderStyle.FixedSingle Then iCurrentXLocation -= 1
         Dim dCurrentDate As Date = MyDateRange.StartDate.AddDays(HorizontalScroll.Value / _columnWidth)
 
+        Using bBackColor As New SolidBrush(HeaderOverlay.BackColor)
+            graphics.FillRectangle(bBackColor, clipRect)
+        End Using
         Using pPen As New Pen(SystemColors.ControlDarkDark, 1)
             Using bForeColor As New SolidBrush(HeaderOverlay.ForeColor)
                 graphics.DrawLine(pPen, 0, iClientHeight - 1, iClientWidth, iClientHeight - 1)
@@ -427,6 +472,29 @@ Public Class DateScroller
         Next
         Return startColumnIndex - 1 'Return the last column index taken by items
     End Function
+    Protected Overrides Sub WndProc(ByRef m As Message)
+        If m.Msg = WM_NCCALCSIZE Then
+            Dim iStyle As Integer = GetWindowLong(Handle, GWL_STYLE)
+            Dim bHideHorizontal As Boolean = (iStyle And WS_HSCROLL) <> 0 AndAlso _autoScrollMode <> AutoScrollMode.Horizontal AndAlso _autoScrollMode <> AutoScrollMode.All
+            Dim bHideVertical As Boolean = (iStyle And WS_VSCROLL) <> 0 AndAlso _autoScrollMode <> AutoScrollMode.Vertical AndAlso _autoScrollMode <> AutoScrollMode.All
+            If bHideHorizontal OrElse bHideVertical Then
+                If m.WParam = IntPtr.Zero Then
+                    Dim rRect As RECT = Marshal.PtrToStructure(Of RECT)(m.LParam)
+                    If bHideHorizontal Then rRect.Bottom += SystemInformation.HorizontalScrollBarHeight + 1
+                    If bHideVertical Then rRect.Right += SystemInformation.VerticalScrollBarWidth + 1
+                    Marshal.StructureToPtr(rRect, m.LParam, False)
+                Else
+                    Dim npParams As NCCALCSIZE_PARAMS = Marshal.PtrToStructure(Of NCCALCSIZE_PARAMS)(m.LParam)
+                    If bHideHorizontal Then npParams.rgrc0.Bottom += SystemInformation.HorizontalScrollBarHeight + 1
+                    If bHideVertical Then npParams.rgrc0.Right += SystemInformation.VerticalScrollBarWidth + 1
+                    Marshal.StructureToPtr(npParams, m.LParam, False)
+                End If
+            End If
+            Dim params As NCCALCSIZE_PARAMS = Marshal.PtrToStructure(Of NCCALCSIZE_PARAMS)(m.LParam)
+        End If
+
+        MyBase.WndProc(m)
+    End Sub
 
 #End Region
 

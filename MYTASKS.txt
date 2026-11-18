@@ -8,19 +8,11 @@
 		git push
 
 
-Changes since last push
-
--Overlay, DateScroller, DateScrollerItem
-	Reworked in preparation of making it a Component class that can be added to any control
-
 
 
 ToDo
-
 -StaticColumnsDataGridView
 	Implement INotifyPropertyChanged events
--Overlay
-	Create base Overlay class to build a HeaderOverlay off of. Allow it to build a FooterOverlay/etc. off of it
 -PinStripeConverter
 	Double check that ConvertFrom is actually working as it should. I see a .ToString where something like a ReferenceEquals should be
 -DateScroller
@@ -28,15 +20,32 @@ ToDo
 
 
 
-11/6/2026
 
+Changes since last push
+
+
+
+
+11/18/2026
+-Overlay
+	Reworked Overlay to be a Component class so it can be added to a non-custom controls as desired
+-DateScroller
+	Added AutoScrollMode enum in Layout to allow for more concise control over scroll bar visibility
+	Added DateScrollerItemPlacement.UserDefined for more control over item placement
+	Added Overrideable PlaceItem function to DateScrollerItem to help with custom control placement
+
+
+11/9/2026
+-Overlay, DateScroller, DateScrollerItem
+	Reworked in preparation of making it a Component class that can be added to any control
+
+
+11/6/2026
 -DateScroller & HeaderOverlay
 	Fixed issues in how the HeaderOverlay interacts with the DateScroller
 
 
-
 11/2/2026
-
 -LinePanel
 	Fixed resizing issue when Orientation = Vertical
 -StaticColumnsDataGridView
@@ -55,9 +64,7 @@ ToDo
 	Created to allow simpler NamedComponetCollection definitions that do not need to create all the Editor backing files (All contained in the NamedComponentCollectionEditor classes)
 
 
-
 9/1/2026
-
 -Controls.DataGridViewLinker.DataGridViewLinkingGroup
 	Made LinkingGroup objects
 -Controls.TabManager.TabGroup

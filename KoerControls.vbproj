@@ -97,6 +97,7 @@
     <Compile Include="Collections\WeakCollections\WeakKeyWeakValueDictionary.vb" />
     <Compile Include="Collections\WeakCollections\WeakValueCollectionDictionary.vb" />
     <Compile Include="Collections\WeakCollections\WeakValueDictionary.vb" />
+    <Compile Include="ComponentModel\ConditionalReadonlyPropertyDescriptor.vb" />
     <Compile Include="Controls\AutoSizeLabel\AutoSizeLabel.vb">
       <SubType>Component</SubType>
     </Compile>
@@ -136,10 +137,11 @@
     <Compile Include="Controls\DateScroller\DateScrollerItemCollection.vb" />
     <Compile Include="Controls\DateScroller\DateScrollerItemCollectionEditor.vb" />
     <Compile Include="Controls\DateScroller\DateScrollerItemPlacement.vb" />
+    <Compile Include="Controls\DateScroller\DateScrollerItemTypeDescriptor.vb" />
+    <Compile Include="Controls\DateScroller\DateScrollerItemTypeDescriptorProvider.vb" />
     <Compile Include="Controls\NamedComponent\NamedComponentCollection.vb" />
     <Compile Include="Controls\NamedComponent\NamedComponentCollectionEditor.EditorForm.vb" />
     <Compile Include="Controls\NamedComponent\NamedComponentCollectionEditor.vb" />
-    <Compile Include="Controls\Overlay\HeaderOverlay.vb" />
     <Compile Include="Controls\Highlighter\HighlightableColor.vb" />
     <Compile Include="Controls\Highlighter\Highlighter.ColorPainter.vb">
       <SubType>Component</SubType>
@@ -161,7 +163,8 @@
     <Compile Include="Controls\MultiLineComboBox\MultiLineComboBox.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\Overlay\Overlay %28Inoperable%29.vb" />
+    <Compile Include="Controls\Overlay\Overlay.HostEditor.vb" />
+    <Compile Include="Controls\Overlay\Overlay.vb" />
     <Compile Include="Controls\Overlay\OverlayDockStyle.vb" />
     <Compile Include="Controls\PinStripe\BrokenPinStripe.vb" />
     <Compile Include="Controls\PinStripe\PinStripe.Painter.vb" />
@@ -235,6 +238,7 @@
     <Compile Include="EventMonitors\ScrollBarEventMonitor.vb" />
     <Compile Include="ExtendedMath.vb" />
     <Compile Include="Forms.vb" />
+    <Compile Include="Layout\AutoScrollMode.vb" />
     <Compile Include="Layout\Direction.vb" />
     <Compile Include="Layout\HSLColor.vb" />
     <Compile Include="Layout\LeftRightRelativeAlignment.vb" />
@@ -255,23 +259,29 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Tasks\CancellableTask.vb" />
-    <Compile Include="Tests\MyTasksView.Designer.vb">
-      <DependentUpon>MyTasksView.vb</DependentUpon>
+    <Compile Include="Tests\CalendarLineView.Designer.vb">
+      <DependentUpon>CalendarLineView.vb</DependentUpon>
     </Compile>
-    <Compile Include="Tests\MyTasksView.vb">
+    <Compile Include="Tests\CalendarLineView.vb">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tests\TestForm.Designer.vb">
-      <DependentUpon>TestForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Tests\TestForm.vb">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Tests\TestStaticColumnsDataGridView.Designer.vb">
       <DependentUpon>TestStaticColumnsDataGridView.vb</DependentUpon>
     </Compile>
     <Compile Include="Tests\TestStaticColumnsDataGridView.vb">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Tests\TestUserControl.Designer.vb">
+      <DependentUpon>TestUserControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\TestUserControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tests\TestUserControl2.Designer.vb">
+      <DependentUpon>TestUserControl2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\TestUserControl2.vb">
+      <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -287,14 +297,17 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tests\MyTasksView.resx">
-      <DependentUpon>MyTasksView.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tests\TestForm.resx">
-      <DependentUpon>TestForm.vb</DependentUpon>
+    <EmbeddedResource Include="Tests\CalendarLineView.resx">
+      <DependentUpon>CalendarLineView.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tests\TestStaticColumnsDataGridView.resx">
       <DependentUpon>TestStaticColumnsDataGridView.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tests\TestUserControl.resx">
+      <DependentUpon>TestUserControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tests\TestUserControl2.resx">
+      <DependentUpon>TestUserControl2.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

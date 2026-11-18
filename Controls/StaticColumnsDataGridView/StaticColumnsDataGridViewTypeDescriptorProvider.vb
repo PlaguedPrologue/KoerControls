@@ -1,6 +1,6 @@
 ﻿Imports System.ComponentModel
 
-'Privides the StaticColumnsDataGridViewTypeDescriptor for a class that implements a StaticColumnsDataGridView
+'''<summary>Privides the <see cref="StaticColumnsDataGridViewTypeDescriptor"/> for a class that implements a <see cref="StaticColumnsDataGridView"/>.</summary>
 Public Class StaticColumnsDataGridViewTypeDescriptorProvider
     Inherits TypeDescriptionProvider
 

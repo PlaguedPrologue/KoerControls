@@ -8,4 +8,6 @@ Public Enum DateScrollerItemPlacement
     Compact = 2
     '''<summary>Items are placed by group, where the groups are in a waterfall and each group is placed in a compact way.</summary>
     GroupedCompact = 3
+    '''<summary>Items are manually placed by the user.</summary>
+    UserDefined = 4
 End Enum

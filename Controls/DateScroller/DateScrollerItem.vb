@@ -15,56 +15,42 @@ Public Class DateScrollerItem
 
     Private _columnCount As Integer = 1
     Private _columnIndex As Integer = -1
-    Private _oldDateRange As DateRange = DateRange.Empty
     Private _itemGroup As DateScrollerGroup
+    Private Shared ReadOnly _typeDescriptorProvidersAdded As New HashSet(Of Type)
 
+    Private Function GetDesignerType() As Type
+        Dim host = TryCast(Site?.GetService(GetType(IDesignerHost)), IDesignerHost)
+        If host Is Nothing OrElse host.RootComponent Is Nothing Then Return MyBase.GetType
+        Dim typeName = host.RootComponent.Site?.Name
+        If String.IsNullOrEmpty(typeName) Then Return host.RootComponent.GetType
+        Dim asm = host.RootComponent.GetType.Assembly
+        Return If(asm.GetTypes.FirstOrDefault(Function(t) t.Name = typeName), host.RootComponent.GetType)
+    End Function
     Private Sub MyDateRange_EndDateChanged(sender As Object, e As EventArgs) Handles MyDateRange.EndDateChanged
-        Dim dNewEndDate As Date = MyDateRange.EndDate
-        If MyDateScroller IsNot Nothing Then
-            MyBase.Width = (MyDateRange.Length + 1) * MyDateScroller.ColumnWidth - MyDateScroller.Padding.Horizontal - 1
-            MyDateScroller.PlaceItems()
-        End If
-        _oldDateRange.EndDate = dNewEndDate
-
+        PlaceItem()
         OnDateRangeChanged(e)
     End Sub
     Private Sub MyDateRange_StartDateChanged(sender As Object, e As EventArgs) Handles MyDateRange.StartDateChanged
-        Dim dNewStartDate As Date = MyDateRange.StartDate
-        If MyDateScroller IsNot Nothing Then
-            Dim pOwnerPadding As Padding = MyDateScroller.Padding
-            MyBase.Bounds = New Rectangle(DateDiff(DateInterval.Day, MyDateScroller.DateRange.StartDate, dNewStartDate) * MyDateScroller.ColumnWidth + pOwnerPadding.Left - 1, MyBase.Top, (MyDateRange.Length + 1) * MyDateScroller.ColumnWidth - pOwnerPadding.Horizontal - 1, MyBase.Height)
-            MyDateScroller.PlaceItems()
-        End If
-        _oldDateRange.StartDate = dNewStartDate
-
+        PlaceItem()
         OnDateRangeChanged(e)
     End Sub
     Private Sub MyDateScroller_ColumnWidthChanged(sender As Object, e As EventArgs) Handles MyDateScroller.ColumnWidthChanged
-        Dim pOwnerPadding As Padding = MyDateScroller.Padding
-        MyBase.Bounds = New Rectangle(DateDiff(DateInterval.Day, MyDateScroller.DateRange.StartDate, MyDateRange.StartDate) * MyDateScroller.ColumnWidth + pOwnerPadding.Left - 1, MyBase.Top, (MyDateRange.Length + 1) * MyDateScroller.ColumnWidth - pOwnerPadding.Horizontal - 1, MyBase.Height)
+        PlaceItem()
     End Sub
     Private Sub MyDateScroller_HeaderHeightChanged(sender As Object, e As EventArgs) Handles MyDateScroller.HeaderHeightChanged
-        Dim pOwnerPadding As Padding = MyDateScroller.Padding
-        Dim iOwnerVerticalPadding As Integer = pOwnerPadding.Vertical
-        MyBase.Bounds = New Rectangle(MyBase.Left, MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + iOwnerVerticalPadding) * _columnIndex, MyBase.Width, MyDateScroller.ItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
+        PlaceItem()
     End Sub
     Private Sub MyDateScroller_HeaderOverlayVisibleChanged(sender As Object, e As EventArgs) Handles MyDateScroller.HeaderVisibleChanged
-        Dim pOwnerPadding As Padding = MyDateScroller.Padding
-        Dim iOwnerVerticalPadding As Integer = pOwnerPadding.Vertical
-        MyBase.Bounds = New Rectangle(MyBase.Left, MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + iOwnerVerticalPadding) * _columnIndex, MyBase.Width, MyDateScroller.ItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
+        PlaceItem()
     End Sub
     Private Sub MyDateScroller_ItemHeightChanged(sender As Object, e As EventArgs) Handles MyDateScroller.ItemHeightChanged
-        Dim pOwnerPadding As Padding = MyDateScroller.Padding
-        Dim iOwnerVerticalPadding As Integer = pOwnerPadding.Vertical
-        MyBase.Bounds = New Rectangle(MyBase.Left, MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + iOwnerVerticalPadding) * _columnIndex, MyBase.Width, MyDateScroller.ItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
+        PlaceItem()
     End Sub
     Private Sub MyDateScroller_PaddingChanged(sender As Object, e As EventArgs) Handles MyDateScroller.PaddingChanged
-        Dim pOwnerPadding As Padding = MyDateScroller.Padding
-        Dim iOwnerVerticalPadding As Integer = pOwnerPadding.Vertical
-        MyBase.Bounds = New Rectangle(MyBase.Left, MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + iOwnerVerticalPadding) * _columnIndex, MyBase.Width, MyDateScroller.ItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
+        PlaceItem()
     End Sub
     Private Sub MyDateScroller_StartDateChanged(sender As Object, e As EventArgs) Handles MyDateScroller.StartDateChanged
-        MyBase.Left = DateDiff(DateInterval.Day, MyDateScroller.DateRange.StartDate, MyDateRange.StartDate) * MyDateScroller.ColumnWidth + MyDateScroller.Padding.Left - 2
+        PlaceItem()
     End Sub
     Private Sub NotifyPropertyChanged(propertyName As String, oldValue As Object, newValue As Object)
         Dim ccsChangeService As IComponentChangeService = TryCast(Site?.GetService(GetType(IComponentChangeService)), IComponentChangeService)
@@ -81,13 +67,23 @@ Public Class DateScrollerItem
 
     '''<summary>Creates a new instance of the <see cref="DateScrollerItem"/> class.</summary>
     Public Sub New()
+        MyBase.New
+
+        Dim tType As Type = GetDesignerType()
+        If _typeDescriptorProvidersAdded.Add(tType) Then TypeDescriptor.AddProvider(New DateScrollerItemTypeDescriptorProvider, tType)
+
         MyBase.AutoSize = False
     End Sub
     '''<summary>Creates a new instance of the <see cref="DateScrollerItem"/> class.</summary>
     '''<param name="dateScroller">The <see cref="KoerControls.DateScroller"/> that will contain the <see cref="DateScrollerItem"/>.</param>
     '''<exception cref="ArgumentNullException">dateScroller is null.</exception>
     Public Sub New(dateScroller As DateScroller)
+        MyBase.New
         If dateScroller Is Nothing Then Throw New ArgumentNullException(NameOf(dateScroller))
+
+        Dim tType As Type = GetDesignerType()
+        If _typeDescriptorProvidersAdded.Add(tType) Then TypeDescriptor.AddProvider(New DateScrollerItemTypeDescriptorProvider, tType)
+
         MyBase.AutoSize = False
         dateScroller.Container?.Add(Me)
         dateScroller.Controls.Add(Me)
@@ -97,8 +93,13 @@ Public Class DateScrollerItem
     '''<param name="dateScroller">The <see cref="KoerControls.DateScroller"/> that will contain the <see cref="DateScrollerItem"/>.</param>
     '''<exception cref="ArgumentNullException">dateScroller -or- dateRange is null.</exception>
     Public Sub New(dateScroller As DateScroller, dateRange As DateRange)
+        MyBase.New
         If dateScroller Is Nothing Then Throw New ArgumentNullException(NameOf(dateScroller))
         If dateRange Is Nothing Then Throw New ArgumentNullException(NameOf(dateRange))
+
+        Dim tType As Type = GetDesignerType()
+        If _typeDescriptorProvidersAdded.Add(tType) Then TypeDescriptor.AddProvider(New DateScrollerItemTypeDescriptorProvider, tType)
+
         MyBase.AutoSize = False
         dateScroller.Container?.Add(Me)
         dateScroller.Controls.Add(Me)
@@ -108,15 +109,7 @@ Public Class DateScrollerItem
 
     Protected Overrides Sub OnHandleCreated(e As EventArgs)
         MyBase.OnHandleCreated(e)
-
-        If MyDateScroller IsNot Nothing Then
-            Dim iOwnerColumnWidth As Integer = MyDateScroller.ColumnWidth
-            Dim pOwnerPadding As Padding = MyDateScroller.Padding
-            Dim iOwnerVerticalPadding As Integer = pOwnerPadding.Vertical
-            Dim iOwnerItemHeight As Integer = MyDateScroller.ItemHeight
-            MyBase.Bounds = New Rectangle(DateDiff(DateInterval.Day, MyDateScroller.DateRange.StartDate, MyDateRange.StartDate) * iOwnerColumnWidth + pOwnerPadding.Left - 1, MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (iOwnerItemHeight + iOwnerVerticalPadding) * _columnIndex, (MyDateRange.Length + 1) * iOwnerColumnWidth - pOwnerPadding.Horizontal - 1, iOwnerItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
-            MyDateScroller.PlaceItems()
-        End If
+        PlaceItem()
     End Sub
 
 #End Region
@@ -187,26 +180,27 @@ Public Class DateScrollerItem
             If value <= 0 Then Throw New ArgumentOutOfRangeException(NameOf(ColumnCount))
             If value = _columnCount Then Return
             _columnCount = value
-            If MyDateScroller Is Nothing Then Return
-            MyBase.Height = MyDateScroller.ItemHeight * _columnCount + MyDateScroller.Padding.Vertical * (_columnCount - 1)
-            MyDateScroller.PlaceItems()
+
+            PlaceItem()
+            MyDateScroller?.PlaceItems()
             OnColumnCountChanged(EventArgs.Empty)
         End Set
     End Property
     '''<summary>Gets the column index of the <see cref="DateScrollerItem"/> in the <see cref="KoerControls.DateScroller"/></summary>
     '''<returns>The column index of the <see cref="DateScrollerItem"/> in the <see cref="KoerControls.DateScroller"/>.</returns>
-    <Browsable(False)>
-    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+    <Category("Layout")>
+    <DefaultValue(0)>
+    <Description("The column index of the DateScrollerItem in its DateScroller.")>
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)>
     Public Property ColumnIndex As Integer
         Get
             Return _columnIndex
         End Get
-        Friend Set(value As Integer)
+        Set(value As Integer)
             If value = _columnIndex Then Return
             _columnIndex = value
 
-            Dim pOwnerPadding As Padding = MyDateScroller.Padding
-            If MyDateScroller IsNot Nothing Then MyBase.Top = MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (MyDateScroller.ItemHeight + pOwnerPadding.Vertical) * value
+            PlaceItem()
             OnColumnIndexChanged(EventArgs.Empty)
         End Set
     End Property
@@ -224,26 +218,8 @@ Public Class DateScrollerItem
             If value = MyDateRange Then Return
             MyDateRange = value
 
-            If MyDateScroller IsNot Nothing AndAlso _oldDateRange IsNot Nothing Then
-                Dim dnewStartDate As Date = value.StartDate
-                Dim bStartDateChanged As Boolean = dnewStartDate <> _oldDateRange.StartDate
-                Dim bLengthChanged As Boolean = value.Length <> _oldDateRange.Length
-
-                If bStartDateChanged AndAlso bLengthChanged Then
-                    Dim pOwnerPadding As Padding = MyDateScroller.Padding
-                    MyBase.Bounds = New Rectangle(DateDiff(DateInterval.Day, MyDateScroller.DateRange.StartDate, dnewStartDate) * MyDateScroller.ColumnWidth + pOwnerPadding.Left - 1, MyBase.Top, (value.Length + 1) * MyDateScroller.ColumnWidth - pOwnerPadding.Horizontal - 1, MyBase.Height)
-                    MyDateScroller.PlaceItems()
-                ElseIf bStartDateChanged Then
-                    MyBase.Left = DateDiff(DateInterval.Day, MyDateScroller.DateRange.StartDate, dnewStartDate) * MyDateScroller.ColumnWidth + MyDateScroller.Padding.Left - 1
-                    MyDateScroller.PlaceItems()
-                Else
-                    MyBase.Width = (value.Length + 1) * MyDateScroller.ColumnWidth - MyDateScroller.Padding.Horizontal - 1
-                    MyDateScroller.PlaceItems()
-                End If
-            End If
-
-            _oldDateRange = value
-
+            PlaceItem()
+            MyDateScroller?.PlaceItems()
             OnDateRangeChanged(EventArgs.Empty)
         End Set
     End Property
@@ -363,13 +339,12 @@ Public Class DateScrollerItem
     Protected Overrides Sub OnParentChanged(e As EventArgs)
         MyBase.OnParentChanged(e)
 
+        If ReferenceEquals(MyDateScroller, Parent) Then Return
+
         If MyDateScroller IsNot Nothing Then
             MyDateScroller.Items.Remove(Me)
             MyDateScroller.PlaceItems()
         End If
-
-        If ReferenceEquals(MyDateScroller, Parent) Then Return
-
         MyDateScroller = TryCast(Parent, DateScroller)
         If MyDateScroller IsNot Nothing Then
             MyDateScroller.Items.Add(Me)
@@ -400,6 +375,16 @@ Public Class DateScrollerItem
     '''<param name="e">The <see cref="EventArgs"/> that contains the event data.</param>
     Protected Overridable Sub OnItemGroupChanged(e As EventArgs)
         RaiseEvent ItemGroupChanged(Me, e)
+    End Sub
+    '''<summary>Places the item based on its index, column count, date range, and its parent DateScroller's properties.</summary>
+    Protected Overridable Sub PlaceItem()
+        If MyDateScroller Is Nothing Then Return
+
+        Dim iOwnerColumnWidth As Integer = MyDateScroller.ColumnWidth
+        Dim pOwnerPadding As Padding = MyDateScroller.Padding
+        Dim iOwnerVerticalPadding As Integer = pOwnerPadding.Vertical
+        Dim iOwnerItemHeight As Integer = MyDateScroller.ItemHeight
+        MyBase.Bounds = New Rectangle(DateDiff(DateInterval.Day, MyDateScroller.DateRange.StartDate, MyDateRange.StartDate) * iOwnerColumnWidth + pOwnerPadding.Left - 1, MyDateScroller.HeaderOverlay.DisplayedHeight + pOwnerPadding.Top + (iOwnerItemHeight + iOwnerVerticalPadding) * _columnIndex, (MyDateRange.Length + 1) * iOwnerColumnWidth - pOwnerPadding.Horizontal - 1, iOwnerItemHeight * _columnCount + iOwnerVerticalPadding * (_columnCount - 1))
     End Sub
 
 #End Region
